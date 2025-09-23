@@ -1,1 +1,9 @@
+[theme] # You have to add this line
 
+primaryColor = '#FF8C02' # Bright Orange
+
+backgroundColor = '#3cb371' # mediumseagreen
+
+secondaryBackgroundColor = '#90ee90' # lightgreen
+
+textColor = "#000000"  # black whiteは→"#ffffff"
