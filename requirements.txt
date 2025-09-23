@@ -1,0 +1,13 @@
+simple-salesforce
+pandas
+openpyxl
+requests
+gspread
+gspread_dataframe
+google-auth
+streamlit_qrcode_scanner
+firebase_admin
+pytz
+flask
+easyocr
+torch
