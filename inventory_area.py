@@ -693,8 +693,6 @@ def button_make(button_text, screen_name):
     st.markdown("""
         <style>
         .stButton>button { /* Streamlitのボタン要素に直接スタイルを適用 */
-            background-color: #FF0;
-            color: black;
             font-size: 10px !important;
             text-align: center;
             font-weight: bold;
@@ -1526,24 +1524,8 @@ def zaiko_place():
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
                                     df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
-                                    # st.dataframe(df_sorted)
+                                    st.dataframe(df_sorted)
                                     # st.table(df_sorted)
-                                    st.markdown("""
-                                    <style>
-                                    .ag-header-cell-label {
-                                        background-color: #f0c040 !important;
-                                        color: black !important;
-                                        border: 1px solid #ccc !important;
-                                    }
-                                    .ag-cell {
-                                        border: 1px solid #ddd !important;
-                                    }
-                                    </style>
-                                    """, unsafe_allow_html=True)
-                                    gb = GridOptionsBuilder.from_dataframe(df_sorted)
-                                    gb.configure_grid_options(headerHeight=35)
-                                    gridOptions = gb.build()
-                                    AgGrid(df_sorted, gridOptions=gridOptions, height=200, theme="alpine")
                                     # st.dataframe(st.session_state.df_search_result)
                                     # edited_df = st.data_editor(
                                     #     st.session_state.df_search_result,
