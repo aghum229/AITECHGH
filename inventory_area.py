@@ -790,9 +790,9 @@ def image_viewer(target_text):
             # image_path = "TanaMap20250820-2.png"
             image_search_flag = True
         elif ((first_char == "E" and 31 <= after_hyphen_int <= 37) 
-            or (first_char == "G" and after_hyphen_int <= 18) 
+            or (first_char == "G" and after_hyphen_int <= 19) 
             or (first_char == "H" and after_hyphen_int <= 18) 
-            or (first_char == "R" and after_hyphen_int <= 19)):
+            or (first_char == "R" and after_hyphen_int <= 18)):
             sub_text = "P-4"
             image_path_sub = "TanaMap20250820-P4.png"
             image_path = "TanaMap20250820-3.png"
