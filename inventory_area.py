@@ -1535,7 +1535,7 @@ def zaiko_place():
                                     }
                                     </style>
                                     """, unsafe_allow_html=True)
-                                    st.write(df)
+                                    st.write(df_sorted)
                                     # st.dataframe(st.session_state.df_search_result)
                                     # edited_df = st.data_editor(
                                     #     st.session_state.df_search_result,
