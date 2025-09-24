@@ -2,10 +2,10 @@
 
 base="light"
 
-primaryColor = '#FF8C02' # Bright Orange
+# primaryColor = '#FF8C02' # Bright Orange
 
 backgroundColor = '#3cb371' # mediumseagreen
 
 secondaryBackgroundColor = '#98fb98' # lightgreen #90ee90
 
-textColor = "#000000"  # black whiteは→"#ffffff"
+# textColor = "#000000"  # black whiteは→"#ffffff"
