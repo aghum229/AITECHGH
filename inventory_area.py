@@ -15,6 +15,7 @@ import re
 # from gspread_dataframe import set_with_dataframe
 import toml
 import streamlit.components.v1 as components
+from st_aggrid import AgGrid, GridOptionsBuilder
 
 import easyocr
 import numpy as np
@@ -1527,15 +1528,10 @@ def zaiko_place():
                                     df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
                                     # st.table(df_sorted)
-                                    st.markdown("""
-                                    <style>
-                                    thead th {
-                                        background-color: #90ee90 !important;
-                                        color: black !important;
-                                    }
-                                    </style>
-                                    """, unsafe_allow_html=True)
-                                    st.write(df_sorted)
+                                    gb = GridOptionsBuilder.from_dataframe(df_sorted)
+                                    gb.configure_grid_options(headerHeight=35)
+                                    gridOptions = gb.build()
+                                    AgGrid(df_sorted, gridOptions=gridOptions, height=200, theme="material")
                                     # st.dataframe(st.session_state.df_search_result)
                                     # edited_df = st.data_editor(
                                     #     st.session_state.df_search_result,
