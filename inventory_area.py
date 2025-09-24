@@ -1531,7 +1531,7 @@ def zaiko_place():
                                     gb = GridOptionsBuilder.from_dataframe(df_sorted)
                                     gb.configure_grid_options(headerHeight=35)
                                     gridOptions = gb.build()
-                                    AgGrid(df_sorted, gridOptions=gridOptions, height=200, theme="material")
+                                    AgGrid(df_sorted, gridOptions=gridOptions, height=200, theme="alpine")
                                     # st.dataframe(st.session_state.df_search_result)
                                     # edited_df = st.data_editor(
                                     #     st.session_state.df_search_result,
