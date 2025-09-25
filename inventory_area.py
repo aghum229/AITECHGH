@@ -1544,12 +1544,12 @@ def zaiko_place():
                                         if item == zkTana_Search:
                                             if listCount2 > 1:
                                                 for index_2, item_2 in enumerate(zkIko):
-                                                if item_2 == zkHin_Search:
-                                                    if zkMo[index_2] == "0":
-                                                        zkMo_value = ""
-                                                    else:
-                                                        zkMo_value = "持出中"
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                                    if item_2 == zkHin_Search:
+                                                        if zkMo[index_2] == "0":
+                                                            zkMo_value = ""
+                                                        else:
+                                                            zkMo_value = "持出中"
+                                                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                             else:
                                                 if zkMo[0] == "0":
                                                     zkMo_value = ""
