@@ -1838,7 +1838,8 @@ def zaiko_place():
                         else:
                             st.warning("移行票番号が見つかりませんでした。")
                             # st.stop()
-                        
+
+                        tanaban_select = st.session_state.tanaban_select_temp
                         st.session_state.list_flag = 0 # 0:移行票番号が無い  1:有る
                         record = data_catch(st.session_state.sf, item_id)
                         if record:
@@ -1877,7 +1878,6 @@ def zaiko_place():
                             zkMochidashi_value_1 = "持出中"
                         
                         owner_value = st.session_state.owner
-                        tanaban_select = st.session_state.tanaban_select_temp
                         production_order_value = st.session_state.production_order
                         styled_text(f"項　　目　 :　追加または削除の対象", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="16px", border_thickness="3px")
                         styled_text(f"社員番号　 : {owner_value}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
