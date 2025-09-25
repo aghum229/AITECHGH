@@ -1380,10 +1380,10 @@ def zaiko_place():
                                         if zkHin_Search in zkHin:
                                             for index_2, item_2 in enumerate(zkHin):
                                                 if item_2 == zkHin_Search:
-                                                    if zkMo[index_2] == "0":
-                                                        zkMo_value = ""
-                                                    else:
+                                                    if zkMo[index_2] == "1":
                                                         zkMo_value = "持出中"
+                                                    else:
+                                                        zkMo_value = ""
                                                     st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [zkTana_list[index_2], zkMo_value, item, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                                     # st.write("zkHin_list:", zkHin_list)
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
@@ -1545,16 +1545,16 @@ def zaiko_place():
                                             if listCount2 > 1:
                                                 for index_2, item_2 in enumerate(zkIko):
                                                     if item_2 == zkHin_Search:
-                                                        if zkMo[index_2] == "0":
-                                                            zkMo_value = ""
-                                                        else:
+                                                        if zkMo[index_2] == "1":
                                                             zkMo_value = "持出中"
+                                                        else:
+                                                            zkMo_value = ""
                                                         st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                             else:
-                                                if zkMo[0] == "0":
-                                                    zkMo_value = ""
-                                                else:
+                                                if zkMo[0] == "1":
                                                     zkMo_value = "持出中"
+                                                else:
+                                                    zkMo_value = ""
                                                 st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
@@ -1872,10 +1872,10 @@ def zaiko_place():
                                                 zkMochidashi_value = zkMochidashi[0]
                                                 break
                         st.session_state.record = ""
-                        if zkMochidashi_value == "0":
-                            zkMochidashi_value_1 = ""
-                        else:
+                        if zkMochidashi_value == "1":
                             zkMochidashi_value_1 = "持出中"
+                        else:
+                            zkMochidashi_value_1 = ""
                         
                         owner_value = st.session_state.owner
                         production_order_value = st.session_state.production_order
