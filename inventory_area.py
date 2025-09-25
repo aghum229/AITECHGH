@@ -321,6 +321,7 @@ def atualizar_tanaban_addkari(sf, item_id):  # 棚番書き込み専用
             "zkKanryoKoutei__c": zkKari,
             "zkSuryo__c": zkKari,
             "zkEndDayTime__c": zkKari,
+            "zkMochidashi__c": zkKari,
             "zkHistory__c": "-"
         })
         # sf.snps_um__Process__c.update(item_id, {"zkTanaban__c": zkTana})
@@ -332,7 +333,7 @@ def atualizar_tanaban_addkari(sf, item_id):  # 棚番書き込み専用
         # reset_form()
     st.stop()
                
-def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkHistory, zkOrder):
+def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder):
     # global add_del_flag  # 0:追加　1:削除
     # global zkScroll_flag  # 初期値0
     # global result_text
@@ -345,6 +346,7 @@ def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkHi
             "zkKanryoKoutei__c": zkKan,
             "zkSuryo__c": zkSu,
             "zkEndDayTime__c": zkEndDT,
+            "zkMochidashi__c": zkMo,
             "zkHistory__c": zkHistory
         })
         # '''
@@ -366,7 +368,7 @@ def data_catch(sf, item_id):
     query = f"""
         SELECT AITC_ID18__c, Name,
             zkTanaban__c, zkIkohyoNo__c ,zkHinban__c, zkKanryoKoutei__c,
-            zkSuryo__c, zkEndDayTime__c, zkHistory__c
+            zkSuryo__c, zkEndDayTime__c, zkMochidashi__c, zkHistory__c
         FROM snps_um__Process__c
         WHERE AITC_ID18__c = '{item_id}'
     """
@@ -413,7 +415,7 @@ def data_catch_for_csv(sf, item_id):
     query = f"""
         SELECT AITC_ID18__c, Name,
             zkTanaban__c, zkIkohyoNo__c ,zkHinban__c, zkKanryoKoutei__c,
-            zkSuryo__c, zkEndDayTime__c, zkHistory__c
+            zkSuryo__c, zkEndDayTime__c, zkMochidashi__c, zkHistory__c
         FROM snps_um__Process__c
         WHERE AITC_ID18__c = '{item_id}'
     """
@@ -443,7 +445,7 @@ def list_update_zkKari(record, zkKari, dbItem, listNo, update_value, flag):
     - dbItem: データベースの項目名(注記.表示ラベルではない)
     - listNo: 対象のインデックスまたはキー
     - update_value: 追加する値
-    - flag: -1(追加 完了日の場合), 0(追加 移行票No以外), 1(追加 移行票Noの場合), 2(削除 移行票No以外), 3(削除 移行票Noの場合)
+    - flag: -1(追加 完了日または持出の場合), 0(追加 移行票No以外), 1(追加 移行票Noの場合), 2(削除 移行票No以外), 3(削除 移行票Noの場合)
 
     Returns:
     - 更新後のzkKari
@@ -774,7 +776,15 @@ def image_viewer(target_text):
         # st.write(second_char)
         # st.write(f"{after_hyphen_int}")
         image_path_sub2 = "TanaMap20250820-0.png"
-        if first_char == "完" and after_hyphen_int <= 9:
+        if (first_char == "完" and (second_char == "E"
+            or first_char == "F" 
+            or first_char == "G" 
+            or first_char == "H"): 
+            sub_text = "P-3"
+            image_path_sub = "TanaMap20250820-P3.png"
+            # image_path = "TanaMap20250820-2.png"
+            image_search_flag = True
+        elif first_char == "完" and after_hyphen_int <= 9:
             sub_text = "P-1"
             image_path_sub = "TanaMap20250820-P1.png"
             image_path = "TanaMap20250820-1.png"
@@ -1097,7 +1107,7 @@ def zaiko_place():
     if "records" not in st.session_state:
         st.session_state.records = ""
     if "df_search_result" not in st.session_state:
-        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
     if "df" not in st.session_state:
         st.session_state.df = None
     if "selected_row" not in st.session_state:
@@ -1172,8 +1182,8 @@ def zaiko_place():
         st.stop()
     
     # 棚番設定用マスタ(棚番を変更する場合には、下記に追加または削除してからatualizar_tanaban_addkari()を実行の事。尚、棚番は改行区切りである。)
-    atualizar_tanaban_addkari(st.session_state.sf, item_id)
-    st.stop()  # 以降の処理を止める
+    # atualizar_tanaban_addkari(st.session_state.sf, item_id)
+    # st.stop()  # 以降の処理を止める
     
     zkTanalist = """
         ---,完A-1,完A-2,完A-3,完A-4,完A-5,完A-6,完A-7,完A-8,完A-9,完A-10,完A-11,完A-12,完A-13,完A-14,完A-15,完A-16,完A-17,完A-18,完A-19,完A-20,完A-21,完A-22,完A-23,完A-24,完A-25,完A-26,完A-27,完A-28,完A-29,完A-30,完A-31,完A-32,完A-33,完A-34,完A-35,完A-36,完A-37,完A-38,完A-39,完A-40,完A-41,完A-42,完A-43,完A-44,完A-45,完A-46,完A-47,完A-48,完A-49,完A-50,
@@ -1238,7 +1248,7 @@ def zaiko_place():
                 st.session_state.qr_code_tana_info = False
                 st.session_state.tanaban_select_temp_info = ""
                 st.session_state.records  = None
-                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                 st.session_state.record  = None
                 st.rerun()
         if st.session_state.manual_input_flag == 9:
@@ -1280,7 +1290,7 @@ def zaiko_place():
                         st.session_state.qr_code_tana_info = False
                         st.session_state.tanaban_select_temp_info = ""
                         st.session_state.records  = None
-                        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                         st.session_state.record  = None
                         st.rerun()
                 if st.session_state.manual_input_check_flag == 0:
@@ -1307,7 +1317,7 @@ def zaiko_place():
                                 st.session_state.hinban_select_flag = False
                                 st.session_state.tanaban_select_flag  = False
                                 st.session_state.records  = None
-                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                 st.session_state.record  = None
                                 st.rerun()
                         if not st.session_state.hinban_select_flag:
@@ -1331,10 +1341,10 @@ def zaiko_place():
                                 if st.button("品番を再選択"):
                                     st.session_state.hinban_select_flag = False
                                     st.session_state.tanaban_select_flag  = False
-                                    st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                    st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                     st.session_state.record  = None
                                     st.rerun()
-                            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                             listCount = 0
                             zkTana = ""
                             zkIko = ""
@@ -1342,6 +1352,7 @@ def zaiko_place():
                             zkKan = ""
                             zkSu = ""
                             zkEndDT = ""
+                            zkMo = "0"
                             zkHistory = ""
                             record = data_catch(st.session_state.sf, item_id)
                             if record:
@@ -1352,6 +1363,7 @@ def zaiko_place():
                                 zkKan_list = record["zkKanryoKoutei__c"].splitlines() 
                                 zkSu_list = record["zkSuryo__c"].splitlines()
                                 zkEndDT_list = record["zkEndDayTime__c"].splitlines() 
+                                zkMo_list = record["zkMochidashi__c"].splitlines()
                                 listCount = len(zkTana_list)
                                 # listCount = len(zkHin_list)
                                 zkHin_Search = st.session_state.hinban_select_value
@@ -1364,10 +1376,15 @@ def zaiko_place():
                                         zkKan = zkKan_list[index].split(",")
                                         zkSu = zkSu_list[index].split(",")
                                         zkEndDT = zkEndDT_list[index].split(",")
+                                        zkMo = zkMo_list[index].split(",")
                                         if zkHin_Search in zkHin:
                                             for index_2, item_2 in enumerate(zkHin):
                                                 if item_2 == zkHin_Search:
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2]], zkEndDT[index_2]
+                                                    if zkMo[index_2] == "0":
+                                                        zkMo_value = ""
+                                                    else:
+                                                        zkMo_value = "持出中"
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [[zkTana_list[index_2], zkMo_value, [item, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                                     # st.write("zkHin_list:", zkHin_list)
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
                                     # st.write(st.session_state.df_search_result)
@@ -1389,7 +1406,7 @@ def zaiko_place():
                                 else:
                                     st.write("棚番が１データしか存在しません。至急、システム担当者に連絡してください！")
                                     st.stop()
-                                    # st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [zkTana_list[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
+                                    # st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [zkTana_list[0], zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
                             else:
                                 st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
                                 st.stop()
@@ -1458,7 +1475,7 @@ def zaiko_place():
                                 st.session_state.tanaban_select_input = False
                                 st.session_state.qr_code_tana_info = False
                                 st.session_state.tanaban_select_temp_info = ""
-                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                 st.session_state.record_2  = None
                                 st.rerun()
                         if not st.session_state.qr_code_tana_info:
@@ -1488,11 +1505,11 @@ def zaiko_place():
                                 if st.button("棚番を再選択(参照)"):
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
-                                    st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                    st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                     st.session_state.record_2  = None
                                     st.rerun()
                             st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
-                            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                             listCount = 0
                             listCount2 = 0
                             zkTana = ""
@@ -1511,6 +1528,7 @@ def zaiko_place():
                                 zkKan_list = record_2["zkKanryoKoutei__c"].splitlines() 
                                 zkSu_list = record_2["zkSuryo__c"].splitlines() 
                                 zkEndDT_list = record_2["zkEndDayTime__c"].splitlines() 
+                                zkMo_list = record_2["zkMochidashi__c"].splitlines() 
                                 listCount = len(zkTana_list)
                                 # listCount = len(zkHin_list)
                                 zkTana_Search = st.session_state.tanaban_select_temp_info
@@ -1521,13 +1539,23 @@ def zaiko_place():
                                         zkKan = zkKan_list[index].split(",")
                                         zkSu = zkSu_list[index].split(",")
                                         zkEndDT = zkEndDT_list[index].split(",")
+                                        zkMo = zkMo_list[index].split(",")
                                         listCount2 = len(zkIko)
                                         if item == zkTana_Search:
                                             if listCount2 > 1:
                                                 for index_2, item_2 in enumerate(zkIko):
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                                if item_2 == zkHin_Search:
+                                                    if zkMo[index_2] == "0":
+                                                        zkMo_value = ""
+                                                    else:
+                                                        zkMo_value = "持出中"
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                             else:
-                                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
+                                                if zkMo[0] == "0":
+                                                    zkMo_value = ""
+                                                else:
+                                                    zkMo_value = "持出中"
+                                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
@@ -1811,12 +1839,50 @@ def zaiko_place():
                             st.warning("移行票番号が見つかりませんでした。")
                             # st.stop()
                         
+                        st.session_state.list_flag = 0 # 0:移行票番号が無い  1:有る
+                        record = data_catch(st.session_state.sf, item_id)
+                        if record:
+                            zkTana_list = ""
+                            listCount = 0
+                            listCount2 = 0
+                            zkIko_kari = ""
+                            zkMochi_list = ""
+                            zkMochidashi = ""
+                            zkMochidashi_value = "0"
+                            zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                            listCount = len(zkTana_list)
+                            if listCount > 2:
+                                for index, item in enumerate(zkTana_list):
+                                    if item == tanaban_select:
+                                        zkIko_list = record["zkIkohyoNo__c"].splitlines()
+                                        zkIko_kari = zkIko_list[index].split(",")
+                                        zkMochi_list = record["zkMochidashi__c"].splitlines()
+                                        zkMochidashi = zkMochi_list[index].split(",")
+                                        listCount2 = len(zkIko_kari)
+                                        if listCount2 > 1:
+                                            for index2, item in enumerate(zkIko_kari):
+                                                if item == st.session_state.production_order:
+                                                    st.session_state.list_flag = 1 # 移行票番号が有る
+                                                    zkMochidashi_value = zkMochidashi[index2]
+                                                    break
+                                        else:
+                                            if zkIko_kari[0] == st.session_state.production_order:
+                                                st.session_state.list_flag = 1 # 移行票番号が有る
+                                                zkMochidashi_value = zkMochidashi[0]
+                                                break
+                        st.session_state.record = ""
+                        if zkMochidashi_value == "0":
+                            zkMochidashi_value_1 = ""
+                        else:
+                            zkMochidashi_value_1 = "持出中"
+                        
                         owner_value = st.session_state.owner
                         tanaban_select = st.session_state.tanaban_select_temp
                         production_order_value = st.session_state.production_order
                         styled_text(f"項　　目　 :　追加または削除の対象", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="16px", border_thickness="3px")
                         styled_text(f"社員番号　 : {owner_value}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         styled_text(f"棚　　番　 : {tanaban_select}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"持　　出　 : {zkMochidashi_value_1}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         styled_text(f"移行票番号 : {production_order_value}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         styled_text(f"品　　番　 : {default_hinban}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         styled_text(f"工　　順　 : {default_process_order}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
@@ -1834,31 +1900,6 @@ def zaiko_place():
                             process_order_name = "-"
                             quantity = 0.0
                             
-                        st.session_state.list_flag = 0 # 0:移行票番号が無い  1:有る
-                        record = data_catch(st.session_state.sf, item_id)
-                        if record:
-                            zkTana_list = ""
-                            listCount = 0
-                            listCount2 = 0
-                            zkIko_kari = ""
-                            zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                            listCount = len(zkTana_list)
-                            if listCount > 2:
-                                for index, item in enumerate(zkTana_list):
-                                    if item == tanaban_select:
-                                        zkIko_list = record["zkIkohyoNo__c"].splitlines()
-                                        zkIko_kari = zkIko_list[index].split(",")
-                                        listCount2 = len(zkIko_kari)
-                                        if listCount2 > 1:
-                                            for index, item in enumerate(zkIko_kari):
-                                                if item == st.session_state.production_order:
-                                                    st.session_state.list_flag = 1 # 移行票番号が有る
-                                                    break
-                                        else:
-                                            if zkIko_kari[0] == st.session_state.production_order:
-                                                st.session_state.list_flag = 1 # 移行票番号が有る
-                                                break
-                        st.session_state.record = ""
                         st.session_state.add_del_flag = 0  # 0:追加 1:削除 9:取消     
                         left, center, right = st.columns(3)
                         with left:
@@ -1919,6 +1960,7 @@ def zaiko_place():
                             zkKan = ""
                             zkSu = ""
                             zkEndDT = ""
+                            zkMo = ""
                             zkOrder = ""
                             zkHistory = ""
                             record = data_catch(st.session_state.sf, item_id)
@@ -1988,16 +2030,18 @@ def zaiko_place():
                                         zkKan = zkIko
                                         zkSu = zkIko
                                         zkEndDT = zkIko
+                                        zkMo = zkIko
                                         zkHistory = zkIko
                                     else:
                                         zkOrder = st.session_state.production_order
-                                        zkHistory_value = f"{tanaban_select},{zkOrder},{hinban},{process_order_name},{quantity},{datetime_str},{owner_value}"
+                                        zkHistory_value = f"{tanaban_select},{zkOrder},{hinban},{process_order_name},{quantity},{datetime_str},{zkMochidashi_value},{owner_value}"
                                         if st.session_state.add_del_flag == 0: # 追加の場合
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
                                             zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
                                             zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 0)   # zk完了工程
                                             zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
                                             zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", -1)   # zk完了日
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", -1)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},add"
                                         elif st.session_state.add_del_flag == 1: # 削除の場合
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
@@ -2005,6 +2049,7 @@ def zaiko_place():
                                             zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 2)   # zk完了工程
                                             zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 2)   # zk数量
                                             zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 2)   # zk完了日
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 2)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},del"
                                         zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                         
@@ -2025,7 +2070,7 @@ def zaiko_place():
                                 st.stop()  # 以降の処理を止める
                             st.session_state.zkScroll_flag = 0
                             if item_id:
-                                update_tanaban(st.session_state.sf, item_id, tanaban_select, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkHistory, zkOrder)
+                                update_tanaban(st.session_state.sf, item_id, tanaban_select, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
                                 button_key = "check_ok_2"
                                 if st.session_state.zkScroll_flag == 1 and button_key not in st.session_state:
                                     @st.dialog("処理結果通知")
