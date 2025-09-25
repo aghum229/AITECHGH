@@ -1384,7 +1384,7 @@ def zaiko_place():
                                                         zkMo_value = ""
                                                     else:
                                                         zkMo_value = "持出中"
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [zkTana_list[index_2], zkMo_value, [item, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [zkTana_list[index_2], zkMo_value, item, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                                     # st.write("zkHin_list:", zkHin_list)
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
                                     # st.write(st.session_state.df_search_result)
