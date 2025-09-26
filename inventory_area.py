@@ -738,7 +738,8 @@ def styled_input_text():
     )
 
 def approve_button(message, button_key):
-    st.write(message)
+    st.markdown(message, unsafe_allow_html=True)
+    # st.write(message)
     left, right = st.columns(2)
     with left:
         dialog_check_ok_flag = st.button("OK", key="dialog_check_ok")
