@@ -969,7 +969,10 @@ def image_viewer(target_text):
                             or (text.strip() == "H-g" and target_text.strip() == "H-9")
                             or (text.strip() == "H-1" and target_text.strip() == "H-10")
                             or (text.strip() == "H11" and target_text.strip() == "H-11")
+                            or (text.strip() == "H12" and target_text.strip() == "H-12")
+                            or (text.strip() == "H14" and target_text.strip() == "H-14")
                             or (text.strip() == "H15" and target_text.strip() == "H-15")
+                            or (text.strip() == "H16" and target_text.strip() == "H-16")
                             or (text.strip() == "H17" and target_text.strip() == "H-17")):
                             (tl, tr, br, bl) = bbox
                             center_x = int((tl[0] + br[0]) / 2)
