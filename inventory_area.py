@@ -951,7 +951,7 @@ def image_viewer(target_text):
                                 break
                 else:
                     for bbox, text, prob in results:
-                        st.write(text)
+                        # st.write(text)
                         if text.strip() == target_text.strip():
                             (tl, tr, br, bl) = bbox
                             center_x = int((tl[0] + br[0]) / 2)
