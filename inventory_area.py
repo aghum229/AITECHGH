@@ -1384,7 +1384,7 @@ def zaiko_place():
                                                         zkMo_value = "持出中"
                                                     else:
                                                         zkMo_value = ""
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [zkTana_list[index_2], zkMo_value, item, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                                     # st.write("zkHin_list:", zkHin_list)
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
                                     # st.write(st.session_state.df_search_result)
@@ -1544,12 +1544,11 @@ def zaiko_place():
                                         if item == zkTana_Search:
                                             if listCount2 > 1:
                                                 for index_2, item_2 in enumerate(zkIko):
-                                                    if item_2 == zkHin_Search:
-                                                        if zkMo[index_2] == "1":
-                                                            zkMo_value = "持出中"
-                                                        else:
-                                                            zkMo_value = ""
-                                                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                                    if zkMo[index_2] == "1":
+                                                        zkMo_value = "持出中"
+                                                    else:
+                                                        zkMo_value = ""
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                                             else:
                                                 if zkMo[0] == "1":
                                                     zkMo_value = "持出中"
@@ -1704,7 +1703,8 @@ def zaiko_place():
                         st.rerun()
                 
                 if not st.session_state.production_order_flag:
-                    st.write(f"#### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}")  
+                    st.write(f"現在選択されている棚番 :   {st.session_state.tanaban_select_temp}") 
+                    # st.write(f"#### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}")  # ←この文字サイズ変更コードでは、特定の文字の場合に背景色が黒くなるバグが発生。原因不明の為、とりあえずコメント化20250926。
                     if st.session_state.manual_input_flag == 0:
                         qr_code_kari = ""
                         left, center, right = st.columns([0.25, 0.5, 0.25])
