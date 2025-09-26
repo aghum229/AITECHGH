@@ -16,6 +16,7 @@ import re
 import toml
 import streamlit.components.v1 as components
 from st_aggrid import AgGrid, GridOptionsBuilder
+import unicodedata
 
 import easyocr
 import numpy as np
