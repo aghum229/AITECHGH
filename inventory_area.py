@@ -1424,7 +1424,11 @@ def zaiko_place():
                                         st.session_state.tanaban_select_flag  = False
                                         st.session_state.tanaban_select_value = ""
                                         st.rerun()
-                                st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
+                                # st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
+                                st.markdown(
+                                    f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_value}</div>",
+                                    unsafe_allow_html=True
+                                )
                                 image_viewer(st.session_state.tanaban_select_value)
                                 st.stop()
                             _= '''
@@ -1444,7 +1448,11 @@ def zaiko_place():
                                     st.session_state.tanaban_select_flag  = False
                                     st.session_state.tanaban_select_value = ""
                                     st.rerun()
-                                st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
+                                # st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
+                                st.markdown(
+                                    f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_value}</div>",
+                                    unsafe_allow_html=True
+                                )
                                 # image_viewer(st.session_state.tanaban_select_value)
                                 st.stop()
                             '''
@@ -1509,7 +1517,11 @@ def zaiko_place():
                                     st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                     st.session_state.record_2  = None
                                     st.rerun()
-                            st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
+                            # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
+                            st.markdown(
+                                f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_temp_info}　にある品番一覧</div>",
+                                unsafe_allow_html=True
+                            )
                             st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                             listCount = 0
                             listCount2 = 0
@@ -1761,7 +1773,7 @@ def zaiko_place():
                             # """
                             message_text = f"""
                             <div style='font-size:22px; font-weight:bold;'>
-                                現在選択されている棚番 : {st.session_state.tanaban_select_temp}<br>
+                                現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
                                 移行票番号(製造オーダー)は、<br>
                                 <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
                                 でよろしいですか？
@@ -1984,7 +1996,7 @@ def zaiko_place():
                                 listCount = len(zkTana_list)
                                 if listCount > 2:
                                     for index, item in enumerate(zkTana_list):
-                                        if item == tanaban_select:
+                                        if item == st.session_state.tanaban_select_temp:
                                             listNumber = index
                                             listAdd = 0
                                             break  # 条件を満たしたらループを終了
@@ -1992,21 +2004,21 @@ def zaiko_place():
                                             listAdd = 1
                                 else:
                                     if listCount == 1:
-                                        if zkTana_list != tanaban_select:
+                                        if zkTana_list != st.session_state.tanaban_select_temp:
                                             listAdd = 1
                                         else:
                                             listNumber = 0
                                     else:
-                                        if zkTana_list[0] != tanaban_select and zkTana_list[1] != tanaban_select:
+                                        if zkTana_list[0] != st.session_state.tanaban_select_temp and zkTana_list[1] != st.session_state.tanaban_select_temp:
                                             listAdd = 1
-                                        elif zkTana_list[0] == tanaban_select:
+                                        elif zkTana_list[0] == st.session_state.tanaban_select_temp:
                                             listNumber = 0
                                         else:
                                             listNumber = 1
                                 datetime_str = dt.now(jst).strftime("%Y/%m/%d %H:%M:%S")
                                 zkHistory_value = ""
                                 if listAdd == 1: # 棚番が無い場合
-                                    st.write(f"❌05 **棚番 '{tanaban_select}' の追加は許可されてません。**")
+                                    st.write(f"❌05 **棚番 '{st.session_state.tanaban_select_temp}' の追加は許可されてません。**")
                                     st.stop()  # 以降の処理を止める
                                 else:
                                     zkIko_raw = record.get("zkIkohyoNo__c", "")
@@ -2048,7 +2060,7 @@ def zaiko_place():
                                         zkHistory = zkIko
                                     else:
                                         zkOrder = st.session_state.production_order
-                                        zkHistory_value = f"{tanaban_select},{zkOrder},{hinban},{process_order_name},{quantity},{datetime_str},{zkMochidashi_value},{owner_value}"
+                                        zkHistory_value = f"{st.session_state.tanaban_select_temp},{zkOrder},{hinban},{process_order_name},{quantity},{datetime_str},{zkMochidashi_value},{owner_value}"
                                         if st.session_state.add_del_flag == 0: # 追加の場合
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
                                             zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
