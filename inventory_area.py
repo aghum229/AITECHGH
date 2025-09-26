@@ -1878,7 +1878,7 @@ def zaiko_place():
                             listCount = len(zkTana_list)
                             if listCount > 2:
                                 for index, item in enumerate(zkTana_list):
-                                    if item == tanaban_select:
+                                    if normalize(item) == normalize(st.session_state.tanaban_select_temp):
                                         zkIko_list = record["zkIkohyoNo__c"].splitlines()
                                         zkIko_kari = zkIko_list[index].split(",")
                                         zkMochi_list = record["zkMochidashi__c"].splitlines()
@@ -2101,7 +2101,7 @@ def zaiko_place():
                                 st.stop()  # 以降の処理を止める
                             st.session_state.zkScroll_flag = 0
                             if item_id:
-                                update_tanaban(st.session_state.sf, item_id, tanaban_select, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
+                                update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
                                 button_key = "check_ok_2"
                                 if st.session_state.zkScroll_flag == 1 and button_key not in st.session_state:
                                     @st.dialog("処理結果通知")
