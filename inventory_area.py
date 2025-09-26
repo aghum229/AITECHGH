@@ -1558,7 +1558,7 @@ def zaiko_place():
                                         zkEndDT = zkEndDT_list[index].split(",")
                                         zkMo = zkMo_list[index].split(",")
                                         listCount2 = len(zkIko)
-                                        if item == zkTana_Search:
+                                        if normalize(item) == normalize(st.session_state.tanaban_select_temp_info):
                                             if listCount2 > 1:
                                                 for index_2, item_2 in enumerate(zkIko):
                                                     if zkMo[index_2] == "1":
