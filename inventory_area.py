@@ -1703,7 +1703,12 @@ def zaiko_place():
                         st.rerun()
                 
                 if not st.session_state.production_order_flag:
-                    st.write(f"### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}") 
+                    str_text = f"現在選択されている棚番 :   {st.session_state.tanaban_select_temp}"
+                    st.markdown(
+                        f"<div style='font-size:28px; font-weight:bold;'>str_text</div>",
+                        unsafe_allow_html=True
+                    )
+                    # st.write(f"### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}") 
                     # st.write(f"#### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}")  # ←この文字サイズ変更コードでは、特定の文字の場合に背景色が黒くなるバグが発生。原因不明の為、とりあえずコメント化20250926。
                     if st.session_state.manual_input_flag == 0:
                         qr_code_kari = ""
