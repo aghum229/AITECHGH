@@ -1765,12 +1765,6 @@ def zaiko_place():
                         def dialog_button(button_key):
                             global message_text
                             # global button_key
-                            # message_text = f"""
-                            # #### 現在選択されている棚番 : {st.session_state.tanaban_select_temp}
-                            # #### 移行票番号(製造オーダー)は、
-                            # ## 「 {st.session_state.production_order} 」
-                            # #### でよろしいですか？
-                            # """
                             message_text = f"""
                             <div style='font-size:22px; font-weight:bold;'>
                                 現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
@@ -1996,6 +1990,7 @@ def zaiko_place():
                                 listCount = len(zkTana_list)
                                 if listCount > 2:
                                     for index, item in enumerate(zkTana_list):
+                                        st.write(f"{item}   {st.session_state.tanaban_select_temp}")
                                         if item == st.session_state.tanaban_select_temp:
                                             listNumber = index
                                             listAdd = 0
