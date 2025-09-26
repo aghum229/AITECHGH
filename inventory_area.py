@@ -758,6 +758,9 @@ def pad_to_center(img, target_width, pad_color=(255, 255, 255)):
     pad_right = target_width - w - pad_left
     return cv2.copyMakeBorder(img, 0, 0, pad_left, pad_right, cv2.BORDER_CONSTANT, value=pad_color)
 
+def normalize(s):
+    return unicodedata.normalize('NFKC', str(s)).strip()
+
 def image_viewer(target_text):
     image_files = sorted(glob.glob("TanaMap*.png") + glob.glob("TanaMap*.jpg") + glob.glob("TanaMap*.jpeg"))
     image_flag = False
@@ -1990,13 +1993,19 @@ def zaiko_place():
                                 listCount = len(zkTana_list)
                                 if listCount > 2:
                                     for index, item in enumerate(zkTana_list):
-                                        # st.write(type(item), type(st.session_state.tanaban_select_temp))
-                                        if str(item) == str(st.session_state.tanaban_select_temp):
+                                        if normalize(item) == normalize(st.session_state.tanaban_select_temp):
                                             listNumber = index
                                             listAdd = 0
-                                            break  # 条件を満たしたらループを終了
+                                            break
                                         else:
                                             listAdd = 1
+                                    # for index, item in enumerate(zkTana_list):
+                                    #     if str(item) == str(st.session_state.tanaban_select_temp):
+                                    #         listNumber = index
+                                    #         listAdd = 0
+                                    #         break  # 条件を満たしたらループを終了
+                                    #     else:
+                                    #         listAdd = 1
                                 else:
                                     if listCount == 1:
                                         if zkTana_list != st.session_state.tanaban_select_temp:
