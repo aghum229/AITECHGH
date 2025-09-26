@@ -1763,7 +1763,7 @@ def zaiko_place():
                             <div style='font-size:22px; font-weight:bold;'>
                                 現在選択されている棚番 : {st.session_state.tanaban_select_temp}<br>
                                 移行票番号(製造オーダー)は、<br>
-                                <span style='font-size:26px; color:#007ACC;'>「 {st.session_state.production_order} 」</span><br>
+                                <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
                                 でよろしいですか？
                             </div>
                             """
