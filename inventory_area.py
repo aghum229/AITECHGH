@@ -1597,7 +1597,7 @@ def zaiko_place():
                                 st.stop()
                             
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
-                            image_viewer(st.session_state.tanaban_select_temp_info)
+                            image_viewer(normalize(st.session_state.tanaban_select_temp_info))
                             st.stop()
                 _= '''
                 else:
