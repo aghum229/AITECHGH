@@ -1703,9 +1703,9 @@ def zaiko_place():
                         st.rerun()
                 
                 if not st.session_state.production_order_flag:
-                    str_text = f"現在選択されている棚番 :   {st.session_state.tanaban_select_temp}"
+                    # str_text = f"現在選択されている棚番 :   {st.session_state.tanaban_select_temp}"
                     st.markdown(
-                        f"<div style='font-size:28px; font-weight:bold;'>str_text</div>",
+                        f"<div style='font-size:28px; font-weight:bold;'>現在選択されている棚番 :   {st.session_state.tanaban_select_temp}</div>",
                         unsafe_allow_html=True
                     )
                     # st.write(f"### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}") 
@@ -1752,11 +1752,19 @@ def zaiko_place():
                         def dialog_button(button_key):
                             global message_text
                             # global button_key
+                            # message_text = f"""
+                            # #### 現在選択されている棚番 : {st.session_state.tanaban_select_temp}
+                            # #### 移行票番号(製造オーダー)は、
+                            # ## 「 {st.session_state.production_order} 」
+                            # #### でよろしいですか？
+                            # """
                             message_text = f"""
-                            #### 現在選択されている棚番 : {st.session_state.tanaban_select_temp}
-                            #### 移行票番号(製造オーダー)は、
-                            ## 「 {st.session_state.production_order} 」
-                            #### でよろしいですか？
+                            <div style='font-size:22px; font-weight:bold;'>
+                                現在選択されている棚番 : {st.session_state.tanaban_select_temp}<br>
+                                移行票番号(製造オーダー)は、<br>
+                                <span style='font-size:26px; color:#007ACC;'>「 {st.session_state.production_order} 」</span><br>
+                                でよろしいですか？
+                            </div>
                             """
                             result_flag = approve_button(message_text, button_key)
                         dialog_button(button_key)
