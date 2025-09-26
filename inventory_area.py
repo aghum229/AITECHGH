@@ -1990,7 +1990,7 @@ def zaiko_place():
                                 listCount = len(zkTana_list)
                                 if listCount > 2:
                                     for index, item in enumerate(zkTana_list):
-                                        st.write(type(item), type(st.session_state.tanaban_select_temp))
+                                        # st.write(type(item), type(st.session_state.tanaban_select_temp))
                                         if str(item) == str(st.session_state.tanaban_select_temp):
                                             listNumber = index
                                             listAdd = 0
