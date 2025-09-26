@@ -961,7 +961,16 @@ def image_viewer(target_text):
                         elif ((text.strip() == "R-g" and target_text.strip() == "R-9")
                             or (text.strip() == "6-5" and target_text.strip() == "G-5") 
                             or (text.strip() == "6-6" and target_text.strip() == "G-6") 
-                            or (text.strip() == "6-17" and target_text.strip() == "G-17")):
+                            or (text.strip() == "6-17" and target_text.strip() == "G-17")
+                            or (text.strip() == "H1" and target_text.strip() == "H-1")
+                            or (text.strip() == "H4" and target_text.strip() == "H-4")
+                            or (text.strip() == "H6" and target_text.strip() == "H-6")
+                            or (text.strip() == "H7" and target_text.strip() == "H-7")
+                            or (text.strip() == "H-g" and target_text.strip() == "H-9")
+                            or (text.strip() == "H-1" and target_text.strip() == "H-10")
+                            or (text.strip() == "H11" and target_text.strip() == "H-11")
+                            or (text.strip() == "H15" and target_text.strip() == "H-15")
+                            or (text.strip() == "H17" and target_text.strip() == "H-17")):
                             (tl, tr, br, bl) = bbox
                             center_x = int((tl[0] + br[0]) / 2)
                             center_y = int((tl[1] + br[1]) / 2)
