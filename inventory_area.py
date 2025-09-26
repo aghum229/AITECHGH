@@ -669,7 +669,7 @@ def display_footer():
     with center:
         st.markdown(
             "<p style='text-align:right;'> \
-            <span style='font-size: 10px;'>ver.1.0.0</span> \
+            <span style='font-size: 10px;'>ver.1.0.1</span> \
             </p>"
             , unsafe_allow_html=True
         )
