@@ -1930,7 +1930,7 @@ def zaiko_place():
                                                 st.session_state.list_flag = 1 # 移行票番号が有る
                                                 zkMochidashi_value = zkMochidashi[0]
                                                 break
-                        st.write(f"持出の値：　{zkMochidashi_value}")
+                        # st.write(f"持出の値：　{zkMochidashi_value}")
                         st.session_state.record = ""
                         if zkMochidashi_value == "1":
                             zkMochidashi_value_1 = "持出中"
@@ -2117,15 +2117,15 @@ def zaiko_place():
                                         zkOrder = st.session_state.production_order
                                         zkHistory_value = f"{st.session_state.tanaban_select_temp},{zkOrder},{hinban},{process_order_name},{quantity},{datetime_str},{zkMochidashi_value},{owner_value}"
                                         if st.session_state.add_del_flag == 2: # 持出ONの場合
-                                            st.write(f"持出の値：　{zkMochidashi_value}")
-                                            # zkMochidashi_value == "1"
+                                            # st.write(f"持出の値：　{zkMochidashi_value}")
+                                            zkMochidashi_value == "1"
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},picadd"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
                                         elif st.session_state.add_del_flag == 3: # 持出OFFの場合
-                                            # zkMochidashi_value == "0"
+                                            zkMochidashi_value == "0"
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},picdel"
