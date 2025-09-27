@@ -1934,8 +1934,7 @@ def zaiko_place():
                         st.session_state.record = ""
                         if zkMochidashi_value == "1":
                             zkMochidashi_value_1 = "持出中"
-                            if st.session_state.list_flag == 1: 
-                                st.session_state.list_flag == 3
+                            st.session_state.list_flag = 3
                         else:
                             zkMochidashi_value_1 = ""
                         
@@ -2037,6 +2036,7 @@ def zaiko_place():
                             zkMo = ""
                             zkOrder = ""
                             zkHistory = ""
+                            st.session_state.zkScroll_flag = 0
                             record = data_catch(st.session_state.sf, item_id)
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
@@ -2164,7 +2164,7 @@ def zaiko_place():
                             if st.session_state.owner is None:
                                 st.write(f"❌09 **作業者コード '{owner}' が未入力です。**")
                                 st.stop()  # 以降の処理を止める
-                            st.session_state.zkScroll_flag = 0
+                            # st.session_state.zkScroll_flag = 0
                             if item_id:
                                 if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
                                     update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
