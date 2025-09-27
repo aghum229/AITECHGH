@@ -1910,6 +1910,8 @@ def zaiko_place():
                         st.session_state.record = ""
                         if zkMochidashi_value == "1":
                             zkMochidashi_value_1 = "持出中"
+                            if st.session_state.list_flag == 1: 
+                                st.session_state.list_flag == 3
                         else:
                             zkMochidashi_value_1 = ""
                         
@@ -1937,13 +1939,18 @@ def zaiko_place():
                             quantity = 0.0
                             
                         st.session_state.add_del_flag = 0  # 0:追加 1:削除 9:取消     
-                        left, center, right = st.columns(3)
+                        left, center1, center2, right = st.columns(4)
                         with left:
                             if st.session_state.list_flag == 0: # 移行票番号が無い場合のみ
                                 submit_button_add = st.form_submit_button("追加")
-                        with center:
+                        with center1:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
                                 submit_button_del = st.form_submit_button("削除")
+                        with center2:
+                            if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
+                                submit_button_pic = st.form_submit_button("持出")
+                            if st.session_state.list_flag == 3: # 持出中のみ
+                                submit_button_pic_cancel = st.form_submit_button("持出解除")
                         with right:
                             submit_button_cancel = st.form_submit_button("取消")
                         submit_button_flag = 0
@@ -1954,6 +1961,13 @@ def zaiko_place():
                         if st.session_state.list_flag == 1:
                             if submit_button_del:
                                 st.session_state.add_del_flag = 1
+                                submit_button_flag = 1
+                            if submit_button_pic:
+                                st.session_state.add_del_flag = 2
+                                submit_button_flag = 1
+                        if st.session_state.list_flag == 3:
+                            if submit_button_pic_cancel:
+                                st.session_state.add_del_flag = 3
                                 submit_button_flag = 1
                         if submit_button_cancel:
                             st.session_state.add_del_flag = 9
