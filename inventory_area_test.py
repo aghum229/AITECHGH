@@ -364,7 +364,7 @@ def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo
         reset_form()
         st.stop()
                
-def update_Mochidashi(sf, item_id, zkTana, zkIko, zkMo, zkHistory, zkOrder, zkMo_flag):
+def update_Mochidashi(sf, item_id, zkTana, zkMo, zkHistory, zkOrder, zkMo_flag):
     # zkMo_flag  # 0:持出OFF　1:持出ON
     try:
         # sf.snps_um__Process__c.update(item_id, {"zkMochidashi__c": zkMo})
@@ -2120,14 +2120,14 @@ def zaiko_place():
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},picadd"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
-                                            update_Mochidashi(st.session_state.sf, item_id, zkMo, zkHistory, zkOrder, 1)
+                                            update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
                                         elif st.session_state.add_del_flag == 3: # 持出OFFの場合
                                             # zkMochidashi_value == "0"
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},picdel"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
-                                            update_Mochidashi(st.session_state.sf, item_id, zkMo, zkHistory, zkOrder, 0)
+                                            update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
                                         elif st.session_state.add_del_flag == 0: # 追加の場合
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
                                             zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
