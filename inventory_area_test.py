@@ -2121,12 +2121,14 @@ def zaiko_place():
                                         zkHistory_value = f"{st.session_state.tanaban_select_temp},{zkOrder},{hinban},{process_order_name},{quantity},{datetime_str},{zkMochidashi_value},{owner_value}"
                                         if st.session_state.add_del_flag == 2: # 持出ONの場合
                                             # zkMochidashi_value == "1"
+                                            zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},picadd"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(sf, item_id, zkMo, zkHistory, zkOrder, 1)
                                         elif st.session_state.add_del_flag == 3: # 持出OFFの場合
                                             # zkMochidashi_value == "0"
+                                            zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},picdel"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
