@@ -785,6 +785,13 @@ def pad_to_center(img, target_width, pad_color=(255, 255, 255)):
 def normalize(s):
     return unicodedata.normalize('NFKC', str(s)).strip()
 
+def conversion_str(records, zkList):
+    zkList_raw = records.get("zkList", "")
+    if isinstance(zkList_raw, str):
+        return zkList_raw.splitlines()
+    else:
+        return []
+
 def image_viewer(target_text):
     image_files = sorted(glob.glob("TanaMap*.png") + glob.glob("TanaMap*.jpg") + glob.glob("TanaMap*.jpeg"))
     image_flag = False
@@ -1190,13 +1197,25 @@ def zaiko_place():
             # if record_2:
             if records:
                 # zkHistory = records["zkHistory__c"]  # zk履歴
-                zkTana_list = records["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                zkIko_list = records["zkIkohyoNo__c"].splitlines() 
-                zkHin_list = records["zkHinban__c"].splitlines() 
-                zkKan_list = records["zkKanryoKoutei__c"].splitlines() 
-                zkSu_list = records["zkSuryo__c"].splitlines() 
-                zkEndDT_list = records["zkEndDayTime__c"].splitlines() 
-                zkMo_list = records["zkMochidashi__c"].splitlines() 
+                # zkTanaban_raw = records.get("zkTanaban__c", "")
+                # if isinstance(zkTanaban_raw, str):
+                #     zkTana_list = zkTanaban_raw.splitlines()
+                # else:
+                #     zkTana_list = []
+                zkTana_list = conversion_str(records, "zkTanaban__c")
+                zkIko_list = conversion_str(records, "zkIkohyoNo__c")
+                zkHin_list = conversion_str(records, "zkHinban__c")
+                zkKan_list = conversion_str(records, "zkKanryoKoutei__c")
+                zkSu_list = conversion_str(records, "zkSuryo__c")
+                zkEndDT_list = conversion_str(records, "zkEndDayTime__c")
+                zkMo_list = conversion_str(records, "zkMochidashi__c")
+                # zkTana_list = records["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                # zkIko_list = records["zkIkohyoNo__c"].splitlines() 
+                # zkHin_list = records["zkHinban__c"].splitlines() 
+                # zkKan_list = records["zkKanryoKoutei__c"].splitlines() 
+                # zkSu_list = records["zkSuryo__c"].splitlines() 
+                # zkEndDT_list = records["zkEndDayTime__c"].splitlines() 
+                # zkMo_list = records["zkMochidashi__c"].splitlines() 
                 for index, item in enumerate(zkTana_list):
                     zkIko = zkIko_list[index].split(",")
                     zkHin = zkHin_list[index].split(",")
