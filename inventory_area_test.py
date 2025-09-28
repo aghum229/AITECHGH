@@ -790,7 +790,8 @@ def conversion_str(record, zkList):
     if isinstance(zkList_raw, str):
         return zkList_raw.splitlines()
     else:
-        return ', '.join(map(str, zkList_raw))
+        # return ', '.join(map(str, zkList_raw))
+        return []
 
 def image_viewer(target_text):
     image_files = sorted(glob.glob("TanaMap*.png") + glob.glob("TanaMap*.jpg") + glob.glob("TanaMap*.jpeg"))
@@ -1202,6 +1203,8 @@ def zaiko_place():
                 zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
                 zkMo_list = conversion_str(record, "zkMochidashi__c")
                 zkHistory_list = conversion_str(record, "zkHistory__c")
+                if listCount == 0:
+                    st.write(zkHistory_list)
                 for index, item in enumerate(zkTana_list):
                     listCount += 1
                     zkIko = zkIko_list[index].split(",")
