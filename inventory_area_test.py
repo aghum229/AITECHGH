@@ -1228,45 +1228,32 @@ def zaiko_place():
             # csv_bytes = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8")
             csv_bytes = st.session_state.df_search_result.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             b64_csv = base64.b64encode(csv_bytes).decode()
-            csv_bytes_df = st.session_state.df_search_result.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
-            b64_csv_df = base64.b64encode(csv_bytes).decode()
+            csv_bytes_df = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
+            b64_csv_df = base64.b64encode(csv_bytes_df).decode()
             # JavaScriptでBase64をBlobに変換してダウンロード
             components.html(f"""
                 <html>
                 <body>
                     <script>
-                        const b64Data = "{b64_csv}";
-                        const byteCharacters = atob(b64Data);
-                        const byteNumbers = new Array(byteCharacters.length);
-                        for (let i = 0; i < byteCharacters.length; i++) {{
-                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        function downloadCSV(base64Data, fileName) {{
+                            const byteCharacters = atob(base64Data);
+                            const byteNumbers = new Array(byteCharacters.length);
+                            for (let i = 0; i < byteCharacters.length; i++) {{
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }}
+                            const byteArray = new Uint8Array(byteNumbers);
+                            const blob = new Blob([byteArray], {{ type: 'text/csv;charset=shift_jis;' }});
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement("a");
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", fileName);
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
                         }}
-                        const byteArray = new Uint8Array(byteNumbers);
-                        const blob = new Blob([byteArray], {{ type: 'text/csv;charset=shift_jis;' }});
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement("a");
-                        link.setAttribute("href", url);
-                        link.setAttribute("download", "{file_name}");
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    </script>
-                    <script>
-                        const b64Data = "{b64_csv_df}";
-                        const byteCharacters = atob(b64Data);
-                        const byteNumbers = new Array(byteCharacters.length);
-                        for (let i = 0; i < byteCharacters.length; i++) {{
-                            byteNumbers[i] = byteCharacters.charCodeAt(i);
-                        }}
-                        const byteArray = new Uint8Array(byteNumbers);
-                        const blob = new Blob([byteArray], {{ type: 'text/csv;charset=shift_jis;' }});
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement("a");
-                        link.setAttribute("href", url);
-                        link.setAttribute("download", "{file_name_df}");
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+            
+                        downloadCSV("{b64_csv}", "{file_name}");
+                        downloadCSV("{b64_csv_df}", "{file_name_df}");
                     </script>
                 </body>
                 </html>
@@ -1275,7 +1262,13 @@ def zaiko_place():
             st.download_button(
                 label="CSVファイルをダウンロード",
                 data=b64_csv,
-                file_name=f"data_{date_today}.csv",
+                file_name=f"{file_name}",
+                mime='text/csv'
+            )
+            st.download_button(
+                label="DataFrameから生成したCSVをダウンロード",
+                data=base64.b64decode(b64_csv_df),
+                file_name=f"df_{file_name_df}",
                 mime='text/csv'
             )
         st.stop()
