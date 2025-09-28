@@ -790,6 +790,7 @@ def conversion_str(record, zkList):
     if isinstance(zkList_raw, str):
         return zkList_raw.splitlines()
     else:
+        # return ', '.join(map(str, zkList_raw))
         return []
 
 def image_viewer(target_text):
@@ -1182,7 +1183,7 @@ def zaiko_place():
         records = data_catch_for_csv(st.session_state.sf, item_id)
         if records:
             df = pd.DataFrame(records)
-            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日", "履歴"])
             listCount = 0
             listCount2 = 0
             zkTana = ""
@@ -1201,7 +1202,13 @@ def zaiko_place():
                 zkSu_list = conversion_str(record, "zkSuryo__c")
                 zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
                 zkMo_list = conversion_str(record, "zkMochidashi__c")
+                if listCount == 0: 
+                    zkHistory_list = conversion_str(record, "zkHistory__c")
+                    zkHistory_list = '\n '.join(zkHistory_list)
+                # if listCount == 0:
+                #     st.write(zkHistory_list)
                 for index, item in enumerate(zkTana_list):
+                    listCount += 1
                     zkIko = zkIko_list[index].split(",")
                     zkHin = zkHin_list[index].split(",")
                     zkKan = zkKan_list[index].split(",")
@@ -1211,9 +1218,15 @@ def zaiko_place():
                     listCount2 = len(zkIko)
                     if listCount2 > 1:
                         for index_2, item_2 in enumerate(zkIko):
-                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                            if listCount == 1:
+                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2], zkHistory_list]
+                            else:
+                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2], ""]
                     else:
-                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
+                        if listCount == 1:
+                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0], zkHistory_list]
+                        else:
+                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0], ""]
             # UTCとしてパース
             dt_utc = datetime.today()
             # 日本時間に変換
