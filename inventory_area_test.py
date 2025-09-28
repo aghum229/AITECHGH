@@ -1204,7 +1204,7 @@ def zaiko_place():
                 zkMo_list = conversion_str(record, "zkMochidashi__c")
                 if listCount == 0: 
                     zkHistory_list = conversion_str(record, "zkHistory__c")
-                    zkHistory_list = ', '.join(zkHistory_list)
+                    zkHistory_list = '\n '.join(zkHistory_list)
                 if listCount == 0:
                     st.write(zkHistory_list)
                 for index, item in enumerate(zkTana_list):
