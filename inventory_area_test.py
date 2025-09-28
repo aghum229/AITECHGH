@@ -1266,7 +1266,6 @@ def zaiko_place():
                         }}
             
                         downloadCSV("{b64_csv}", "{file_name}");
-                        downloadCSV("{b64_csv}", "{file_name}");
                     </script>
                 </body>
                 </html>
