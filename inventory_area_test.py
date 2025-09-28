@@ -785,9 +785,8 @@ def pad_to_center(img, target_width, pad_color=(255, 255, 255)):
 def normalize(s):
     return unicodedata.normalize('NFKC', str(s)).strip()
 
-def conversion_str(records, zkList):
-    # zkList_raw = records.get("zkList", "")
-    zkList_raw = records["zkList"]
+def conversion_str(record, zkList):
+    zkList_raw = record.get(zkList, "")
     if isinstance(zkList_raw, str):
         return zkList_raw.splitlines()
     else:
@@ -1194,37 +1193,28 @@ def zaiko_place():
             zkEndDT = ""
             zkMo = ""
             zkHistory = ""
-            # record_2 = data_catch(st.session_state.sf, item_id)
-            # if record_2:
-            # if records:
-                # zkHistory = records["zkHistory__c"]  # zk履歴
-                # zkTanaban_raw = records.get("zkTanaban__c", "")
-                # if isinstance(zkTanaban_raw, str):
-                #     zkTana_list = zkTanaban_raw.splitlines()
-                # else:
-                #     zkTana_list = []
             for record in records:
-                zkList_raw = record.get("zkTanaban__c", "")
-                zkTana_list = zkList_raw.splitlines()
-                zkList_raw = record.get("zkIkohyoNo__c", "")
-                zkIko_list = zkList_raw.splitlines()
-                zkList_raw = record.get("zkHinban__c", "")
-                zkHin_list = zkList_raw.splitlines()
-                zkList_raw = record.get("zkKanryoKoutei__c", "")
-                zkKan_list = zkList_raw.splitlines()
-                zkList_raw = record.get("zkSuryo__c", "")
-                zkSu_list = zkList_raw.splitlines()
-                zkList_raw = record.get("zkEndDayTime__c", "")
-                zkEndDT_list = zkList_raw.splitlines()
-                zkList_raw = record.get("zkMochidashi__c", "")
-                zkMo_list = zkList_raw.splitlines()
-                # zkTana_list = records["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                # zkIko_list = records["zkIkohyoNo__c"].splitlines() 
-                # zkHin_list = records["zkHinban__c"].splitlines() 
-                # zkKan_list = records["zkKanryoKoutei__c"].splitlines() 
-                # zkSu_list = records["zkSuryo__c"].splitlines() 
-                # zkEndDT_list = records["zkEndDayTime__c"].splitlines() 
-                # zkMo_list = records["zkMochidashi__c"].splitlines() 
+                zkTana_list = conversion_str(record, "zkTanaban__c")
+                zkIko_list = conversion_str(record, "zkIkohyoNo__c")
+                zkHin_list = conversion_str(record, "zkHinban__c")
+                zkKan_list = conversion_str(record, "zkKanryoKoutei__c")
+                zkSu_list = conversion_str(record, "zkSuryo__c")
+                zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
+                zkMo_list = conversion_str(record, "zkMochidashi__c")
+                # zkList_raw = record.get("zkTanaban__c", "")
+                # zkTana_list = zkList_raw.splitlines() # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                # zkList_raw = record.get("zkIkohyoNo__c", "")
+                # zkIko_list = zkList_raw.splitlines()
+                # zkList_raw = record.get("zkHinban__c", "")
+                # zkHin_list = zkList_raw.splitlines()
+                # zkList_raw = record.get("zkKanryoKoutei__c", "")
+                # zkKan_list = zkList_raw.splitlines()
+                # zkList_raw = record.get("zkSuryo__c", "")
+                # zkSu_list = zkList_raw.splitlines()
+                # zkList_raw = record.get("zkEndDayTime__c", "")
+                # zkEndDT_list = zkList_raw.splitlines()
+                # zkList_raw = record.get("zkMochidashi__c", "")
+                # zkMo_list = zkList_raw.splitlines()
                 for index, item in enumerate(zkTana_list):
                     zkIko = zkIko_list[index].split(",")
                     zkHin = zkHin_list[index].split(",")
@@ -1235,17 +1225,17 @@ def zaiko_place():
                     listCount2 = len(zkIko)
                     if listCount2 > 1:
                         for index_2, item_2 in enumerate(zkIko):
-                            if zkMo[index_2] == "1":
-                                zkMo_value = "持出中"
-                            else:
-                                zkMo_value = ""
-                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                            # if zkMo[index_2] == "1":
+                            #     zkMo_value = "持出中"
+                            # else:
+                            #     zkMo_value = ""
+                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                     else:
-                        if zkMo[0] == "1":
-                            zkMo_value = "持出中"
-                        else:
-                            zkMo_value = ""
-                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
+                        # if zkMo[0] == "1":
+                        #     zkMo_value = "持出中"
+                        # else:
+                        #     zkMo_value = ""
+                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
             # UTCとしてパース
             dt_utc = datetime.today()
             # 日本時間に変換
