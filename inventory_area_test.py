@@ -1174,7 +1174,50 @@ def zaiko_place():
     if st.session_state['owner'] == "9997":
         records = data_catch_for_csv(st.session_state.sf, item_id)
         if records:
-            df = pd.DataFrame(records)
+            # df = pd.DataFrame(records)
+            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+            listCount = 0
+            listCount2 = 0
+            zkTana = ""
+            zkIko = ""
+            zkHin = ""
+            zkKan = ""
+            zkSu = ""
+            zkEndDT = ""
+            zkMo = ""
+            zkHistory = ""
+            # record_2 = data_catch(st.session_state.sf, item_id)
+            # if record_2:
+            if records:
+                # zkHistory = records["zkHistory__c"]  # zk履歴
+                zkTana_list = records["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                zkIko_list = records["zkIkohyoNo__c"].splitlines() 
+                zkHin_list = records["zkHinban__c"].splitlines() 
+                zkKan_list = records["zkKanryoKoutei__c"].splitlines() 
+                zkSu_list = records["zkSuryo__c"].splitlines() 
+                zkEndDT_list = records["zkEndDayTime__c"].splitlines() 
+                zkMo_list = records["zkMochidashi__c"].splitlines() 
+                for index, item in enumerate(zkTana_list):
+                    zkIko = zkIko_list[index].split(",")
+                    zkHin = zkHin_list[index].split(",")
+                    zkKan = zkKan_list[index].split(",")
+                    zkSu = zkSu_list[index].split(",")
+                    zkEndDT = zkEndDT_list[index].split(",")
+                    zkMo = zkMo_list[index].split(",")
+                    listCount2 = len(zkIko)
+                    if listCount2 > 1:
+                        for index_2, item_2 in enumerate(zkIko):
+                            if zkMo[index_2] == "1":
+                                zkMo_value = "持出中"
+                            else:
+                                zkMo_value = ""
+                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                    else:
+                        if zkMo[0] == "1":
+                            zkMo_value = "持出中"
+                        else:
+                            zkMo_value = ""
+                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
             # UTCとしてパース
             dt_utc = datetime.today()
             # 日本時間に変換
@@ -1184,8 +1227,9 @@ def zaiko_place():
             date_today = dt_jst.strftime("%Y/%m/%d %H:%M:%S")
             file_name=f"zaiko_tana_backup_{date_today}.csv"
             # BOM付きCSVをバイナリで生成
-            csv_bytes = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
+            # csv_bytes = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             # csv_bytes = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8")
+            csv_bytes = st.session_state.df_search_result.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             b64_csv = base64.b64encode(csv_bytes).decode()
             
             # JavaScriptでBase64をBlobに変換してダウンロード
@@ -1570,6 +1614,7 @@ def zaiko_place():
                             zkKan = ""
                             zkSu = ""
                             zkEndDT = ""
+                            zkMo = ""
                             zkHistory = ""
                             record_2 = data_catch(st.session_state.sf, item_id)
                             if record_2:
