@@ -1203,6 +1203,7 @@ def zaiko_place():
                 zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
                 zkMo_list = conversion_str(record, "zkMochidashi__c")
                 zkHistory_list = conversion_str(record, "zkHistory__c")
+                zkHistory_list = ', '.join(zkHistory_list)
                 if listCount == 0:
                     st.write(zkHistory_list)
                 for index, item in enumerate(zkTana_list):
