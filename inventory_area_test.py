@@ -786,7 +786,8 @@ def normalize(s):
     return unicodedata.normalize('NFKC', str(s)).strip()
 
 def conversion_str(records, zkList):
-    zkList_raw = records.get("zkList", "")
+    # zkList_raw = records.get("zkList", "")
+    zkList_raw = records["zkList"]
     if isinstance(zkList_raw, str):
         return zkList_raw.splitlines()
     else:
