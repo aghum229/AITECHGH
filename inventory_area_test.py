@@ -1196,20 +1196,28 @@ def zaiko_place():
             zkHistory = ""
             # record_2 = data_catch(st.session_state.sf, item_id)
             # if record_2:
-            if records:
+            # if records:
                 # zkHistory = records["zkHistory__c"]  # zk履歴
                 # zkTanaban_raw = records.get("zkTanaban__c", "")
                 # if isinstance(zkTanaban_raw, str):
                 #     zkTana_list = zkTanaban_raw.splitlines()
                 # else:
                 #     zkTana_list = []
-                zkTana_list = conversion_str(records, "zkTanaban__c")
-                zkIko_list = conversion_str(records, "zkIkohyoNo__c")
-                zkHin_list = conversion_str(records, "zkHinban__c")
-                zkKan_list = conversion_str(records, "zkKanryoKoutei__c")
-                zkSu_list = conversion_str(records, "zkSuryo__c")
-                zkEndDT_list = conversion_str(records, "zkEndDayTime__c")
-                zkMo_list = conversion_str(records, "zkMochidashi__c")
+            for record in records:
+                zkList_raw = record.get("zkTanaban__c", "")
+                zkTana_list = zkList_raw.splitlines()
+                zkList_raw = record.get("zkIkohyoNo__c", "")
+                zkIko_list = zkList_raw.splitlines()
+                zkList_raw = record.get("zkHinban__c", "")
+                zkHin_list = zkList_raw.splitlines()
+                zkList_raw = record.get("zkKanryoKoutei__c", "")
+                zkKan_list = zkList_raw.splitlines()
+                zkList_raw = record.get("zkSuryo__c", "")
+                zkSu_list = zkList_raw.splitlines()
+                zkList_raw = record.get("zkEndDayTime__c", "")
+                zkEndDT_list = zkList_raw.splitlines()
+                zkList_raw = record.get("zkMochidashi__c", "")
+                zkMo_list = zkList_raw.splitlines()
                 # zkTana_list = records["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
                 # zkIko_list = records["zkIkohyoNo__c"].splitlines() 
                 # zkHin_list = records["zkHinban__c"].splitlines() 
