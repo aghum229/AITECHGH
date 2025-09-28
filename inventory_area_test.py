@@ -1205,12 +1205,19 @@ def zaiko_place():
                 zkSu_list = conversion_str(record, "zkSuryo__c")
                 zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
                 zkMo_list = conversion_str(record, "zkMochidashi__c")
+                zkTana = '\n '.join(zkTana_list)
+                zkIko = '\n '.join(zkIko_list)
+                zkHin = '\n '.join(zkHin_list)
+                zkKan = '\n '.join(zkKan_list)
+                zkSu = '\n '.join(zkSu_list)
+                zkEndDT = '\n '.join(zkEndDT_list)
+                zkMo = '\n '.join(zkMo_list)
                 if listCount == 0: 
                     zkHistory_list = conversion_str(record, "zkHistory__c")
                     zkHistory_list = '\n '.join(zkHistory_list)
-                    st.session_state.df_search_result_bak.loc[len(st.session_state.df_search_result_bak)] = [zkTana_list, zkMo_list, zkIko_list, zkHin_list, zkKan_list, zkSu_list, zkEndDT_list, zkHistory_list]
+                    st.session_state.df_search_result_bak.loc[len(st.session_state.df_search_result_bak)] = [zkTana, zkMo, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkHistory_list]
                 else:
-                    st.session_state.df_search_result_bak.loc[len(st.session_state.df_search_result_bak)] = [zkTana_list, zkMo_list, zkIko_list, zkHin_list, zkKan_list, zkSu_list, zkEndDT_list, ""]
+                    st.session_state.df_search_result_bak.loc[len(st.session_state.df_search_result_bak)] = [zkTana, zkMo, zkIko, zkHin, zkKan, zkSu, zkEndDT, ""]
                 # if listCount == 0:
                 #     st.write(zkHistory_list)
                 for index, item in enumerate(zkTana_list):
