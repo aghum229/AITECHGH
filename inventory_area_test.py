@@ -790,7 +790,7 @@ def conversion_str(record, zkList):
     if isinstance(zkList_raw, str):
         return zkList_raw.splitlines()
     else:
-        return []
+        return ', '.join(map(str, zkList_raw))
 
 def image_viewer(target_text):
     image_files = sorted(glob.glob("TanaMap*.png") + glob.glob("TanaMap*.jpg") + glob.glob("TanaMap*.jpeg"))
