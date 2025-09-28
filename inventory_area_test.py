@@ -1216,12 +1216,12 @@ def zaiko_place():
                             if listCount == 1:
                                 st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2], zkHistory_list]
                             else:
-                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2], ""]
                     else:
                         if listCount == 1:
                             st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0], zkHistory_list]
                         else:
-                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
+                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0], ""]
             # UTCとしてパース
             dt_utc = datetime.today()
             # 日本時間に変換
