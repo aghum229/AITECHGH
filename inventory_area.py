@@ -785,6 +785,13 @@ def pad_to_center(img, target_width, pad_color=(255, 255, 255)):
 def normalize(s):
     return unicodedata.normalize('NFKC', str(s)).strip()
 
+def conversion_str(record, zkList):
+    zkList_raw = record.get(zkList, "")
+    if isinstance(zkList_raw, str):
+        return zkList_raw.splitlines()
+    else:
+        return []
+
 def image_viewer(target_text):
     image_files = sorted(glob.glob("TanaMap*.png") + glob.glob("TanaMap*.jpg") + glob.glob("TanaMap*.jpeg"))
     image_flag = False
@@ -1175,6 +1182,38 @@ def zaiko_place():
         records = data_catch_for_csv(st.session_state.sf, item_id)
         if records:
             df = pd.DataFrame(records)
+            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+            listCount = 0
+            listCount2 = 0
+            zkTana = ""
+            zkIko = ""
+            zkHin = ""
+            zkKan = ""
+            zkSu = ""
+            zkEndDT = ""
+            zkMo = ""
+            zkHistory = ""
+            for record in records:
+                zkTana_list = conversion_str(record, "zkTanaban__c")
+                zkIko_list = conversion_str(record, "zkIkohyoNo__c")
+                zkHin_list = conversion_str(record, "zkHinban__c")
+                zkKan_list = conversion_str(record, "zkKanryoKoutei__c")
+                zkSu_list = conversion_str(record, "zkSuryo__c")
+                zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
+                zkMo_list = conversion_str(record, "zkMochidashi__c")
+                for index, item in enumerate(zkTana_list):
+                    zkIko = zkIko_list[index].split(",")
+                    zkHin = zkHin_list[index].split(",")
+                    zkKan = zkKan_list[index].split(",")
+                    zkSu = zkSu_list[index].split(",")
+                    zkEndDT = zkEndDT_list[index].split(",")
+                    zkMo = zkMo_list[index].split(",")
+                    listCount2 = len(zkIko)
+                    if listCount2 > 1:
+                        for index_2, item_2 in enumerate(zkIko):
+                            st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                    else:
+                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
             # UTCとしてパース
             dt_utc = datetime.today()
             # 日本時間に変換
@@ -1183,31 +1222,38 @@ def zaiko_place():
             # 表示形式を整える
             date_today = dt_jst.strftime("%Y/%m/%d %H:%M:%S")
             file_name=f"zaiko_tana_backup_{date_today}.csv"
+            file_name_df=f"zaiko_tana_backup_df_{date_today}.csv"
             # BOM付きCSVをバイナリで生成
-            csv_bytes = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
+            # csv_bytes = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             # csv_bytes = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8")
+            csv_bytes = st.session_state.df_search_result.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             b64_csv = base64.b64encode(csv_bytes).decode()
-            
+            csv_bytes_df = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
+            b64_csv_df = base64.b64encode(csv_bytes_df).decode()
             # JavaScriptでBase64をBlobに変換してダウンロード
             components.html(f"""
                 <html>
                 <body>
                     <script>
-                        const b64Data = "{b64_csv}";
-                        const byteCharacters = atob(b64Data);
-                        const byteNumbers = new Array(byteCharacters.length);
-                        for (let i = 0; i < byteCharacters.length; i++) {{
-                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        function downloadCSV(base64Data, fileName) {{
+                            const byteCharacters = atob(base64Data);
+                            const byteNumbers = new Array(byteCharacters.length);
+                            for (let i = 0; i < byteCharacters.length; i++) {{
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }}
+                            const byteArray = new Uint8Array(byteNumbers);
+                            const blob = new Blob([byteArray], {{ type: 'text/csv;charset=shift_jis;' }});
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement("a");
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", fileName);
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
                         }}
-                        const byteArray = new Uint8Array(byteNumbers);
-                        const blob = new Blob([byteArray], {{ type: 'text/csv;charset=shift_jis;' }});
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement("a");
-                        link.setAttribute("href", url);
-                        link.setAttribute("download", "{file_name}");
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+            
+                        downloadCSV("{b64_csv}", "{file_name}");
+                        downloadCSV("{b64_csv_df}", "{file_name_df}");
                     </script>
                 </body>
                 </html>
@@ -1216,7 +1262,13 @@ def zaiko_place():
             st.download_button(
                 label="CSVファイルをダウンロード",
                 data=b64_csv,
-                file_name=f"data_{date_today}.csv",
+                file_name=f"{file_name}",
+                mime='text/csv'
+            )
+            st.download_button(
+                label="DataFrameから生成したCSVをダウンロード",
+                data=base64.b64decode(b64_csv_df),
+                file_name=f"df_{file_name_df}",
                 mime='text/csv'
             )
         st.stop()
@@ -1570,6 +1622,7 @@ def zaiko_place():
                             zkKan = ""
                             zkSu = ""
                             zkEndDT = ""
+                            zkMo = ""
                             zkHistory = ""
                             record_2 = data_catch(st.session_state.sf, item_id)
                             if record_2:
