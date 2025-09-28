@@ -1181,7 +1181,7 @@ def zaiko_place():
     if st.session_state['owner'] == "9997":
         records = data_catch_for_csv(st.session_state.sf, item_id)
         if records:
-            # df = pd.DataFrame(records)
+            df = pd.DataFrame(records)
             st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
             listCount = 0
             listCount2 = 0
@@ -1201,20 +1201,6 @@ def zaiko_place():
                 zkSu_list = conversion_str(record, "zkSuryo__c")
                 zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
                 zkMo_list = conversion_str(record, "zkMochidashi__c")
-                # zkList_raw = record.get("zkTanaban__c", "")
-                # zkTana_list = zkList_raw.splitlines() # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                # zkList_raw = record.get("zkIkohyoNo__c", "")
-                # zkIko_list = zkList_raw.splitlines()
-                # zkList_raw = record.get("zkHinban__c", "")
-                # zkHin_list = zkList_raw.splitlines()
-                # zkList_raw = record.get("zkKanryoKoutei__c", "")
-                # zkKan_list = zkList_raw.splitlines()
-                # zkList_raw = record.get("zkSuryo__c", "")
-                # zkSu_list = zkList_raw.splitlines()
-                # zkList_raw = record.get("zkEndDayTime__c", "")
-                # zkEndDT_list = zkList_raw.splitlines()
-                # zkList_raw = record.get("zkMochidashi__c", "")
-                # zkMo_list = zkList_raw.splitlines()
                 for index, item in enumerate(zkTana_list):
                     zkIko = zkIko_list[index].split(",")
                     zkHin = zkHin_list[index].split(",")
@@ -1225,16 +1211,8 @@ def zaiko_place():
                     listCount2 = len(zkIko)
                     if listCount2 > 1:
                         for index_2, item_2 in enumerate(zkIko):
-                            # if zkMo[index_2] == "1":
-                            #     zkMo_value = "持出中"
-                            # else:
-                            #     zkMo_value = ""
                             st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[index_2], zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
                     else:
-                        # if zkMo[0] == "1":
-                        #     zkMo_value = "持出中"
-                        # else:
-                        #     zkMo_value = ""
                         st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
             # UTCとしてパース
             dt_utc = datetime.today()
@@ -1244,12 +1222,14 @@ def zaiko_place():
             # 表示形式を整える
             date_today = dt_jst.strftime("%Y/%m/%d %H:%M:%S")
             file_name=f"zaiko_tana_backup_{date_today}.csv"
+            file_name_df=f"zaiko_tana_backup_df_{date_today}.csv"
             # BOM付きCSVをバイナリで生成
             # csv_bytes = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             # csv_bytes = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8")
             csv_bytes = st.session_state.df_search_result.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             b64_csv = base64.b64encode(csv_bytes).decode()
-            
+            csv_bytes_df = st.session_state.df_search_result.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
+            b64_csv_df = base64.b64encode(csv_bytes).decode()
             # JavaScriptでBase64をBlobに変換してダウンロード
             components.html(f"""
                 <html>
@@ -1267,6 +1247,23 @@ def zaiko_place():
                         const link = document.createElement("a");
                         link.setAttribute("href", url);
                         link.setAttribute("download", "{file_name}");
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    </script>
+                    <script>
+                        const b64Data = "{b64_csv_df}";
+                        const byteCharacters = atob(b64Data);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {{
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }}
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], {{ type: 'text/csv;charset=shift_jis;' }});
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement("a");
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", "{file_name_df}");
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
