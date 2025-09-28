@@ -1156,6 +1156,8 @@ def zaiko_place():
         st.session_state.records = ""
     if "df_search_result" not in st.session_state:
         st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+    if "df_search_result_bak" not in st.session_state:
+        st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
     if "df" not in st.session_state:
         st.session_state.df = None
     if "selected_row" not in st.session_state:
@@ -1184,6 +1186,7 @@ def zaiko_place():
         if records:
             df = pd.DataFrame(records)
             st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日", "履歴"])
+            st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日", "履歴"])
             listCount = 0
             listCount2 = 0
             zkTana = ""
@@ -1202,9 +1205,19 @@ def zaiko_place():
                 zkSu_list = conversion_str(record, "zkSuryo__c")
                 zkEndDT_list = conversion_str(record, "zkEndDayTime__c")
                 zkMo_list = conversion_str(record, "zkMochidashi__c")
+                zkTana = '\n '.join(zkTana_list)
+                zkIko = '\n '.join(zkIko_list)
+                zkHin = '\n '.join(zkHin_list)
+                zkKan = '\n '.join(zkKan_list)
+                zkSu = '\n '.join(zkSu_list)
+                zkEndDT = '\n '.join(zkEndDT_list)
+                zkMo = '\n '.join(zkMo_list)
                 if listCount == 0: 
                     zkHistory_list = conversion_str(record, "zkHistory__c")
                     zkHistory_list = '\n '.join(zkHistory_list)
+                    st.session_state.df_search_result_bak.loc[len(st.session_state.df_search_result_bak)] = [zkTana, zkMo, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkHistory_list]
+                else:
+                    st.session_state.df_search_result_bak.loc[len(st.session_state.df_search_result_bak)] = [zkTana, zkMo, zkIko, zkHin, zkKan, zkSu, zkEndDT, ""]
                 # if listCount == 0:
                 #     st.write(zkHistory_list)
                 for index, item in enumerate(zkTana_list):
@@ -1235,12 +1248,15 @@ def zaiko_place():
             # 表示形式を整える
             date_today = dt_jst.strftime("%Y/%m/%d %H:%M:%S")
             file_name=f"zaiko_tana_backup_{date_today}.csv"
+            file_name_bak=f"zaiko_tana_backup_bak_{date_today}.csv"
             file_name_df=f"zaiko_tana_backup_df_{date_today}.csv"
             # BOM付きCSVをバイナリで生成
             # csv_bytes = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             # csv_bytes = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8")
             csv_bytes = st.session_state.df_search_result.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             b64_csv = base64.b64encode(csv_bytes).decode()
+            csv_bytes_bak = st.session_state.df_search_result_bak.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
+            b64_csv_bak = base64.b64encode(csv_bytes_bak).decode()
             csv_bytes_df = df.to_csv(index=False, encoding="shift_jis").encode("shift_jis")
             b64_csv_df = base64.b64encode(csv_bytes_df).decode()
             # JavaScriptでBase64をBlobに変換してダウンロード
@@ -1266,6 +1282,7 @@ def zaiko_place():
                         }}
             
                         downloadCSV("{b64_csv}", "{file_name}");
+                        downloadCSV("{b64_csv_bak}", "{file_name_bak}");
                     </script>
                 </body>
                 </html>
