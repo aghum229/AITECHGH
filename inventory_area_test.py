@@ -574,6 +574,7 @@ def set_flag(flag):
 button_style = """
 <style>
 div.stButton {
+    white-space: pre-line;
     display: flex;
     justify-content: center;
     width: 100%; /* 必要に応じて調整：ボタンコンテナの幅 */
@@ -588,6 +589,28 @@ div.stButton > button {
     width: 350px; /* ボタンの横幅を固定値に設定 */
     max-width: 350px; /* 必要に応じて最大幅も設定 */
     height: 24px;
+}
+</style>
+"""
+
+formsubmitbutton_style = """
+<style>
+div.stFormSubmitButton {
+    white-space: pre-line;
+    display: flex;
+    justify-content: center;
+    width: 100%; /* 必要に応じて調整：ボタンコンテナの幅 */
+    # width: auto; /* 必要に応じて変更 */
+}
+div.stFormSubmitButton > button {
+    font-size: 12px !important; /* 文字サイズを指定 */
+    font-weight  : bold ;
+    color        : #FFF;
+    border-radius: 5px 5px 5px 5px     ;/* 枠線：半径10ピクセルの角丸     */
+    background   : #8a2be2             ;/* 背景色：aqua            */
+    width: 150px; /* ボタンの横幅を固定値に設定 */
+    max-width: 150px; /* 必要に応じて最大幅も設定 */
+    height: 24px !important;
 }
 </style>
 """
@@ -728,6 +751,7 @@ def button_make(button_text, screen_name):
             width: 200px;
             max-width: 200px;
             height: 20px;
+            
             margin: 5px; /* ボタン間の間隔など調整 */
         }
         .stButton>button:hover {
@@ -2049,22 +2073,22 @@ def zaiko_place():
                             process_order = 0
                             process_order_name = "-"
                             quantity = 0.0
-                            
+
                         st.session_state.add_del_flag = 0  # 0:追加 1:削除 2:持出 3:持出解除 9:取消     
                         left, center1, center2, right = st.columns(4)
                         with left:
                             if st.session_state.list_flag == 0: # 移行票番号が無い場合のみ
-                                submit_button_add = st.form_submit_button("追加")
+                                submit_button_add = st.form_submit_button("追加(add)")
                         with center1:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
-                                submit_button_del = st.form_submit_button("削除")
+                                submit_button_del = st.form_submit_button("削除(del)")
                         with center2:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
-                                submit_button_pic = st.form_submit_button("持出")
+                                submit_button_pic = st.form_submit_button("持出(picking)")
                             if st.session_state.list_flag == 3: # 持出中のみ
-                                submit_button_pic_cancel = st.form_submit_button("持出解除")
+                                submit_button_pic_cancel = st.form_submit_button("持出解除(release)")
                         with right:
-                            submit_button_cancel = st.form_submit_button("取消")
+                            submit_button_cancel = st.form_submit_button("取消(cancel)")
                         submit_button_flag = 0
                         if st.session_state.list_flag == 0:
                             if submit_button_add:
@@ -2300,6 +2324,7 @@ def show_main_screen():
     # display_container('yellow', '☆在庫置場管理システム☆')
     display_line()
     st.markdown(button_style, unsafe_allow_html=True)
+    st.markdown(formsubmitbutton_style, unsafe_allow_html=True)
     styled_input_text()
     zaiko_place()
     # button_set('button0', '0.ショートカット', 'other0')
