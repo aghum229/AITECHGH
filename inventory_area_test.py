@@ -724,7 +724,7 @@ def display_footer():
     with center:
         st.markdown(
             "<p style='text-align:right;'> \
-            <span style='font-size: 10px;'>ver.1.0.1</span> \
+            <span style='font-size: 10px;'>ver.1.0.2</span> \
             </p>"
             , unsafe_allow_html=True
         )
@@ -1994,6 +1994,7 @@ def zaiko_place():
                                 last_record = st.session_state.data[0]
                                 default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0)
                                 # default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0.0)
+                                default_quantity = round(default_quantity)
                                 default_process_order = int(last_record.get("snps_um__ProcessOrderNo__c", 0))
                                 default_process_order_name = last_record.get("snps_um__ProcessName__c")
                                 default_id = last_record.get("snps_um__Process__r", {}).get("AITC_ID18__c", "")
