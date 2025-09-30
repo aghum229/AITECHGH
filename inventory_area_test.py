@@ -227,17 +227,19 @@ def consultar_salesforce(production_order, sf):
         records = result['records']
         if not records:
             st.write("❌00 **データの取り出しに失敗しました。**")
-            return pd.DataFrame(), None, None, 0.0
+            return pd.DataFrame(), None, None, 0
+            # return pd.DataFrame(), None, None, 0.0
         df = pd.DataFrame(records)
         st.session_state.all_data = df.to_dict(orient="records")
         
         df_done = df[df['snps_um__Status__c'] == 'Done']
         if not df_done.empty:
             last_record = df_done.loc[df_done['snps_um__ProcessOrderNo__c'].idxmax()].to_dict()
-            cumulative_cost = last_record.get("snps_um__Process__r", {}).get("AITC_Acumulated_Price__c", 0.0)
+            cumulative_cost = last_record.get("snps_um__Process__r", {}).get("AITC_Acumulated_Price__c", 0)
+            # cumulative_cost = last_record.get("snps_um__Process__r", {}).get("AITC_Acumulated_Price__c", 0.0)
             if cumulative_cost is None:
-                cumulative_cost = 0.0
-
+                cumulative_cost = 0
+                # cumulative_cost = 0.0
             father_id = last_record['snps_um__Item__c']
             composition_query = f"""
                 SELECT 
@@ -250,23 +252,29 @@ def consultar_salesforce(production_order, sf):
             composition_records = composition_result['records']
             if composition_records:
                 material = composition_records[0].get("snps_um__ChildItem__r", {}).get("Name", "N/A")
-                material_weight = composition_records[0].get("snps_um__AddQt__c", 0.0)
+                material_weight = composition_records[0].get("snps_um__AddQt__c", 0)
+                # material_weight = composition_records[0].get("snps_um__AddQt__c", 0.0)
             else:
                 material = "N/A"
-                material_weight = 0.0
+                material_weight = 0
+                # material_weight = 0.0
             return pd.DataFrame([last_record]), material, material_weight, cumulative_cost
         else:
             st.write("❌01 **データの取り出しに失敗しました。**")
-        return pd.DataFrame(), None, None, 0.0
+        return pd.DataFrame(), None, None, 0
+        # return pd.DataFrame(), None, None, 0.0
     except Exception as e:
         st.error(f"Salesforceクエリエラー: {e}")
-        return pd.DataFrame(), None, None, 0.0
+        return pd.DataFrame(), None, None, 0
+        # return pd.DataFrame(), None, None, 0.0
 
 def clean_quantity(value):
     if isinstance(value, str):
         num = re.sub(r'[^\d.]', '', value)
-        return float(num) if num else 0.0
-    return float(value) if value else 0.0
+        return float(num) if num else 0
+    return float(value) if value else 0
+    #     return float(num) if num else 0.0
+    # return float(value) if value else 0.0
 
 def simplify_dataframe(df):
     if df.empty:
@@ -1113,7 +1121,8 @@ def zaiko_place():
     if 'mostrar_sucesso' not in st.session_state:
         st.session_state['mostrar_sucesso'] = False
     if "quantity" not in st.session_state:
-        st.session_state.quantity = 0.0
+        st.session_state.quantity = 0
+        # st.session_state.quantity = 0.0
     if "process_order" not in st.session_state:
         st.session_state.process_order = 0
     if "material" not in st.session_state:
@@ -1121,7 +1130,8 @@ def zaiko_place():
     if "material_weight" not in st.session_state:
         st.session_state.material_weight = None
     if "cumulative_cost" not in st.session_state:
-        st.session_state.cumulative_cost = 0.0
+        st.session_state.cumulative_cost = 0
+        # st.session_state.cumulative_cost = 0.0
     if "manual_input_value" not in st.session_state:
         st.session_state.manual_input_value = ""
     if "manual_input" not in st.session_state:
@@ -1811,7 +1821,8 @@ def zaiko_place():
                             st.session_state.data = None
                             st.session_state.material = None
                             st.session_state.material_weight = None
-                            st.session_state.cumulative_cost = 0.0
+                            st.session_state.cumulative_cost = 0
+                            # st.session_state.cumulative_cost = 0.0
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
@@ -1948,7 +1959,8 @@ def zaiko_place():
                             st.session_state.data = None
                             st.session_state.material = None
                             st.session_state.material_weight = None
-                            st.session_state.cumulative_cost = 0.0
+                            st.session_state.cumulative_cost = 0
+                            # st.session_state.cumulative_cost = 0.0
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
@@ -1959,7 +1971,8 @@ def zaiko_place():
                     st.session_state.zkSplitNo = 99
                     st.session_state.zkSplitFlag = 0
                     with st.form(key="registro_form", clear_on_submit=True):
-                        default_quantity = 0.0
+                        default_quantity = 0
+                        # default_quantity = 0.0
                         default_process_order = 0
                         default_process_order_name = ""
                         default_id = ""
@@ -1979,7 +1992,8 @@ def zaiko_place():
                                 st.session_state.material_weight = material_weight
                                 st.session_state.cumulative_cost = cumulative_cost
                                 last_record = st.session_state.data[0]
-                                default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0.0)
+                                default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0)
+                                # default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0.0)
                                 default_process_order = int(last_record.get("snps_um__ProcessOrderNo__c", 0))
                                 default_process_order_name = last_record.get("snps_um__ProcessName__c")
                                 default_id = last_record.get("snps_um__Process__r", {}).get("AITC_ID18__c", "")
@@ -2072,7 +2086,8 @@ def zaiko_place():
                             hinban = "-"
                             process_order = 0
                             process_order_name = "-"
-                            quantity = 0.0
+                            quantity = 0
+                            # quantity = 0.0
 
                         st.session_state.add_del_flag = 0  # 0:追加 1:削除 2:持出 3:持出解除 9:取消     
                         left, center1, center2, right = st.columns(4)
