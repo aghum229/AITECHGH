@@ -1160,12 +1160,12 @@ def zaiko_place():
         st.session_state.selected_tanaban_key = ""
     if "tanaban_select_info" not in st.session_state:
         st.session_state.tanaban_select_info = ""
-    if "tanaban_select_info_select" not in st.session_state:
-        st.session_state.tanaban_select_info_select = ""
     if "tanaban_select_temp" not in st.session_state:
         st.session_state.tanaban_select_temp = ""
     if "tanaban_select_temp_info" not in st.session_state:
         st.session_state.tanaban_select_temp_info = ""
+    if "tanaban_select_temp_info_select" not in st.session_state:
+        st.session_state.tanaban_select_temp_info_select = ""
     if "tanaban_select_value" not in st.session_state:
         st.session_state.tanaban_select_value = ""
     if "tanaban_select_flag" not in st.session_state:
@@ -1668,23 +1668,23 @@ def zaiko_place():
                             else:
                                 # zkTanalistSplit = zkTanalist.split(",")
                                 zkTanalist_selectSplit = zkTanalist_select.split(",")
+                                zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
                                 tanaban_select_info_select = st.selectbox(
                                     "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_info_select"
                                 )
                                 st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
                                 if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
-                                    zkTanalist_select_max = zkTanalist_select_max.split(",")
-                                    zkTanalist_select_max = zkTanalist_select_max.index(zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select))
+                                    zkTanalist_select_max = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
                                     for i in range(1, zkTanalist_select_max + 1):
                                         if i == 1:
                                             zkTanalistSplit = i
                                         else:
                                             zkTanalistSplit = zkTanalistSplit + f",[i]"
                                     zkTanalistSplit = zkTanalistSplit.split(",")
-                                    tanaban_select_info_select = st.selectbox(
-                                        "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info"
+                                    tanaban_select_info_select_max = st.selectbox(
+                                        "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info_max"
                                     )
-                                    st.session_state.tanaban_select_temp_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select}"
+                                    st.session_state.tanaban_select_temp_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select_max}"
                             if st.session_state.tanaban_select_temp_info != "" and st.session_state.tanaban_select_temp_info != "---":
                                 st.session_state.show_camera = False
                                 st.session_state.qr_code_tana_info = True
