@@ -1907,9 +1907,11 @@ def zaiko_place():
                         )
                         if tanaban_select_value != "" and tanaban_select_value != "---":
                             tanaban_select = f"{tanaban_select_mark}-{tanaban_select_value}"
-                if tanaban_select != "" and tanaban_select != "---":
+                st.session_state.tanaban_select_temp = tanaban_select
+                if st.session_state.tanaban_select_temp != "" and st.session_state.tanaban_select_temp != "---":
+                # if tanaban_select != "" and tanaban_select != "---":
                     # st.session_state.tanaban = tanaban_select
-                    st.session_state.tanaban_select_temp = tanaban_select
+                    # st.session_state.tanaban_select_temp = tanaban_select
                     st.session_state.show_camera = False
                     st.session_state.qr_code_tana = True
                     # st.write(st.session_state.qr_code_tana)
