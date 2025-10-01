@@ -1689,9 +1689,11 @@ def zaiko_place():
                                     for i in range(1, range_max + 1):
                                         if i == 1:
                                             if st.session_state.tanaban_select_temp_info_select == "E":
-                                                i += 30                                              
+                                                i += 30
                                             zkTanalistSplit = f"---,{i}"
                                         else:
+                                            if st.session_state.tanaban_select_temp_info_select == "E":
+                                                i += 30
                                             zkTanalistSplit = f"{zkTanalistSplit},{i}"
                                     zkTanalistSplit = zkTanalistSplit.split(",")
                                     tanaban_select_info_select_max = st.selectbox(
