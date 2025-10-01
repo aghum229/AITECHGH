@@ -1720,7 +1720,7 @@ def zaiko_place():
                                                         zkMo_value = "持出中"
                                                     else:
                                                         zkMo_value = ""
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(zkSu[index_2]), zkEndDT[index_2]]
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(int(zkSu[index_2])), zkEndDT[index_2]]
                                             else:
                                                 if zkMo[0] == "1":
                                                     zkMo_value = "持出中"
