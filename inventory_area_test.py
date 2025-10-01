@@ -1416,6 +1416,7 @@ def zaiko_place():
                 st.session_state.tanaban_select_input = False
                 st.session_state.qr_code_tana_info = False
                 st.session_state.tanaban_select_temp_info = ""
+                st.session_state.tanaban_select_temp_info_select = ""
                 st.session_state.records  = None
                 st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                 st.session_state.record  = None
@@ -1458,6 +1459,7 @@ def zaiko_place():
                         st.session_state.tanaban_select_input = False
                         st.session_state.qr_code_tana_info = False
                         st.session_state.tanaban_select_temp_info = ""
+                        st.session_state.tanaban_select_temp_info_select = ""
                         st.session_state.records  = None
                         st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                         st.session_state.record  = None
@@ -1653,6 +1655,7 @@ def zaiko_place():
                                 st.session_state.tanaban_select_input = False
                                 st.session_state.qr_code_tana_info = False
                                 st.session_state.tanaban_select_temp_info = ""
+                                st.session_state.tanaban_select_temp_info_select = ""
                                 st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                 st.session_state.record_2  = None
                                 st.rerun()
@@ -1674,14 +1677,14 @@ def zaiko_place():
                                 )
                                 st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
                                 if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
-                                    st.write("st.session_state.tanaban_select_temp_info_select:", st.session_state.tanaban_select_temp_info_select)
-                                    st.write("zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select):", zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select))
+                                    # st.write("st.session_state.tanaban_select_temp_info_select:", st.session_state.tanaban_select_temp_info_select)
+                                    # st.write("zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select):", zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select))
                                     zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
-                                    st.write("zkTanalist_select_max_value:", zkTanalist_select_max_value)
+                                    # st.write("zkTanalist_select_max_value:", zkTanalist_select_max_value)
                                     if zkTanalist_select_max_value.isdigit():
                                         range_max = int(zkTanalist_select_max_value)
                                     else:
-                                        st.warning(f"棚の最大値が数値ではありません: {zkTanalist_select_max_value}")
+                                        # st.warning(f"棚の最大値が数値ではありません: {zkTanalist_select_max_value}")
                                         range_max = 1  # フォールバック
                                     for i in range(1, range_max + 1):
                                         if i == 1:
@@ -1708,6 +1711,7 @@ def zaiko_place():
                                 if st.button("棚番を再選択(参照)"):
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
+                                    st.session_state.tanaban_select_temp_info_select = ""
                                     st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                     st.session_state.record_2  = None
                                     st.rerun()
