@@ -1543,7 +1543,8 @@ def zaiko_place():
                                                         zkMo_value = "持出中"
                                                     else:
                                                         zkMo_value = ""
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(int(zkSu[index_2])), zkEndDT[index_2]]
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(float(zkSu[index_2]))
+, zkEndDT[index_2]]
                                                     # st.write("zkHin_list:", zkHin_list)
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
                                     # st.write(st.session_state.df_search_result)
@@ -1720,7 +1721,8 @@ def zaiko_place():
                                                         zkMo_value = "持出中"
                                                     else:
                                                         zkMo_value = ""
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(int(zkSu[index_2])), zkEndDT[index_2]]
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(float(zkSu[index_2]))
+, zkEndDT[index_2]]
                                             else:
                                                 if zkMo[0] == "1":
                                                     zkMo_value = "持出中"
@@ -1729,7 +1731,7 @@ def zaiko_place():
                                                 if zkSu[0] == "-":
                                                     zkSu_value = zkSu[0]
                                                 else:
-                                                    zkSu_value = round(int(zkSu[0]))
+                                                    zkSu_value = round(float(zkSu[0]))
                                                 st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu_value, zkEndDT[0]]
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
