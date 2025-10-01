@@ -1689,7 +1689,8 @@ def zaiko_place():
                                         "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info_max"
                                     )
                                     if tanaban_select_info_select_max != "" and tanaban_select_info_select_max != "---":
-                                        st.session_state.tanaban_select_temp_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select_max}"
+                                        tanaban_select_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select_max}"
+                            st.session_state.tanaban_select_temp_info = tanaban_select_info
                             if st.session_state.tanaban_select_temp_info != "" and st.session_state.tanaban_select_temp_info != "---":
                                 st.session_state.show_camera = False
                                 st.session_state.qr_code_tana_info = True
