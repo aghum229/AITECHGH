@@ -1629,171 +1629,171 @@ def zaiko_place():
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
                         st.title("棚番で検索")
-                        if not st.session_state.tanaban_select_input:
-                            left, right = st.columns(2)
-                            with left:
-                                button_qr_tana = st.button("QRコード(棚番)")
-                                tool_tips("(棚番をQRコードで検索)")
-                            with right:
-                                button_manual_tana = st.button("手動入力(棚番)")
-                                tool_tips("(棚番を手動選択で検索)")
-                            if button_qr_tana or button_manual_tana: 
-                                if button_qr_tana:
-                                    st.session_state.manual_input_info_flag = 0
-                                else:
-                                    st.session_state.manual_input_info_flag = 1
-                                # st.session_state.manual_input_check = True
-                                # st.session_state.manual_input_check_select = False
-                                st.session_state.tanaban_select_input = True
+                    if not st.session_state.tanaban_select_input:
+                        left, right = st.columns(2)
+                        with left:
+                            button_qr_tana = st.button("QRコード(棚番)")
+                            tool_tips("(棚番をQRコードで検索)")
+                        with right:
+                            button_manual_tana = st.button("手動入力(棚番)")
+                            tool_tips("(棚番を手動選択で検索)")
+                        if button_qr_tana or button_manual_tana: 
+                            if button_qr_tana:
+                                st.session_state.manual_input_info_flag = 0
+                            else:
+                                st.session_state.manual_input_info_flag = 1
+                            # st.session_state.manual_input_check = True
+                            # st.session_state.manual_input_check_select = False
+                            st.session_state.tanaban_select_input = True
+                            st.rerun()
+                    else:
+                        left, center, right = st.columns([0.25, 0.5, 0.25])
+                        with center:
+                            if st.button("棚番入力を再選択"):
+                                st.session_state.tanaban_select_input = False
+                                st.session_state.qr_code_tana_info = False
+                                st.session_state.tanaban_select_temp_info = ""
+                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                st.session_state.record_2  = None
                                 st.rerun()
+                        if not st.session_state.qr_code_tana_info:
+                            tanaban_select_info = ""
+                            tanaban_select_info_select = ""
+                            if st.session_state.manual_input_info_flag == 0:
+                                st.write("棚番のQRコードをスキャンしてください:")
+                                qr_code_tana_info = qrcode_scanner(key='qrcode_scanner_tana_info')  
+                                if qr_code_tana_info:  
+                                    # st.write(qr_code_tana_info) 
+                                    tanaban_select_info = qr_code_tana_info.strip()
+                            else:
+                                # zkTanalistSplit = zkTanalist.split(",")
+                                zkTanalist_selectSplit = zkTanalist_select.split(",")
+                                zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
+                                tanaban_select_info_select = st.selectbox(
+                                    "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_info_select"
+                                )
+                                st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
+                                if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
+                                    st.write("st.session_state.tanaban_select_temp_info_select:", st.session_state.tanaban_select_temp_info_select)
+                                    st.write("zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select):", zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select))
+                                    zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
+                                    st.write("zkTanalist_select_max_value:", zkTanalist_select_max_value)
+                                    if zkTanalist_select_max_value == "---":
+                                        range_max = 1
+                                    else:
+                                        range_max = int(zkTanalist_select_max_value)
+                                    for i in range(1, range_max + 1):
+                                        if i == 1:
+                                            zkTanalistSplit = f"---,{i}"
+                                        else:
+                                            zkTanalistSplit = f"{zkTanalistSplit},{i}"
+                                    zkTanalistSplit = zkTanalistSplit.split(",")
+                                    tanaban_select_info_select_max = st.selectbox(
+                                        "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info_max"
+                                    )
+                                    if tanaban_select_info_select_max != "" and tanaban_select_info_select_max != "---":
+                                        tanaban_select_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select_max}"
+                            st.session_state.tanaban_select_temp_info = tanaban_select_info
+                            if st.session_state.tanaban_select_temp_info != "" and st.session_state.tanaban_select_temp_info != "---":
+                                st.session_state.show_camera = False
+                                st.session_state.qr_code_tana_info = True
+                                # st.session_state.qr_code = ""
+                                # st.session_state.production_order = ""
+                                # st.session_state.production_order_flag = False
+                                st.rerun()  # 再描画して次のステップへoptions.index(selected_option)
                         else:
                             left, center, right = st.columns([0.25, 0.5, 0.25])
                             with center:
-                                if st.button("棚番入力を再選択"):
-                                    st.session_state.tanaban_select_input = False
+                                if st.button("棚番を再選択(参照)"):
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
                                     st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                     st.session_state.record_2  = None
                                     st.rerun()
-                            if not st.session_state.qr_code_tana_info:
-                                tanaban_select_info = ""
-                                tanaban_select_info_select = ""
-                                if st.session_state.manual_input_info_flag == 0:
-                                    st.write("棚番のQRコードをスキャンしてください:")
-                                    qr_code_tana_info = qrcode_scanner(key='qrcode_scanner_tana_info')  
-                                    if qr_code_tana_info:  
-                                        # st.write(qr_code_tana_info) 
-                                        tanaban_select_info = qr_code_tana_info.strip()
-                                else:
-                                    # zkTanalistSplit = zkTanalist.split(",")
-                                    zkTanalist_selectSplit = zkTanalist_select.split(",")
-                                    zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
-                                    tanaban_select_info_select = st.selectbox(
-                                        "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_info_select"
-                                    )
-                                    st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
-                                    if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
-                                        st.write("st.session_state.tanaban_select_temp_info_select:", st.session_state.tanaban_select_temp_info_select)
-                                        st.write("zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select):", zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select))
-                                        zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
-                                        st.write("zkTanalist_select_max_value:", zkTanalist_select_max_value)
-                                        if zkTanalist_select_max_value == "---":
-                                            range_max = 1
-                                        else:
-                                            range_max = int(zkTanalist_select_max_value)
-                                        for i in range(1, range_max + 1):
-                                            if i == 1:
-                                                zkTanalistSplit = f"---,{i}"
-                                            else:
-                                                zkTanalistSplit = f"{zkTanalistSplit},{i}"
-                                        zkTanalistSplit = zkTanalistSplit.split(",")
-                                        tanaban_select_info_select_max = st.selectbox(
-                                            "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info_max"
-                                        )
-                                        if tanaban_select_info_select_max != "" and tanaban_select_info_select_max != "---":
-                                            tanaban_select_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select_max}"
-                                st.session_state.tanaban_select_temp_info = tanaban_select_info
-                                if st.session_state.tanaban_select_temp_info != "" and st.session_state.tanaban_select_temp_info != "---":
-                                    st.session_state.show_camera = False
-                                    st.session_state.qr_code_tana_info = True
-                                    # st.session_state.qr_code = ""
-                                    # st.session_state.production_order = ""
-                                    # st.session_state.production_order_flag = False
-                                    st.rerun()  # 再描画して次のステップへoptions.index(selected_option)
-                            else:
-                                left, center, right = st.columns([0.25, 0.5, 0.25])
-                                with center:
-                                    if st.button("棚番を再選択(参照)"):
-                                        st.session_state.qr_code_tana_info = False
-                                        st.session_state.tanaban_select_temp_info = ""
-                                        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
-                                        st.session_state.record_2  = None
-                                        st.rerun()
-                                # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
-                                st.markdown(
-                                    f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_temp_info}　にある品番一覧</div>",
-                                    unsafe_allow_html=True
-                                )
-                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
-                                listCount = 0
-                                listCount2 = 0
-                                zkTana = ""
-                                zkIko = ""
-                                zkHin = ""
-                                zkKan = ""
-                                zkSu = ""
-                                zkEndDT = ""
-                                zkMo = ""
-                                zkHistory = ""
-                                record_2 = data_catch(st.session_state.sf, item_id)
-                                if record_2:
-                                    # zkHistory = record_2["zkHistory__c"]  # zk履歴
-                                    zkTana_list = record_2["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                                    zkIko_list = record_2["zkIkohyoNo__c"].splitlines() 
-                                    zkHin_list = record_2["zkHinban__c"].splitlines() 
-                                    zkKan_list = record_2["zkKanryoKoutei__c"].splitlines() 
-                                    zkSu_list = record_2["zkSuryo__c"].splitlines() 
-                                    zkEndDT_list = record_2["zkEndDayTime__c"].splitlines() 
-                                    zkMo_list = record_2["zkMochidashi__c"].splitlines() 
-                                    listCount = len(zkTana_list)
-                                    # listCount = len(zkHin_list)
-                                    zkTana_Search = st.session_state.tanaban_select_temp_info
-                                    if listCount > 1:
-                                        for index, item in enumerate(zkTana_list):
-                                            zkIko = zkIko_list[index].split(",")
-                                            zkHin = zkHin_list[index].split(",")
-                                            zkKan = zkKan_list[index].split(",")
-                                            zkSu = zkSu_list[index].split(",")
-                                            zkEndDT = zkEndDT_list[index].split(",")
-                                            zkMo = zkMo_list[index].split(",")
-                                            listCount2 = len(zkIko)
-                                            if normalize(item) == normalize(st.session_state.tanaban_select_temp_info):
-                                                if listCount2 > 1:
-                                                    for index_2, item_2 in enumerate(zkIko):
-                                                        if zkMo[index_2] == "1":
-                                                            zkMo_value = "持出中"
-                                                        else:
-                                                            zkMo_value = ""
-                                                        st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(float(zkSu[index_2]))
-    , zkEndDT[index_2]]
-                                                else:
-                                                    if zkMo[0] == "1":
+                            # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
+                            st.markdown(
+                                f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_temp_info}　にある品番一覧</div>",
+                                unsafe_allow_html=True
+                            )
+                            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                            listCount = 0
+                            listCount2 = 0
+                            zkTana = ""
+                            zkIko = ""
+                            zkHin = ""
+                            zkKan = ""
+                            zkSu = ""
+                            zkEndDT = ""
+                            zkMo = ""
+                            zkHistory = ""
+                            record_2 = data_catch(st.session_state.sf, item_id)
+                            if record_2:
+                                # zkHistory = record_2["zkHistory__c"]  # zk履歴
+                                zkTana_list = record_2["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                                zkIko_list = record_2["zkIkohyoNo__c"].splitlines() 
+                                zkHin_list = record_2["zkHinban__c"].splitlines() 
+                                zkKan_list = record_2["zkKanryoKoutei__c"].splitlines() 
+                                zkSu_list = record_2["zkSuryo__c"].splitlines() 
+                                zkEndDT_list = record_2["zkEndDayTime__c"].splitlines() 
+                                zkMo_list = record_2["zkMochidashi__c"].splitlines() 
+                                listCount = len(zkTana_list)
+                                # listCount = len(zkHin_list)
+                                zkTana_Search = st.session_state.tanaban_select_temp_info
+                                if listCount > 1:
+                                    for index, item in enumerate(zkTana_list):
+                                        zkIko = zkIko_list[index].split(",")
+                                        zkHin = zkHin_list[index].split(",")
+                                        zkKan = zkKan_list[index].split(",")
+                                        zkSu = zkSu_list[index].split(",")
+                                        zkEndDT = zkEndDT_list[index].split(",")
+                                        zkMo = zkMo_list[index].split(",")
+                                        listCount2 = len(zkIko)
+                                        if normalize(item) == normalize(st.session_state.tanaban_select_temp_info):
+                                            if listCount2 > 1:
+                                                for index_2, item_2 in enumerate(zkIko):
+                                                    if zkMo[index_2] == "1":
                                                         zkMo_value = "持出中"
                                                     else:
                                                         zkMo_value = ""
-                                                    if zkSu[0] == "-":
-                                                        zkSu_value = zkSu[0]
-                                                    else:
-                                                        zkSu_value = round(float(zkSu[0]))
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu_value, zkEndDT[0]]
-                                        # st.write(st.session_state.df_search_result)
-                                        # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
-                                        # st.write(st.session_state.df_search_result.columns)
-                                        df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
-                                        # st.dataframe(df_sorted)
-                                        st.table(df_sorted)
-                                        # gb = GridOptionsBuilder.from_dataframe(df_sorted)
-                                        # gb.configure_grid_options(headerHeight=35)
-                                        # gridOptions = gb.build()
-                                        # AgGrid(df_sorted, gridOptions=gridOptions, height=200, theme="streamlit")
-                                        # st.dataframe(st.session_state.df_search_result)
-                                        # edited_df = st.data_editor(
-                                        #     st.session_state.df_search_result,
-                                        #    num_rows="dynamic",
-                                        #     use_container_width=True,
-                                        #     key="editable_table"
-                                        # )
-                                    else:
-                                        st.write("棚番が１データしか存在しません。至急、システム担当者に連絡してください！")
-                                        st.stop()
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(float(zkSu[index_2]))
+, zkEndDT[index_2]]
+                                            else:
+                                                if zkMo[0] == "1":
+                                                    zkMo_value = "持出中"
+                                                else:
+                                                    zkMo_value = ""
+                                                if zkSu[0] == "-":
+                                                    zkSu_value = zkSu[0]
+                                                else:
+                                                    zkSu_value = round(float(zkSu[0]))
+                                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu_value, zkEndDT[0]]
+                                    # st.write(st.session_state.df_search_result)
+                                    # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
+                                    # st.write(st.session_state.df_search_result.columns)
+                                    df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
+                                    # st.dataframe(df_sorted)
+                                    st.table(df_sorted)
+                                    # gb = GridOptionsBuilder.from_dataframe(df_sorted)
+                                    # gb.configure_grid_options(headerHeight=35)
+                                    # gridOptions = gb.build()
+                                    # AgGrid(df_sorted, gridOptions=gridOptions, height=200, theme="streamlit")
+                                    # st.dataframe(st.session_state.df_search_result)
+                                    # edited_df = st.data_editor(
+                                    #     st.session_state.df_search_result,
+                                    #    num_rows="dynamic",
+                                    #     use_container_width=True,
+                                    #     key="editable_table"
+                                    # )
                                 else:
-                                    st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
+                                    st.write("棚番が１データしか存在しません。至急、システム担当者に連絡してください！")
                                     st.stop()
-                                
-                                # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
-                                image_viewer(normalize(st.session_state.tanaban_select_temp_info))
+                            else:
+                                st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
                                 st.stop()
+                            
+                            # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
+                            image_viewer(normalize(st.session_state.tanaban_select_temp_info))
+                            st.stop()
                 _= '''
                 else:
                     st.title("移行票番号で検索")
