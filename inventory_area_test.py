@@ -1674,8 +1674,8 @@ def zaiko_place():
                                 )
                                 st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
                                 if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
-                                    zkTanalist_select_max = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
-                                    for i in range(1, zkTanalist_select_max + 1):
+                                    zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
+                                    for i in range(1, zkTanalist_select_max_value + 1):
                                         if i == 1:
                                             zkTanalistSplit = i
                                         else:
