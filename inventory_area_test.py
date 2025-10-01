@@ -1682,7 +1682,10 @@ def zaiko_place():
                                     zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
                                     # st.write("zkTanalist_select_max_value:", zkTanalist_select_max_value)
                                     if zkTanalist_select_max_value.isdigit():
-                                        range_max = int(zkTanalist_select_max_value)
+                                        if st.session_state.tanaban_select_temp_info_select == "E":
+                                            range_max = int(zkTanalist_select_max_value) - 30
+                                        else:
+                                            range_max = int(zkTanalist_select_max_value)
                                     else:
                                         # st.warning(f"棚の最大値が数値ではありません: {zkTanalist_select_max_value}")
                                         range_max = 1  # フォールバック
