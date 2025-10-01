@@ -1602,31 +1602,6 @@ def zaiko_place():
                                 )
                                 image_viewer(st.session_state.tanaban_select_value)
                                 st.stop()
-                            _= '''
-                            if not st.session_state.tanaban_select_flag:
-                                selected_tanaban = ""
-                                selected_tanaban = st.selectbox("棚番を選択してください　(クリックするとリストが開きます)", tanban_list, key="selected_tanaban_key")
-                                # selected_tanaban = st.selectbox("棚番を選択してください　(クリックするとリストが開きます)", st.session_state.df_search_result["棚番"])
-                                st.session_state.tanaban_select_value = selected_tanaban
-                                if st.session_state.tanaban_select_value != "" and st.session_state.tanaban_select_value != "---":
-                                    st.session_state.tanaban_select_flag = True
-                                    st.write(f"{st.session_state.tanaban_select_value}  ←描画直前の棚番")
-                                    st.rerun()  # 再描画して次のステップへ
-                                else:
-                                    st.write(f"{st.session_state.tanaban_select_value}  ←現在の棚番")
-                            else:
-                                if st.button("棚番を再選択"):
-                                    st.session_state.tanaban_select_flag  = False
-                                    st.session_state.tanaban_select_value = ""
-                                    st.rerun()
-                                # st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
-                                st.markdown(
-                                    f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_value}</div>",
-                                    unsafe_allow_html=True
-                                )
-                                # image_viewer(st.session_state.tanaban_select_value)
-                                st.stop()
-                            '''
                 elif st.session_state.manual_input_check_flag == 1:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
@@ -1887,6 +1862,8 @@ def zaiko_place():
             # st.session_state.manual_input_flag = 1
             if not st.session_state.qr_code_tana:
                 tanaban_select = ""
+                tanaban_select_mark = ""
+                tanaban_select_value = ""
                 if st.session_state.manual_input_flag == 0:
                     st.write("棚番のQRコードをスキャンしてください:")
                     qr_code_tana = qrcode_scanner(key='qrcode_scanner_tana')  
@@ -1895,15 +1872,41 @@ def zaiko_place():
                         # st.write(qr_code_tana) 
                         tanaban_select = qr_code_tana.strip()
                 else:
-                    zkTanalistSplit = zkTanalist.split(",")
-                    # st.write(f"選択前棚番号: {tanaban_select}")
-                    tanaban_select = st.selectbox(
-                        "棚番号を選んでください", zkTanalistSplit, key="tanaban_select"
+                    # zkTanalistSplit = zkTanalist.split(",")
+                    # tanaban_select = st.selectbox(
+                    #     "棚番号を選んでください", zkTanalistSplit, key="tanaban_select"
+                    # )
+                    
+                    zkTanalist_selectSplit = zkTanalist_select.split(",")
+                    zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
+                    tanaban_select_mark = st.selectbox(
+                        "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_mark"
                     )
-                    # options = zkTanalistSplit
-                    # st.session_state.tanaban_select = st.selectbox("棚番号を選んでください", options, key="tanaban_select")
-                    # st.write(f"選択された棚番号: {st.session_state.tanaban_select}")
-                
+                    if tanaban_select_mark != "" and tanaban_select_mark != "---":
+                        zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(tanaban_select_mark)]
+                        if zkTanalist_select_max_value.isdigit():
+                            if tanaban_select_mark == "E":
+                                range_max = int(zkTanalist_select_max_value) - 30
+                            else:
+                                range_max = int(zkTanalist_select_max_value)
+                        else:
+                            # st.warning(f"棚の最大値が数値ではありません: {zkTanalist_select_max_value}")
+                            range_max = 1  # フォールバック
+                        for i in range(1, range_max + 1):
+                            if i == 1:
+                                if tanaban_select_mark == "E":
+                                    i += 30
+                                zkTanalistSplit = f"---,{i}"
+                            else:
+                                if tanaban_select_mark == "E":
+                                    i += 30
+                                zkTanalistSplit = f"{zkTanalistSplit},{i}"
+                        zkTanalistSplit = zkTanalistSplit.split(",")
+                        tanaban_select_value = st.selectbox(
+                            "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_value"
+                        )
+                        if tanaban_select_value != "" and tanaban_select_value != "---":
+                            tanaban_select = f"{tanaban_select_mark}-{tanaban_select_value}"
                 if tanaban_select != "" and tanaban_select != "---":
                     # st.session_state.tanaban = tanaban_select
                     st.session_state.tanaban_select_temp = tanaban_select
