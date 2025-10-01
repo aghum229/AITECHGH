@@ -1160,6 +1160,8 @@ def zaiko_place():
         st.session_state.selected_tanaban_key = ""
     if "tanaban_select_info" not in st.session_state:
         st.session_state.tanaban_select_info = ""
+    if "tanaban_select_info_select" not in st.session_state:
+        st.session_state.tanaban_select_info_select = ""
     if "tanaban_select_temp" not in st.session_state:
         st.session_state.tanaban_select_temp = ""
     if "tanaban_select_temp_info" not in st.session_state:
@@ -1364,7 +1366,15 @@ def zaiko_place():
         R-1,R-2,R-3,R-4,R-5,R-6,R-7,R-8,R-9,R-10,R-11,R-12,R-13,R-14,R-15,R-16,R-17,R-18,R-19,R-20,
         S-1,S-2,S-3,S-4,S-5,S-6,S-7,S-8,S-9,S-10,S-11,S-12,S-13,S-14,S-15,S-16,S-17,S-18,S-19,S-20
         """
-    
+
+    zkTanalist_select = """
+        ---,完A,完B,完C,完D,完E,完F,除内,除外,バ,シ,A,D,E,F,G,H,R,S
+        """
+
+    zkTanalist_select_max = """
+        ---,50,50,50,50,20,20,50,50,20,20,30,30,70,40,40,40,20,20
+        """
+        
     if not st.session_state.manual_input_check:
         left, center, right = st.columns([0.25, 0.5, 0.25])
         with center:
@@ -1648,6 +1658,7 @@ def zaiko_place():
                                 st.rerun()
                         if not st.session_state.qr_code_tana_info:
                             tanaban_select_info = ""
+                            tanaban_select_info_select = ""
                             if st.session_state.manual_input_info_flag == 0:
                                 st.write("棚番のQRコードをスキャンしてください:")
                                 qr_code_tana_info = qrcode_scanner(key='qrcode_scanner_tana_info')  
@@ -1655,18 +1666,32 @@ def zaiko_place():
                                     # st.write(qr_code_tana_info) 
                                     tanaban_select_info = qr_code_tana_info.strip()
                             else:
-                                zkTanalistSplit = zkTanalist.split(",")
-                                tanaban_select_info = st.selectbox(
-                                    "棚番号を選んでください", zkTanalistSplit, key="tanaban_select_info"
+                                # zkTanalistSplit = zkTanalist.split(",")
+                                zkTanalist_selectSplit = zkTanalist_select.split(",")
+                                tanaban_select_info_select = st.selectbox(
+                                    "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_info_select"
                                 )
-                            st.session_state.tanaban_select_temp_info = tanaban_select_info
+                                st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
+                                if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
+                                    zkTanalist_select_max = zkTanalist_select_max.split(",")
+                                    zkTanalist_select_max = zkTanalist_select_max.index(zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select))
+                                    for i in range(1, zkTanalist_select_max + 1):
+                                        if i == 1:
+                                            zkTanalistSplit = i
+                                        else:
+                                            zkTanalistSplit = zkTanalistSplit + f",[i]"
+                                    zkTanalistSplit = zkTanalistSplit.split(",")
+                                    tanaban_select_info_select = st.selectbox(
+                                        "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info"
+                                    )
+                                    st.session_state.tanaban_select_temp_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select}"
                             if st.session_state.tanaban_select_temp_info != "" and st.session_state.tanaban_select_temp_info != "---":
                                 st.session_state.show_camera = False
                                 st.session_state.qr_code_tana_info = True
                                 # st.session_state.qr_code = ""
                                 # st.session_state.production_order = ""
                                 # st.session_state.production_order_flag = False
-                                st.rerun()  # 再描画して次のステップへ
+                                st.rerun()  # 再描画して次のステップへoptions.index(selected_option)
                         else:
                             left, center, right = st.columns([0.25, 0.5, 0.25])
                             with center:
