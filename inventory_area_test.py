@@ -1796,7 +1796,7 @@ def zaiko_place():
                                 st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
                                 st.stop()
                             
-                            # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
+                            st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
                             image_viewer(normalize(st.session_state.tanaban_select_temp_info))
                             st.stop()
                 _= '''
