@@ -1902,11 +1902,11 @@ def zaiko_place():
                                     i += 30
                                 zkTanalistSplit = f"{zkTanalistSplit},{i}"
                         zkTanalistSplit = zkTanalistSplit.split(",")
-                        tanaban_select_value = st.selectbox(
-                            "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_value"
+                        tanaban_select_number = st.selectbox(
+                            "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_number"
                         )
-                        if tanaban_select_value != "" and tanaban_select_value != "---":
-                            tanaban_select = f"{tanaban_select_mark}-{tanaban_select_value}"
+                        if tanaban_select_number != "" and tanaban_select_number != "---":
+                            tanaban_select = f"{tanaban_select_mark}-{tanaban_select_number}"
                 st.session_state.tanaban_select_temp = tanaban_select
                 if st.session_state.tanaban_select_temp != "" and st.session_state.tanaban_select_temp != "---":
                 # if tanaban_select != "" and tanaban_select != "---":
