@@ -227,17 +227,19 @@ def consultar_salesforce(production_order, sf):
         records = result['records']
         if not records:
             st.write("❌00 **データの取り出しに失敗しました。**")
-            return pd.DataFrame(), None, None, 0.0
+            return pd.DataFrame(), None, None, 0
+            # return pd.DataFrame(), None, None, 0.0
         df = pd.DataFrame(records)
         st.session_state.all_data = df.to_dict(orient="records")
         
         df_done = df[df['snps_um__Status__c'] == 'Done']
         if not df_done.empty:
             last_record = df_done.loc[df_done['snps_um__ProcessOrderNo__c'].idxmax()].to_dict()
-            cumulative_cost = last_record.get("snps_um__Process__r", {}).get("AITC_Acumulated_Price__c", 0.0)
+            cumulative_cost = last_record.get("snps_um__Process__r", {}).get("AITC_Acumulated_Price__c", 0)
+            # cumulative_cost = last_record.get("snps_um__Process__r", {}).get("AITC_Acumulated_Price__c", 0.0)
             if cumulative_cost is None:
-                cumulative_cost = 0.0
-
+                cumulative_cost = 0
+                # cumulative_cost = 0.0
             father_id = last_record['snps_um__Item__c']
             composition_query = f"""
                 SELECT 
@@ -250,23 +252,29 @@ def consultar_salesforce(production_order, sf):
             composition_records = composition_result['records']
             if composition_records:
                 material = composition_records[0].get("snps_um__ChildItem__r", {}).get("Name", "N/A")
-                material_weight = composition_records[0].get("snps_um__AddQt__c", 0.0)
+                material_weight = composition_records[0].get("snps_um__AddQt__c", 0)
+                # material_weight = composition_records[0].get("snps_um__AddQt__c", 0.0)
             else:
                 material = "N/A"
-                material_weight = 0.0
+                material_weight = 0
+                # material_weight = 0.0
             return pd.DataFrame([last_record]), material, material_weight, cumulative_cost
         else:
             st.write("❌01 **データの取り出しに失敗しました。**")
-        return pd.DataFrame(), None, None, 0.0
+        return pd.DataFrame(), None, None, 0
+        # return pd.DataFrame(), None, None, 0.0
     except Exception as e:
         st.error(f"Salesforceクエリエラー: {e}")
-        return pd.DataFrame(), None, None, 0.0
+        return pd.DataFrame(), None, None, 0
+        # return pd.DataFrame(), None, None, 0.0
 
 def clean_quantity(value):
     if isinstance(value, str):
         num = re.sub(r'[^\d.]', '', value)
-        return float(num) if num else 0.0
-    return float(value) if value else 0.0
+        return float(num) if num else 0
+    return float(value) if value else 0
+    #     return float(num) if num else 0.0
+    # return float(value) if value else 0.0
 
 def simplify_dataframe(df):
     if df.empty:
@@ -502,7 +510,10 @@ def list_update_zkKari(record, zkKari, dbItem, listNo, update_value, flag):
         else:
             if flag == 3:
                 st.session_state.zkSplitNo = 0
-            zkSplit[st.session_state.zkSplitNo] = "-"  # 小項目の対象にデフォルト値反映
+            if flag == 4:
+                zkSplit[st.session_state.zkSplitNo] = update_value  # 小項目の対象に特定値反映
+            else:
+                zkSplit[st.session_state.zkSplitNo] = "-"  # 小項目の対象にデフォルト値反映
         zkKari[listNo] = ",".join(zkSplit)  # 大項目に反映
     else:
         if zkKari[listNo] == "-":  # 大項目がデフォルト値の場合
@@ -574,6 +585,7 @@ def set_flag(flag):
 button_style = """
 <style>
 div.stButton {
+    white-space: pre-line;
     display: flex;
     justify-content: center;
     width: 100%; /* 必要に応じて調整：ボタンコンテナの幅 */
@@ -588,6 +600,28 @@ div.stButton > button {
     width: 350px; /* ボタンの横幅を固定値に設定 */
     max-width: 350px; /* 必要に応じて最大幅も設定 */
     height: 24px;
+}
+</style>
+"""
+
+formsubmitbutton_style = """
+<style>
+div.stFormSubmitButton {
+    white-space: pre-line;
+    display: flex;
+    justify-content: center;
+    width: 100%; /* 必要に応じて調整：ボタンコンテナの幅 */
+    # width: auto; /* 必要に応じて変更 */
+}
+div.stFormSubmitButton > button {
+    font-size: 12px !important; /* 文字サイズを指定 */
+    font-weight  : bold ;
+    color        : #FFF;
+    border-radius: 5px 5px 5px 5px     ;/* 枠線：半径10ピクセルの角丸     */
+    background   : #8a2be2             ;/* 背景色：aqua            */
+    width: 150px; /* ボタンの横幅を固定値に設定 */
+    max-width: 150px; /* 必要に応じて最大幅も設定 */
+    height: 24px !important;
 }
 </style>
 """
@@ -693,7 +727,7 @@ def display_footer():
     with center:
         st.markdown(
             "<p style='text-align:right;'> \
-            <span style='font-size: 10px;'>ver.1.0.1</span> \
+            <span style='font-size: 10px;'>ver.1.0.2</span> \
             </p>"
             , unsafe_allow_html=True
         )
@@ -728,6 +762,7 @@ def button_make(button_text, screen_name):
             width: 200px;
             max-width: 200px;
             height: 20px;
+            
             margin: 5px; /* ボタン間の間隔など調整 */
         }
         .stButton>button:hover {
@@ -1089,7 +1124,8 @@ def zaiko_place():
     if 'mostrar_sucesso' not in st.session_state:
         st.session_state['mostrar_sucesso'] = False
     if "quantity" not in st.session_state:
-        st.session_state.quantity = 0.0
+        st.session_state.quantity = 0
+        # st.session_state.quantity = 0.0
     if "process_order" not in st.session_state:
         st.session_state.process_order = 0
     if "material" not in st.session_state:
@@ -1097,7 +1133,8 @@ def zaiko_place():
     if "material_weight" not in st.session_state:
         st.session_state.material_weight = None
     if "cumulative_cost" not in st.session_state:
-        st.session_state.cumulative_cost = 0.0
+        st.session_state.cumulative_cost = 0
+        # st.session_state.cumulative_cost = 0.0
     if "manual_input_value" not in st.session_state:
         st.session_state.manual_input_value = ""
     if "manual_input" not in st.session_state:
@@ -1130,6 +1167,8 @@ def zaiko_place():
         st.session_state.tanaban_select_temp = ""
     if "tanaban_select_temp_info" not in st.session_state:
         st.session_state.tanaban_select_temp_info = ""
+    if "tanaban_select_temp_info_select" not in st.session_state:
+        st.session_state.tanaban_select_temp_info_select = ""
     if "tanaban_select_value" not in st.session_state:
         st.session_state.tanaban_select_value = ""
     if "tanaban_select_flag" not in st.session_state:
@@ -1330,7 +1369,15 @@ def zaiko_place():
         R-1,R-2,R-3,R-4,R-5,R-6,R-7,R-8,R-9,R-10,R-11,R-12,R-13,R-14,R-15,R-16,R-17,R-18,R-19,R-20,
         S-1,S-2,S-3,S-4,S-5,S-6,S-7,S-8,S-9,S-10,S-11,S-12,S-13,S-14,S-15,S-16,S-17,S-18,S-19,S-20
         """
-    
+
+    zkTanalist_select = """
+        ---,完A,完B,完C,完D,完E,完F,除内,除外,バ,シ,A,D,E,F,G,H,R,S
+        """
+
+    zkTanalist_select_max = """
+        ---,50,50,50,50,20,20,50,50,20,20,30,30,70,40,40,40,20,20
+        """
+        
     if not st.session_state.manual_input_check:
         left, center, right = st.columns([0.25, 0.5, 0.25])
         with center:
@@ -1372,6 +1419,7 @@ def zaiko_place():
                 st.session_state.tanaban_select_input = False
                 st.session_state.qr_code_tana_info = False
                 st.session_state.tanaban_select_temp_info = ""
+                st.session_state.tanaban_select_temp_info_select = ""
                 st.session_state.records  = None
                 st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                 st.session_state.record  = None
@@ -1381,11 +1429,14 @@ def zaiko_place():
                 left, center, right = st.columns([0.25, 0.5, 0.25])
                 with center:
                     st.title("参照方法　選択")
-                left, center1, center2, right = st.columns(4)
-                with center1:
+                left, right = st.columns(2)
+                # left, center1, center2, right = st.columns(4)
+                # with center1:
+                with left:
                     button_manual_Hinban = st.button("品番(入力)で検索")
                     tool_tips("(品番を手動で入力し検索(曖昧検索可))")
-                with center2:
+                # with center2:
+                with right:
                     button_manual_Tanaban = st.button("棚番で検索")
                     tool_tips("(棚番をQRコード入力または手動選択で検索)")
                 # with right:
@@ -1414,6 +1465,7 @@ def zaiko_place():
                         st.session_state.tanaban_select_input = False
                         st.session_state.qr_code_tana_info = False
                         st.session_state.tanaban_select_temp_info = ""
+                        st.session_state.tanaban_select_temp_info_select = ""
                         st.session_state.records  = None
                         st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                         st.session_state.record  = None
@@ -1509,7 +1561,8 @@ def zaiko_place():
                                                         zkMo_value = "持出中"
                                                     else:
                                                         zkMo_value = ""
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(float(zkSu[index_2]))
+, zkEndDT[index_2]]
                                                     # st.write("zkHin_list:", zkHin_list)
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
                                     # st.write(st.session_state.df_search_result)
@@ -1555,31 +1608,6 @@ def zaiko_place():
                                 )
                                 image_viewer(st.session_state.tanaban_select_value)
                                 st.stop()
-                            _= '''
-                            if not st.session_state.tanaban_select_flag:
-                                selected_tanaban = ""
-                                selected_tanaban = st.selectbox("棚番を選択してください　(クリックするとリストが開きます)", tanban_list, key="selected_tanaban_key")
-                                # selected_tanaban = st.selectbox("棚番を選択してください　(クリックするとリストが開きます)", st.session_state.df_search_result["棚番"])
-                                st.session_state.tanaban_select_value = selected_tanaban
-                                if st.session_state.tanaban_select_value != "" and st.session_state.tanaban_select_value != "---":
-                                    st.session_state.tanaban_select_flag = True
-                                    st.write(f"{st.session_state.tanaban_select_value}  ←描画直前の棚番")
-                                    st.rerun()  # 再描画して次のステップへ
-                                else:
-                                    st.write(f"{st.session_state.tanaban_select_value}  ←現在の棚番")
-                            else:
-                                if st.button("棚番を再選択"):
-                                    st.session_state.tanaban_select_flag  = False
-                                    st.session_state.tanaban_select_value = ""
-                                    st.rerun()
-                                # st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
-                                st.markdown(
-                                    f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_value}</div>",
-                                    unsafe_allow_html=True
-                                )
-                                # image_viewer(st.session_state.tanaban_select_value)
-                                st.stop()
-                            '''
                 elif st.session_state.manual_input_check_flag == 1:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
@@ -1608,11 +1636,13 @@ def zaiko_place():
                                 st.session_state.tanaban_select_input = False
                                 st.session_state.qr_code_tana_info = False
                                 st.session_state.tanaban_select_temp_info = ""
+                                st.session_state.tanaban_select_temp_info_select = ""
                                 st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                 st.session_state.record_2  = None
                                 st.rerun()
                         if not st.session_state.qr_code_tana_info:
                             tanaban_select_info = ""
+                            tanaban_select_info_select = ""
                             if st.session_state.manual_input_info_flag == 0:
                                 st.write("棚番のQRコードをスキャンしてください:")
                                 qr_code_tana_info = qrcode_scanner(key='qrcode_scanner_tana_info')  
@@ -1620,10 +1650,41 @@ def zaiko_place():
                                     # st.write(qr_code_tana_info) 
                                     tanaban_select_info = qr_code_tana_info.strip()
                             else:
-                                zkTanalistSplit = zkTanalist.split(",")
-                                tanaban_select_info = st.selectbox(
-                                    "棚番号を選んでください", zkTanalistSplit, key="tanaban_select_info"
+                                # zkTanalistSplit = zkTanalist.split(",")
+                                zkTanalist_selectSplit = zkTanalist_select.split(",")
+                                zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
+                                tanaban_select_info_select = st.selectbox(
+                                    "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_info_select"
                                 )
+                                st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
+                                if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
+                                    # st.write("st.session_state.tanaban_select_temp_info_select:", st.session_state.tanaban_select_temp_info_select)
+                                    # st.write("zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select):", zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select))
+                                    zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(st.session_state.tanaban_select_temp_info_select)]
+                                    # st.write("zkTanalist_select_max_value:", zkTanalist_select_max_value)
+                                    if zkTanalist_select_max_value.isdigit():
+                                        if st.session_state.tanaban_select_temp_info_select == "E":
+                                            range_max = int(zkTanalist_select_max_value) - 30
+                                        else:
+                                            range_max = int(zkTanalist_select_max_value)
+                                    else:
+                                        # st.warning(f"棚の最大値が数値ではありません: {zkTanalist_select_max_value}")
+                                        range_max = 1  # フォールバック
+                                    for i in range(1, range_max + 1):
+                                        if i == 1:
+                                            if st.session_state.tanaban_select_temp_info_select == "E":
+                                                i += 30
+                                            zkTanalistSplit = f"---,{i}"
+                                        else:
+                                            if st.session_state.tanaban_select_temp_info_select == "E":
+                                                i += 30
+                                            zkTanalistSplit = f"{zkTanalistSplit},{i}"
+                                    zkTanalistSplit = zkTanalistSplit.split(",")
+                                    tanaban_select_info_select_max = st.selectbox(
+                                        "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info_max"
+                                    )
+                                    if tanaban_select_info_select_max != "" and tanaban_select_info_select_max != "---":
+                                        tanaban_select_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select_max}"
                             st.session_state.tanaban_select_temp_info = tanaban_select_info
                             if st.session_state.tanaban_select_temp_info != "" and st.session_state.tanaban_select_temp_info != "---":
                                 st.session_state.show_camera = False
@@ -1631,13 +1692,14 @@ def zaiko_place():
                                 # st.session_state.qr_code = ""
                                 # st.session_state.production_order = ""
                                 # st.session_state.production_order_flag = False
-                                st.rerun()  # 再描画して次のステップへ
+                                st.rerun()  # 再描画して次のステップへoptions.index(selected_option)
                         else:
                             left, center, right = st.columns([0.25, 0.5, 0.25])
                             with center:
                                 if st.button("棚番を再選択(参照)"):
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
+                                    st.session_state.tanaban_select_temp_info_select = ""
                                     st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
                                     st.session_state.record_2  = None
                                     st.rerun()
@@ -1686,13 +1748,18 @@ def zaiko_place():
                                                         zkMo_value = "持出中"
                                                     else:
                                                         zkMo_value = ""
-                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], zkSu[index_2], zkEndDT[index_2]]
+                                                    st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(float(zkSu[index_2]))
+, zkEndDT[index_2]]
                                             else:
                                                 if zkMo[0] == "1":
                                                     zkMo_value = "持出中"
                                                 else:
                                                     zkMo_value = ""
-                                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
+                                                if zkSu[0] == "-":
+                                                    zkSu_value = zkSu[0]
+                                                else:
+                                                    zkSu_value = round(float(zkSu[0]))
+                                                st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[0], zkHin[0], zkKan[0], zkSu_value, zkEndDT[0]]
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
@@ -1787,7 +1854,8 @@ def zaiko_place():
                             st.session_state.data = None
                             st.session_state.material = None
                             st.session_state.material_weight = None
-                            st.session_state.cumulative_cost = 0.0
+                            st.session_state.cumulative_cost = 0
+                            # st.session_state.cumulative_cost = 0.0
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
@@ -1800,6 +1868,8 @@ def zaiko_place():
             # st.session_state.manual_input_flag = 1
             if not st.session_state.qr_code_tana:
                 tanaban_select = ""
+                tanaban_select_mark = ""
+                tanaban_select_value = ""
                 if st.session_state.manual_input_flag == 0:
                     st.write("棚番のQRコードをスキャンしてください:")
                     qr_code_tana = qrcode_scanner(key='qrcode_scanner_tana')  
@@ -1808,18 +1878,46 @@ def zaiko_place():
                         # st.write(qr_code_tana) 
                         tanaban_select = qr_code_tana.strip()
                 else:
-                    zkTanalistSplit = zkTanalist.split(",")
-                    # st.write(f"選択前棚番号: {tanaban_select}")
-                    tanaban_select = st.selectbox(
-                        "棚番号を選んでください", zkTanalistSplit, key="tanaban_select"
+                    # zkTanalistSplit = zkTanalist.split(",")
+                    # tanaban_select = st.selectbox(
+                    #     "棚番号を選んでください", zkTanalistSplit, key="tanaban_select"
+                    # )
+                    
+                    zkTanalist_selectSplit = zkTanalist_select.split(",")
+                    zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
+                    tanaban_select_mark = st.selectbox(
+                        "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_mark"
                     )
-                    # options = zkTanalistSplit
-                    # st.session_state.tanaban_select = st.selectbox("棚番号を選んでください", options, key="tanaban_select")
-                    # st.write(f"選択された棚番号: {st.session_state.tanaban_select}")
-                
-                if tanaban_select != "" and tanaban_select != "---":
+                    if tanaban_select_mark != "" and tanaban_select_mark != "---":
+                        zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(tanaban_select_mark)]
+                        if zkTanalist_select_max_value.isdigit():
+                            if tanaban_select_mark == "E":
+                                range_max = int(zkTanalist_select_max_value) - 30
+                            else:
+                                range_max = int(zkTanalist_select_max_value)
+                        else:
+                            # st.warning(f"棚の最大値が数値ではありません: {zkTanalist_select_max_value}")
+                            range_max = 1  # フォールバック
+                        for i in range(1, range_max + 1):
+                            if i == 1:
+                                if tanaban_select_mark == "E":
+                                    i += 30
+                                zkTanalistSplit = f"---,{i}"
+                            else:
+                                if tanaban_select_mark == "E":
+                                    i += 30
+                                zkTanalistSplit = f"{zkTanalistSplit},{i}"
+                        zkTanalistSplit = zkTanalistSplit.split(",")
+                        tanaban_select_number = st.selectbox(
+                            "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_number"
+                        )
+                        if tanaban_select_number != "" and tanaban_select_number != "---":
+                            tanaban_select = f"{tanaban_select_mark}-{tanaban_select_number}"
+                st.session_state.tanaban_select_temp = tanaban_select
+                if st.session_state.tanaban_select_temp != "" and st.session_state.tanaban_select_temp != "---":
+                # if tanaban_select != "" and tanaban_select != "---":
                     # st.session_state.tanaban = tanaban_select
-                    st.session_state.tanaban_select_temp = tanaban_select
+                    # st.session_state.tanaban_select_temp = tanaban_select
                     st.session_state.show_camera = False
                     st.session_state.qr_code_tana = True
                     # st.write(st.session_state.qr_code_tana)
@@ -1924,7 +2022,8 @@ def zaiko_place():
                             st.session_state.data = None
                             st.session_state.material = None
                             st.session_state.material_weight = None
-                            st.session_state.cumulative_cost = 0.0
+                            st.session_state.cumulative_cost = 0
+                            # st.session_state.cumulative_cost = 0.0
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
@@ -1935,7 +2034,8 @@ def zaiko_place():
                     st.session_state.zkSplitNo = 99
                     st.session_state.zkSplitFlag = 0
                     with st.form(key="registro_form", clear_on_submit=True):
-                        default_quantity = 0.0
+                        default_quantity = 0
+                        # default_quantity = 0.0
                         default_process_order = 0
                         default_process_order_name = ""
                         default_id = ""
@@ -1955,7 +2055,9 @@ def zaiko_place():
                                 st.session_state.material_weight = material_weight
                                 st.session_state.cumulative_cost = cumulative_cost
                                 last_record = st.session_state.data[0]
-                                default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0.0)
+                                default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0)
+                                # default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0.0)
+                                default_quantity = round(default_quantity)
                                 default_process_order = int(last_record.get("snps_um__ProcessOrderNo__c", 0))
                                 default_process_order_name = last_record.get("snps_um__ProcessName__c")
                                 default_id = last_record.get("snps_um__Process__r", {}).get("AITC_ID18__c", "")
@@ -2048,23 +2150,24 @@ def zaiko_place():
                             hinban = "-"
                             process_order = 0
                             process_order_name = "-"
-                            quantity = 0.0
-                            
+                            quantity = 0
+                            # quantity = 0.0
+
                         st.session_state.add_del_flag = 0  # 0:追加 1:削除 2:持出 3:持出解除 9:取消     
                         left, center1, center2, right = st.columns(4)
                         with left:
                             if st.session_state.list_flag == 0: # 移行票番号が無い場合のみ
-                                submit_button_add = st.form_submit_button("追加")
+                                submit_button_add = st.form_submit_button("追加(add)")
                         with center1:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
-                                submit_button_del = st.form_submit_button("削除")
+                                submit_button_del = st.form_submit_button("削除(del)")
                         with center2:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
-                                submit_button_pic = st.form_submit_button("持出")
+                                submit_button_pic = st.form_submit_button("持出(picking)")
                             if st.session_state.list_flag == 3: # 持出中のみ
-                                submit_button_pic_cancel = st.form_submit_button("持出解除")
+                                submit_button_pic_cancel = st.form_submit_button("持出解除(release)")
                         with right:
-                            submit_button_cancel = st.form_submit_button("取消")
+                            submit_button_cancel = st.form_submit_button("取消(cancel)")
                         submit_button_flag = 0
                         if st.session_state.list_flag == 0:
                             if submit_button_add:
@@ -2221,12 +2324,13 @@ def zaiko_place():
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
                                         elif st.session_state.add_del_flag == 0: # 追加の場合
+                                            zkMochidashi_value = "0"
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
                                             zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
                                             zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 0)   # zk完了工程
                                             zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
-                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", -1)   # zk完了日
-                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", -1)   # zk持出
+                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 0)   # zk完了日
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 0)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},add"
                                         elif st.session_state.add_del_flag == 1: # 削除の場合
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
@@ -2257,6 +2361,11 @@ def zaiko_place():
                             if item_id:
                                 if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
                                     update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
+                                else:
+                                    if st.session_state.add_del_flag == 3: # 持出OFFの場合
+                                        update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
+                                    else:
+                                        update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
                                 button_key = "check_ok_2"
                                 if st.session_state.zkScroll_flag == 1 and button_key not in st.session_state:
                                     @st.dialog("処理結果通知")
@@ -2300,6 +2409,7 @@ def show_main_screen():
     # display_container('yellow', '☆在庫置場管理システム☆')
     display_line()
     st.markdown(button_style, unsafe_allow_html=True)
+    st.markdown(formsubmitbutton_style, unsafe_allow_html=True)
     styled_input_text()
     zaiko_place()
     # button_set('button0', '0.ショートカット', 'other0')
