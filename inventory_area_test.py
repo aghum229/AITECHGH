@@ -510,7 +510,10 @@ def list_update_zkKari(record, zkKari, dbItem, listNo, update_value, flag):
         else:
             if flag == 3:
                 st.session_state.zkSplitNo = 0
-            zkSplit[st.session_state.zkSplitNo] = "-"  # 小項目の対象にデフォルト値反映
+            if flag == 4:
+                zkSplit[st.session_state.zkSplitNo] = update_value  # 小項目の対象に特定値反映
+            else:
+                zkSplit[st.session_state.zkSplitNo] = "-"  # 小項目の対象にデフォルト値反映
         zkKari[listNo] = ",".join(zkSplit)  # 大項目に反映
     else:
         if zkKari[listNo] == "-":  # 大項目がデフォルト値の場合
