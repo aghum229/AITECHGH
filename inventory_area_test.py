@@ -2083,7 +2083,17 @@ def zaiko_place():
                                 st.warning("生産オーダーに該当する 'Done' ステータスの記録が見つかりませんでした。")
                                 # st.stop()
                         else:
-                            st.warning("移行票番号が見つかりませんでした。")
+                            # st.warning("移行票番号が見つかりませんでした。")
+                            st.write(f"❌07 **移行票番号が見つかりませんでした。**")
+                            st.session_state.qr_code_tana = False
+                            st.session_state.tanaban_select_temp = ""
+                            if st.session_state.manual_input_flag == 0:
+                                st.session_state.show_camera = True  # 必要に応じて棚番再選択
+                            st.session_state.qr_code = ""
+                            st.session_state.production_order = ""
+                            st.session_state.production_order_flag = False
+                            st.session_state.add_del_flag = 0
+                            st.session_state.df = None
                             # st.stop()
 
                         tanaban_select = st.session_state.tanaban_select_temp
