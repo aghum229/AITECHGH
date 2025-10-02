@@ -2166,7 +2166,7 @@ def zaiko_place():
                         st.session_state.add_del_flag = 0  # 0:追加 1:削除 2:持出 3:持出解除 9:取消     
                         left, center1, center2, right = st.columns(4)
                         with left:
-                            if st.session_state.list_flag == 0: # 移行票番号が無い場合のみ
+                            if st.session_state.list_flag == 0 and tanaban_select != "": # 移行票番号が無い場合のみ
                                 submit_button_add = st.form_submit_button("追加(add)")
                         with center1:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
