@@ -1510,6 +1510,24 @@ def zaiko_place():
                                     st.rerun()  # 再描画して次のステップへ
                                 _= '''
                                 '''
+                            else:
+                                button_key = "check_ok_hinban_select"
+                                st.session_state.result_text = "検索文字を含む品番は、ありませんでした。"
+                                @st.dialog("品番検索結果通知")
+                                def dialog_button_hinban_select(button_key):
+                                    global dialog_ok_flag
+                                    # st.session_state["dialog_closed"] = True
+                                    st.write(st.session_state.result_text)
+                                    dialog_ok_flag = st.button("OK", key="dialog_ok_hinban_select")
+                                    if dialog_ok_flag:
+                                        st.session_state.manual_input_hinban_entered = False
+                                        st.session_state.hinban_select_flag = False
+                                        st.session_state.tanaban_select_flag  = False
+                                        st.session_state.records  = None
+                                        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                        st.session_state.record  = None
+                                        st.rerun()
+                                dialog_button_hinban_select(button_key)
                         else:
                             # st.write(f"選択された品番：{st.session_state.hinban_select_value}")
                             # st.stop()
@@ -1544,6 +1562,7 @@ def zaiko_place():
                                 listCount = len(zkTana_list)
                                 # listCount = len(zkHin_list)
                                 zkHin_Search = st.session_state.hinban_select_value
+                                zkHin_Search_flag = 0 
                                 if listCount > 1:
                                     for index, item in enumerate(zkTana_list):
                                         # st.write(f"for文で検索した棚番: '{item}'") 
@@ -1563,8 +1582,25 @@ def zaiko_place():
                                                         zkMo_value = ""
                                                     st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [item, zkMo_value, zkIko[index_2], zkHin[index_2], zkKan[index_2], round(float(zkSu[index_2]))
 , zkEndDT[index_2]]
+                                                    zkHin_Search_flag = 1
                                                     # st.write("zkHin_list:", zkHin_list)
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
+                                    if zkHin_Search_flag == 0:
+                                        button_key = "check_ok_zkHin_Search"
+                                        st.session_state.result_text = "検索文字を含む品番は、ありませんでした。"
+                                        @st.dialog("品番検索結果通知")
+                                        def dialog_button_zkHin_Search(button_key):
+                                            global dialog_ok_flag
+                                            # st.session_state["dialog_closed"] = True
+                                            st.write(st.session_state.result_text)
+                                            dialog_ok_flag = st.button("OK", key="dialog_ok_zkHin_Search")
+                                            if dialog_ok_flag:
+                                                st.session_state.hinban_select_flag = False
+                                                st.session_state.tanaban_select_flag  = False
+                                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                                st.session_state.record  = None
+                                                st.rerun()
+                                        dialog_button_zkHin_Search(button_key)
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
