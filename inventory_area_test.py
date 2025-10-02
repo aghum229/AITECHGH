@@ -2323,8 +2323,8 @@ def zaiko_place():
                                             zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
                                             zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 0)   # zk完了工程
                                             zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
-                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", -1)   # zk完了日
-                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", -1)   # zk持出
+                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 0)   # zk完了日
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 0)   # zk持出
                                             zkHistory_value = f"{zkHistory_value},add"
                                         elif st.session_state.add_del_flag == 1: # 削除の場合
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
