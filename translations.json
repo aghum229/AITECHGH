@@ -1,1 +1,13 @@
+{
+  "ja": {
+    "title": "ようこそ",
+    "input_label": "名前を入力してください",
+    "submit": "送信"
+  },
+  "en": {
+    "title": "Welcome",
+    "input_label": "Please enter your name",
+    "submit": "Submit"
+  }
+}
 
