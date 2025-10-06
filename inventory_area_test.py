@@ -24,6 +24,7 @@ import cv2
 from PIL import Image
 import glob
 import base64
+import json
 
 # 固定コンテナコードの始まり
 from typing import Literal
@@ -2726,7 +2727,33 @@ def unknown_screen():
         #     pass
     display_footer()
 
+# JSONファイルの読み込み
+@st.cache_data
+def load_translations():
+    with open("translations.json", "r", encoding="utf-8") as f:
+        return json.load(f)
 
+translations = load_translations()
+
+# セッション状態で言語を保持
+if "lang" not in st.session_state:
+    st.session_state.lang = "ja"  # 初期言語は日本語
+
+# 言語切り替えボタン
+def switch_language():
+    st.session_state.lang = "en" if st.session_state.lang == "ja" else "ja"
+
+st.button("🌐 言語切替 / Switch Language", on_click=switch_language)
+
+# 選択された言語の辞書を取得
+t = translations[st.session_state.lang]
+
+# UI表示
+st.title(t["title"])
+st.text_input(t["input_label"])
+st.button(t["submit"])
+
+st.stop()
 
 if "sf" not in st.session_state:
     try:
