@@ -1749,7 +1749,7 @@ def zaiko_place():
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
                                     st.session_state.tanaban_select_temp_info_select = ""
-                                    st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                     st.session_state.record_2  = None
                                     st.rerun()
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
@@ -1757,7 +1757,7 @@ def zaiko_place():
                                 f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_temp_info}　にある品番一覧</div>",
                                 unsafe_allow_html=True
                             )
-                            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                            st.session_state.df_search_result = st.session_state.df_search_result_syoki
                             listCount = 0
                             listCount2 = 0
                             zkTana = ""
@@ -1812,7 +1812,8 @@ def zaiko_place():
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
-                                    df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
+                                    # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
+                                    df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
                                     st.table(df_sorted)
                                     # gb = GridOptionsBuilder.from_dataframe(df_sorted)
