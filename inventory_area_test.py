@@ -2756,10 +2756,13 @@ if "lang" not in st.session_state:
 def switch_language():
     st.session_state.lang = "en" if st.session_state.lang == "ja" else "ja"
 
+if "Switch_Language_button_flag" not in st.session_state:
+    st.session_state.Switch_Language_button_flag = 0
 left, center, right = st.columns([0.25, 0.5, 0.25])
 with center:
     st.markdown(button_style, unsafe_allow_html=True)
-    st.button("🌐 言語切替 / Switch Language", on_click=switch_language)
+    if st.session_state.Switch_Language_button_flag == 0:
+        st.button("🌐 言語切替 / Switch Language", on_click=switch_language)
 
 # 選択された言語の辞書を取得
 t = translations[st.session_state.lang]
@@ -2795,6 +2798,7 @@ if not st.session_state.user_code_entered:
     if st.session_state['owner']:  # 入力があれば保存して完了フラグを立てる
         st.session_state.user_code = st.session_state['owner']
         st.session_state.user_code_entered = True
+        st.session_state.Switch_Language_button_flag = 1
         st.rerun()  # 再描画して次のステップへ
 else:
     # _= '''
