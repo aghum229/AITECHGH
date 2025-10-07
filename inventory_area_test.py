@@ -1204,7 +1204,7 @@ def zaiko_place():
         st.session_state.selected_row = None
     if "button_key" not in st.session_state:
         st.session_state.button_key = ""
-    if "add_del_flag" not in st.session_state: # 0:追加　1:削除
+    if "add_del_flag" not in st.session_state: # 0:追加　1:削除t["text001"]
         st.session_state.add_del_flag = 0
     if "zkSplitNo" not in st.session_state: # 初期値99
         st.session_state.zkSplitNo = 99
@@ -2749,11 +2749,11 @@ st.button("🌐 言語切替 / Switch Language", on_click=switch_language)
 t = translations[st.session_state.lang]
 
 # UI表示
-st.title(t["title"])
-st.text_input(t["input_label"])
-st.button(t["submit"])
+# st.title(t["title"])
+# st.text_input(t["input_label"])
+# st.button(t["submit"])
 
-st.stop()
+# st.stop()
 
 if "sf" not in st.session_state:
     try:
@@ -2769,8 +2769,10 @@ if "user_code_entered" not in st.session_state:
     
 if not st.session_state.user_code_entered:
     styled_input_text()
-    st.title("作業者コード入力")
-    st.session_state['owner'] = st.text_input("作業者コード(社員番号)を入力してください (3～4桁、例: 999)",
+    st.title(t["text001"])
+    # st.title("作業者コード入力")
+    # st.session_state['owner'] = st.text_input("作業者コード(社員番号)を入力してください (3～4桁、例: 999)",
+    st.session_state['owner'] = st.text_input(t["text002"],
                                               max_chars=4,
                                               key="owner_input")
     
