@@ -2,45 +2,45 @@
   "ja": {
     "title": "ようこそ",
     "input_label": "名前を入力してください",
-    "submit": "送信"
-    "text001": "作業者コード入力"
-    "text002": "作業者コード(社員番号)を入力してください (3～4桁、例: 999)"
-    "text003": "棚番"
-    "text004": "持出"
-    "text005": "移行票番号"
-    "text006": "品番"
-    "text007": "完了工程"
-    "text008": "数量"
-    "text009": "完了日"
-    "text010": "入力方法　選択"
-    "text011": "QRコード"
-    "text012": "(棚番と移行票番号をQRコードで入力)"
-    "text013": "手動入力"
-    "text014": "(棚番と移行票番号を手動で入力)"
-    "text015": "参照"
-    "text016": "(品番から棚番を検索)"
+    "submit": "送信",
+    "text001": "作業者コード入力",
+    "text002": "作業者コード(社員番号)を入力してください (3～4桁  例 999)",
+    "text003": "棚番",
+    "text004": "持出",
+    "text005": "移行票番号",
+    "text006": "品番",
+    "text007": "完了工程",
+    "text008": "数量",
+    "text009": "完了日",
+    "text010": "入力方法　選択",
+    "text011": "QRコード",
+    "text012": "(棚番と移行票番号をQRコードで入力)",
+    "text013": "手動入力",
+    "text014": "(棚番と移行票番号を手動で入力)",
+    "text015": "参照",
+    "text016": "(品番から棚番を検索)",
     "text017": "入力方法を再選択"
   },
   "en": {
     "title": "Welcome",
     "input_label": "Please enter your name",
-    "submit": "Submit"
-    "text001": "Enter employee number"
-    "text002": "Enter employee number (3 to 4 digits, for example, 999)"
-    "text003": "Location number"
-    "text004": "Taking out"
-    "text005": "Ikohyo number"
-    "text006": "Product number"
-    "text007": "Completed process"
-    "text008": "Quantity"
-    "text009": "Completion date"
-    "text010": "Input Method Selection"
-    "text011": "QR code"
-    "text012": "(Enter location number and ikohyo number using the QR code)"
-    "text013": "Manual input"
-    "text014": "(Manually enter location number and ikohyo number)"
-    "text015": "Reference"
-    "text016": "(Search for location number by product number)"
+    "submit": "Submit",
+    "text001": "Enter employee number",
+    "text002": "Enter employee number (3 to 4 digits  for example 999)",
+    "text003": "Location number",
+    "text004": "Taking out",
+    "text005": "Ikohyo number",
+    "text006": "Product number",
+    "text007": "Completed process",
+    "text008": "Quantity",
+    "text009": "Completion date",
+    "text010": "Input Method Selection",
+    "text011": "QR code",
+    "text012": "(Enter location number and ikohyo number using the QR code)",
+    "text013": "Manual input",
+    "text014": "(Manually enter location number and ikohyo number)",
+    "text015": "Reference",
+    "text016": "(Search for location number by product number)",
     "text017": "Reselect input method"
 
   }
