@@ -1194,17 +1194,20 @@ def zaiko_place():
         st.session_state.record = ""
     if "records" not in st.session_state:
         st.session_state.records = ""
+    if "df_search_result_syoki" not in st.session_state:
+        # st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+        st.session_state.df_search_result_syoki = pd.DataFrame(columns=[t["text003"], t["text004"], t["text005"], t["text006"], t["text007"], t["text008"], t["text009"]])
     if "df_search_result" not in st.session_state:
-        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+        st.session_state.df_search_result = st.session_state.df_search_result_syoki
     if "df_search_result_bak" not in st.session_state:
-        st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+        st.session_state.df_search_result_bak = st.session_state.df_search_result_syoki
     if "df" not in st.session_state:
         st.session_state.df = None
     if "selected_row" not in st.session_state:
         st.session_state.selected_row = None
     if "button_key" not in st.session_state:
         st.session_state.button_key = ""
-    if "add_del_flag" not in st.session_state: # 0:追加　1:削除t["text001"]
+    if "add_del_flag" not in st.session_state: # 0:追加　1:削除t["text003"]
         st.session_state.add_del_flag = 0
     if "zkSplitNo" not in st.session_state: # 初期値99
         st.session_state.zkSplitNo = 99
@@ -1225,8 +1228,8 @@ def zaiko_place():
         records = data_catch_for_csv(st.session_state.sf, item_id)
         if records:
             df = pd.DataFrame(records)
-            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日", "履歴"])
-            st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日", "履歴"])
+            st.session_state.df_search_result = st.session_state.df_search_result_syoki
+            st.session_state.df_search_result_bak = st.session_state.df_search_result_syoki
             listCount = 0
             listCount2 = 0
             zkTana = ""
@@ -1382,19 +1385,26 @@ def zaiko_place():
     if not st.session_state.manual_input_check:
         left, center, right = st.columns([0.25, 0.5, 0.25])
         with center:
-            st.title("入力方法　選択")
+            # st.title("入力方法　選択")
+            st.title(t["text010"])
         left, center, right = st.columns(3)
         with left:
-            button_qr = st.button("QRコード")
-            tool_tips("(棚番と移行票番号をQRコードで入力)")
+            # button_qr = st.button("QRコード")
+            # tool_tips("(棚番と移行票番号をQRコードで入力)")
+            button_qr = st.button(t["text011"])
+            tool_tips(t["text012"])
             # st.markdown('<p style="font-size:12px;">(棚番と移行票番号をQRコードで入力)</p>', unsafe_allow_html=True)
             # st.write("###### (棚番と移行票番号をQRコードで入力)")
         with center:
-            button_manual = st.button("手動入力")
-            tool_tips("(棚番と移行票番号を手動で入力)")
+            # button_manual = st.button("手動入力")
+            # tool_tips("(棚番と移行票番号を手動で入力)")
+            button_manual = st.button(t["text013"])
+            tool_tips(t["text014"])
         with right:
-            button_reference = st.button("参照")
-            tool_tips("(品番から棚番を検索)")
+            # button_reference = st.button("参照")
+            # tool_tips("(品番から棚番を検索)")
+            button_reference = st.button(t["text015"])
+            tool_tips(t["text016"])
         if button_qr or button_manual or button_reference: 
             if button_qr:
                 st.session_state.manual_input_flag = 0
@@ -1408,7 +1418,8 @@ def zaiko_place():
     else:
         left, center, right = st.columns([0.25, 0.5, 0.25])
         with center:
-            if st.button("入力方法を再選択"):
+            # if st.button("入力方法を再選択"):
+            if st.button(t["text017"]):
                 st.session_state.manual_input_check = False
                 st.session_state.manual_input_flag = 0
                 st.session_state.manual_input_check_select = False
@@ -1422,7 +1433,7 @@ def zaiko_place():
                 st.session_state.tanaban_select_temp_info = ""
                 st.session_state.tanaban_select_temp_info_select = ""
                 st.session_state.records  = None
-                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                st.session_state.df_search_result = st.session_state.df_search_result_syoki
                 st.session_state.record  = None
                 st.rerun()
         if st.session_state.manual_input_flag == 9:
@@ -1468,7 +1479,7 @@ def zaiko_place():
                         st.session_state.tanaban_select_temp_info = ""
                         st.session_state.tanaban_select_temp_info_select = ""
                         st.session_state.records  = None
-                        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                        st.session_state.df_search_result = st.session_state.df_search_result_syoki
                         st.session_state.record  = None
                         st.rerun()
                 if st.session_state.manual_input_check_flag == 0:
@@ -1495,7 +1506,7 @@ def zaiko_place():
                                 st.session_state.hinban_select_flag = False
                                 st.session_state.tanaban_select_flag  = False
                                 st.session_state.records  = None
-                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                 st.session_state.record  = None
                                 st.rerun()
                         if not st.session_state.hinban_select_flag:
@@ -1525,7 +1536,7 @@ def zaiko_place():
                                         st.session_state.hinban_select_flag = False
                                         st.session_state.tanaban_select_flag  = False
                                         st.session_state.records  = None
-                                        st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                        st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                         st.session_state.record  = None
                                         st.rerun()
                                 dialog_button_hinban_select(button_key)
@@ -1537,10 +1548,10 @@ def zaiko_place():
                                 if st.button("品番を再選択"):
                                     st.session_state.hinban_select_flag = False
                                     st.session_state.tanaban_select_flag  = False
-                                    st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                     st.session_state.record  = None
                                     st.rerun()
-                            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                            st.session_state.df_search_result = st.session_state.df_search_result_syoki
                             listCount = 0
                             zkTana = ""
                             zkIko = ""
@@ -1598,14 +1609,15 @@ def zaiko_place():
                                             if dialog_ok_flag:
                                                 st.session_state.hinban_select_flag = False
                                                 st.session_state.tanaban_select_flag  = False
-                                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                                 st.session_state.record  = None
                                                 st.rerun()
                                         dialog_button_zkHin_Search(button_key)
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
-                                    df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
+                                    # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
+                                    df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
                                     st.table(df_sorted)
                                     # gb = GridOptionsBuilder.from_dataframe(df_sorted)
@@ -1674,14 +1686,14 @@ def zaiko_place():
                                 st.session_state.qr_code_tana_info = False
                                 st.session_state.tanaban_select_temp_info = ""
                                 st.session_state.tanaban_select_temp_info_select = ""
-                                st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
+                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                 st.session_state.record_2  = None
                                 st.rerun()
                         if not st.session_state.qr_code_tana_info:
                             tanaban_select_info = ""
                             tanaban_select_info_select = ""
                             if st.session_state.manual_input_info_flag == 0:
-                                st.write("棚番のQRコードをスキャンしてください:")
+                                st.write("棚番のQRコードをスキャンしてください")
                                 qr_code_tana_info = qrcode_scanner(key='qrcode_scanner_tana_info')  
                                 if qr_code_tana_info:  
                                     # st.write(qr_code_tana_info) 
