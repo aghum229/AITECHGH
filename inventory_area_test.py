@@ -2008,7 +2008,7 @@ def zaiko_place():
                                 st.rerun()
                         if qr_code_kari == "":
                             st.session_state.show_camera = True
-                            st.write("移行票番号(製造オーダー)のQRコードをスキャンしてください:")
+                            st.write("移行票番号(製造オーダー)のQRコードをスキャンしてください")
                             qr_code_kari = qrcode_scanner(key="qrcode_scanner_fixed")
                             if qr_code_kari is not None and qr_code_kari.strip() != "":
                                 st.session_state.qr_code = qr_code_kari.strip()
@@ -2019,7 +2019,7 @@ def zaiko_place():
                                 
                     else:                   
                         styled_input_text()
-                        manual_input = st.text_input("移行票番号を入力し、Enterを押してください。 (1～6桁、例: 12345):",
+                        manual_input = st.text_input("移行票番号を入力し、Enterを押してください。 (1～6桁、例: 12345)",
                                                     value="",
                                                     max_chars=6,
                                                     key="manual_input")
