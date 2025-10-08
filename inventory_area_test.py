@@ -728,7 +728,7 @@ def display_footer():
     with center:
         st.markdown(
             "<p style='text-align:right;'> \
-            <span style='font-size: 10px;'>ver.1.0.2</span> \
+            <span style='font-size: 10px;'>{st.session_state.version_value}</span> \
             </p>"
             , unsafe_allow_html=True
         )
@@ -2879,6 +2879,7 @@ if "sf" not in st.session_state:
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
+    st.session_state.version_value = "ver.1.0.3"
     
 if not st.session_state.user_code_entered:
     styled_input_text()
