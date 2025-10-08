@@ -1440,17 +1440,22 @@ def zaiko_place():
             if not st.session_state.manual_input_check_select:
                 left, center, right = st.columns([0.25, 0.5, 0.25])
                 with center:
-                    st.title("参照方法　選択")
+                    # st.title("参照方法　選択")
+                    st.title(t["text018"])
                 left, right = st.columns(2)
                 # left, center1, center2, right = st.columns(4)
                 # with center1:
                 with left:
-                    button_manual_Hinban = st.button("品番(入力)で検索")
-                    tool_tips("(品番を手動で入力し検索(曖昧検索可))")
+                    # button_manual_Hinban = st.button("品番(入力)で検索")
+                    # tool_tips("(品番を手動で入力し検索(曖昧検索可))")
+                    button_manual_Hinban = st.button(t["text019"])
+                    tool_tips(t["text020"])
                 # with center2:
                 with right:
-                    button_manual_Tanaban = st.button("棚番で検索")
-                    tool_tips("(棚番をQRコード入力または手動選択で検索)")
+                    # button_manual_Tanaban = st.button("棚番で検索")
+                    # tool_tips("(棚番をQRコード入力または手動選択で検索)")
+                    button_manual_Tanaban = st.button(t["text021"])
+                    tool_tips(t["text022"])
                 # with right:
                 #     button_qr_Ikohyo = st.button("移行票番号で検索")
                 #     tool_tips("(移行票番号をQRコードまたは手動入力で検索)")
@@ -1467,7 +1472,8 @@ def zaiko_place():
             else:
                 left, center, right = st.columns([0.25, 0.5, 0.25])
                 with center:
-                    if st.button("参照方法を再選択"):
+                    # if st.button("参照方法を再選択"):
+                    if st.button(t["text023"]):
                         st.session_state.manual_input_check_select = False
                         st.session_state.manual_input_check_flag = 0
                         st.session_state.manual_input_info_flag = 0
@@ -1485,10 +1491,12 @@ def zaiko_place():
                 if st.session_state.manual_input_check_flag == 0:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
-                        st.title("品番(入力)で検索")
+                        # st.title("品番(入力)で検索")
+                        st.title(t["text019"])
                     if not st.session_state.manual_input_hinban_entered:
                         styled_input_text()
-                        manual_input_hinban_kari = st.text_input("品番を入力し、Enterを押してください。",
+                        # manual_input_hinban_kari = st.text_input("品番を入力し、Enterを押してください。",
+                        manual_input_hinban_kari = st.text_input(t["text024"],
                                                     value="",
                                                     key="manual_input_hinban_00")
                         if manual_input_hinban_kari:
@@ -1501,7 +1509,8 @@ def zaiko_place():
                         #     st.session_state.hinban_select = "---"
                         left, center, right = st.columns([0.25, 0.5, 0.25])
                         with center:
-                            if st.button("品番を再入力"):
+                            # if st.button("品番を再入力"):
+                            if st.button(t["text025"]):
                                 st.session_state.manual_input_hinban_entered = False
                                 st.session_state.hinban_select_flag = False
                                 st.session_state.tanaban_select_flag  = False
@@ -1513,8 +1522,11 @@ def zaiko_place():
                             records = data_catch_hinmoku(st.session_state.sf, st.session_state["manual_input_hinban"])
                             if records:
                                 hinban_list = ["---"] + sorted([r["snps_um__ItemName__c"] for r in records])  # ID: AITC_ID18__c, 品番: snps_um__ItemName__c, 品名: AITC_PrintItemName__c
+                                # hinban_select = st.selectbox(
+                                #     "品番を選択してください　(クリックするとリストが開きます)", hinban_list, key="hinban_select"
+                                # )
                                 hinban_select = st.selectbox(
-                                    "品番を選択してください　(クリックするとリストが開きます)", hinban_list, key="hinban_select"
+                                    t["text026"], hinban_list, key="hinban_select"
                                 )
                                 st.session_state.hinban_select_value = hinban_select
                                 if st.session_state.hinban_select_value != "" and st.session_state.hinban_select_value != "---":
@@ -1524,8 +1536,10 @@ def zaiko_place():
                                 '''
                             else:
                                 button_key = "check_ok_hinban_select"
-                                st.session_state.result_text = "検索文字を含む品番は、ありませんでした。"
-                                @st.dialog("品番検索結果通知")
+                                # st.session_state.result_text = "検索文字を含む品番は、ありませんでした。"
+                                st.session_state.result_text = t["text027"]
+                                # @st.dialog("品番検索結果通知")
+                                @st.dialog(t["text028"])
                                 def dialog_button_hinban_select(button_key):
                                     global dialog_ok_flag
                                     # st.session_state["dialog_closed"] = True
@@ -1545,7 +1559,8 @@ def zaiko_place():
                             # st.stop()
                             left, center, right = st.columns([0.25, 0.5, 0.25])
                             with center:
-                                if st.button("品番を再選択"):
+                                # if st.button("品番を再選択"):
+                                if st.button(t["text030"]):
                                     st.session_state.hinban_select_flag = False
                                     st.session_state.tanaban_select_flag  = False
                                     st.session_state.df_search_result = st.session_state.df_search_result_syoki
@@ -1599,8 +1614,10 @@ def zaiko_place():
                                                     # st.write("df_search_result:", st.session_state.df_search_result)
                                     if zkHin_Search_flag == 0:
                                         button_key = "check_ok_zkHin_Search"
-                                        st.session_state.result_text = "検索文字を含む品番は、ありませんでした。"
-                                        @st.dialog("品番検索結果通知")
+                                        # st.session_state.result_text = "検索文字を含む品番は、ありませんでした。"
+                                        st.session_state.result_text = t["text027"]
+                                        # @st.dialog("品番検索結果通知")
+                                        @st.dialog(t["text028"])
                                         def dialog_button_zkHin_Search(button_key):
                                             global dialog_ok_flag
                                             # st.session_state["dialog_closed"] = True
@@ -1631,28 +1648,36 @@ def zaiko_place():
                                     #     key="editable_table"
                                     # )
                                 else:
-                                    st.write("棚番が１データしか存在しません。至急、システム担当者に連絡してください！")
+                                    # st.write("棚番が１データしか存在しません。至急、システム担当者に連絡してください！")
+                                    st.write(t["text032"])
                                     st.stop()
                                     # st.session_state.df_search_result.loc[len(st.session_state.df_search_result)] = [zkTana_list[0], zkMo[0], zkIko[0], zkHin[0], zkKan[0], zkSu[0], zkEndDT[0]]
                             else:
-                                st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
+                                # st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
+                                st.write(t["text033"])
                                 st.stop()
                             # tanban_list = ["---"] + sorted(st.session_state.df_search_result.iloc[:, 0].dropna().unique())
                             tanban_list = ["---"] + st.session_state.df_search_result.iloc[:, 0].dropna().tolist()
                             selected_tanaban = ""
-                            selected_tanaban = st.selectbox("棚番を選択してください　(クリックするとリストが開きます)", tanban_list, key="selected_tanaban_key")
+                            # selected_tanaban = st.selectbox("棚番を選択してください　(クリックするとリストが開きます)", tanban_list, key="selected_tanaban_key")
+                            selected_tanaban = st.selectbox(t["text034"], tanban_list, key="selected_tanaban_key")
                             # selected_tanaban = st.selectbox("棚番を選択してください　(クリックするとリストが開きます)", st.session_state.df_search_result["棚番"])
                             st.session_state.tanaban_select_value = selected_tanaban
                             if st.session_state.tanaban_select_value != "" and st.session_state.tanaban_select_value != "---":
                                 left, center, right = st.columns([0.25, 0.5, 0.25])
                                 with center:
-                                    if st.button("棚番を再選択"):
+                                    # if st.button("棚番を再選択"):
+                                    if st.button(t["text035"]):
                                         st.session_state.tanaban_select_flag  = False
                                         st.session_state.tanaban_select_value = ""
                                         st.rerun()
                                 # st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
+                                # st.markdown(
+                                #     f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_value}</div>",
+                                #     unsafe_allow_html=True
+                                # )
                                 st.markdown(
-                                    f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_value}</div>",
+                                    f"<div style='font-size:28px; font-weight:bold;'>{t["text036"]} :  {st.session_state.tanaban_select_value}</div>",
                                     unsafe_allow_html=True
                                 )
                                 image_viewer(st.session_state.tanaban_select_value)
@@ -1660,15 +1685,20 @@ def zaiko_place():
                 elif st.session_state.manual_input_check_flag == 1:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
-                        st.title("棚番で検索")
+                        # st.title("棚番で検索")
+                        st.title(t["text021"])
                     if not st.session_state.tanaban_select_input:
                         left, right = st.columns(2)
                         with left:
-                            button_qr_tana = st.button("QRコード(棚番)")
-                            tool_tips("(棚番をQRコードで検索)")
+                            # button_qr_tana = st.button("QRコード(棚番)")
+                            # tool_tips("(棚番をQRコードで検索)")
+                            button_qr_tana = st.button(t["text037"])
+                            tool_tips(t["text038"])
                         with right:
-                            button_manual_tana = st.button("手動入力(棚番)")
-                            tool_tips("(棚番を手動選択で検索)")
+                            # button_manual_tana = st.button("手動入力(棚番)")
+                            # tool_tips("(棚番を手動選択で検索)")
+                            button_manual_tana = st.button(t["text039"])
+                            tool_tips(t["text040"])
                         if button_qr_tana or button_manual_tana: 
                             if button_qr_tana:
                                 st.session_state.manual_input_info_flag = 0
@@ -1681,7 +1711,8 @@ def zaiko_place():
                     else:
                         left, center, right = st.columns([0.25, 0.5, 0.25])
                         with center:
-                            if st.button("棚番入力を再選択"):
+                            # if st.button("棚番入力を再選択"):
+                            if st.button(t["text041"]):
                                 st.session_state.tanaban_select_input = False
                                 st.session_state.qr_code_tana_info = False
                                 st.session_state.tanaban_select_temp_info = ""
@@ -1693,7 +1724,8 @@ def zaiko_place():
                             tanaban_select_info = ""
                             tanaban_select_info_select = ""
                             if st.session_state.manual_input_info_flag == 0:
-                                st.write("棚番のQRコードをスキャンしてください")
+                                # st.write("棚番のQRコードをスキャンしてください")
+                                st.write(t["text042"])
                                 qr_code_tana_info = qrcode_scanner(key='qrcode_scanner_tana_info')  
                                 if qr_code_tana_info:  
                                     # st.write(qr_code_tana_info) 
@@ -1702,8 +1734,11 @@ def zaiko_place():
                                 # zkTanalistSplit = zkTanalist.split(",")
                                 zkTanalist_selectSplit = zkTanalist_select.split(",")
                                 zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
+                                # tanaban_select_info_select = st.selectbox(
+                                #     "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_info_select"
+                                # )
                                 tanaban_select_info_select = st.selectbox(
-                                    "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_info_select"
+                                    t["text043"], zkTanalist_selectSplit, key="tanaban_select_info_select"
                                 )
                                 st.session_state.tanaban_select_temp_info_select = tanaban_select_info_select
                                 if st.session_state.tanaban_select_temp_info_select != "" and st.session_state.tanaban_select_temp_info_select != "---":
@@ -1729,8 +1764,11 @@ def zaiko_place():
                                                 i += 30
                                             zkTanalistSplit = f"{zkTanalistSplit},{i}"
                                     zkTanalistSplit = zkTanalistSplit.split(",")
+                                    # tanaban_select_info_select_max = st.selectbox(
+                                    #     "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info_max"
+                                    # )
                                     tanaban_select_info_select_max = st.selectbox(
-                                        "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_info_max"
+                                        t["text044"], zkTanalistSplit, key="tanaban_select_info_max"
                                     )
                                     if tanaban_select_info_select_max != "" and tanaban_select_info_select_max != "---":
                                         tanaban_select_info = f"{st.session_state.tanaban_select_temp_info_select}-{tanaban_select_info_select_max}"
@@ -1745,7 +1783,8 @@ def zaiko_place():
                         else:
                             left, center, right = st.columns([0.25, 0.5, 0.25])
                             with center:
-                                if st.button("棚番を再選択(参照)"):
+                                # if st.button("棚番を再選択(参照)"):
+                                if st.button(t["text045"]):
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
                                     st.session_state.tanaban_select_temp_info_select = ""
@@ -1753,8 +1792,12 @@ def zaiko_place():
                                     st.session_state.record_2  = None
                                     st.rerun()
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
+                            # st.markdown(
+                            #     f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_temp_info}　にある品番一覧</div>",
+                            #     unsafe_allow_html=True
+                            # )
                             st.markdown(
-                                f"<div style='font-size:28px; font-weight:bold;'>選択された棚番 :  {st.session_state.tanaban_select_temp_info}　にある品番一覧</div>",
+                                f"<div style='font-size:28px; font-weight:bold;'>{t["text036"]} :  {st.session_state.tanaban_select_temp_info}　{t["text046"]}</div>",
                                 unsafe_allow_html=True
                             )
                             st.session_state.df_search_result = st.session_state.df_search_result_syoki
@@ -1828,10 +1871,12 @@ def zaiko_place():
                                     #     key="editable_table"
                                     # )
                                 else:
-                                    st.write("棚番が１データしか存在しません。至急、システム担当者に連絡してください！")
+                                    # st.write("棚番が１データしか存在しません。至急、システム担当者に連絡してください！")
+                                    st.write(t["text032"])
                                     st.stop()
                             else:
-                                st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
+                                # st.write("'item_id'　が存在しません。至急、システム担当者に連絡してください！")
+                                st.write(t["text033"])
                                 st.stop()
                             
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
@@ -1921,7 +1966,8 @@ def zaiko_place():
                 tanaban_select_mark = ""
                 tanaban_select_value = ""
                 if st.session_state.manual_input_flag == 0:
-                    st.write("棚番のQRコードをスキャンしてください:")
+                    # st.write("棚番のQRコードをスキャンしてください:")
+                    st.write(t["text042"])
                     qr_code_tana = qrcode_scanner(key='qrcode_scanner_tana')  
                 
                     if qr_code_tana:  
@@ -1935,8 +1981,11 @@ def zaiko_place():
                     
                     zkTanalist_selectSplit = zkTanalist_select.split(",")
                     zkTanalist_select_maxSplit = zkTanalist_select_max.split(",")
+                    # tanaban_select_mark = st.selectbox(
+                    #     "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_mark"
+                    # )
                     tanaban_select_mark = st.selectbox(
-                        "棚記号を選んでください", zkTanalist_selectSplit, key="tanaban_select_mark"
+                        t["text043"], zkTanalist_selectSplit, key="tanaban_select_mark"
                     )
                     if tanaban_select_mark != "" and tanaban_select_mark != "---":
                         zkTanalist_select_max_value = zkTanalist_select_maxSplit[zkTanalist_selectSplit.index(tanaban_select_mark)]
@@ -1958,8 +2007,11 @@ def zaiko_place():
                                     i += 30
                                 zkTanalistSplit = f"{zkTanalistSplit},{i}"
                         zkTanalistSplit = zkTanalistSplit.split(",")
+                        # tanaban_select_number = st.selectbox(
+                        #     "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_number"
+                        # )
                         tanaban_select_number = st.selectbox(
-                            "棚の数字を選んでください", zkTanalistSplit, key="tanaban_select_number"
+                            t["text044"], zkTanalistSplit, key="tanaban_select_number"
                         )
                         if tanaban_select_number != "" and tanaban_select_number != "---":
                             tanaban_select = f"{tanaban_select_mark}-{tanaban_select_number}"
@@ -1978,7 +2030,8 @@ def zaiko_place():
             else:
                 left, center, right = st.columns([0.25, 0.5, 0.25])
                 with center:
-                    if st.button("棚番を再選択"):
+                    # if st.button("棚番を再選択"):
+                    if st.button(t["text035"]):
                         st.session_state.qr_code_tana = False
                         st.session_state.tanaban_select_temp = ""
                         if st.session_state.manual_input_flag == 0:
@@ -1990,8 +2043,12 @@ def zaiko_place():
                 
                 if not st.session_state.production_order_flag:
                     # str_text = f"現在選択されている棚番 :   {st.session_state.tanaban_select_temp}"
+                    # st.markdown(
+                    #     f"<div style='font-size:28px; font-weight:bold;'>現在選択されている棚番 :   {st.session_state.tanaban_select_temp}</div>",
+                    #     unsafe_allow_html=True
+                    # )
                     st.markdown(
-                        f"<div style='font-size:28px; font-weight:bold;'>現在選択されている棚番 :   {st.session_state.tanaban_select_temp}</div>",
+                        f"<div style='font-size:28px; font-weight:bold;'>{t["text047"]} :   {st.session_state.tanaban_select_temp}</div>",
                         unsafe_allow_html=True
                     )
                     # st.write(f"### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}") 
@@ -2000,7 +2057,8 @@ def zaiko_place():
                         qr_code_kari = ""
                         left, center, right = st.columns([0.25, 0.5, 0.25])
                         with center:
-                            if st.button("移行票番号(製造オーダー)を再選択", key="camera_rerun"):
+                            # if st.button("移行票番号(製造オーダー)を再選択", key="camera_rerun"):
+                            if st.button(t["text048"], key="camera_rerun"):
                                 st.session_state.show_camera = True
                                 st.session_state.qr_code = ""
                                 st.session_state.production_order = None
@@ -2008,7 +2066,8 @@ def zaiko_place():
                                 st.rerun()
                         if qr_code_kari == "":
                             st.session_state.show_camera = True
-                            st.write("移行票番号(製造オーダー)のQRコードをスキャンしてください")
+                            # st.write("移行票番号(製造オーダー)のQRコードをスキャンしてください")
+                            st.write(t["text049"])
                             qr_code_kari = qrcode_scanner(key="qrcode_scanner_fixed")
                             if qr_code_kari is not None and qr_code_kari.strip() != "":
                                 st.session_state.qr_code = qr_code_kari.strip()
@@ -2019,7 +2078,8 @@ def zaiko_place():
                                 
                     else:                   
                         styled_input_text()
-                        manual_input = st.text_input("移行票番号を入力し、Enterを押してください。 (1～6桁、例: 12345)",
+                        # manual_input = st.text_input("移行票番号を入力し、Enterを押してください。 (1～6桁、例: 12345)",
+                        manual_input = st.text_input(t["text050"],
                                                     value="",
                                                     max_chars=6,
                                                     key="manual_input")
@@ -2034,16 +2094,25 @@ def zaiko_place():
                     if st.session_state.production_order != "" and button_key not in st.session_state:
                     # if st.session_state.production_order != "" and st.session_state[button_key] == False:
                         # if st.button("棚番と移行票番号確認"):
-                        @st.dialog("棚番と移行票番号確認")
+                        # @st.dialog("棚番と移行票番号確認")
+                        @st.dialog(t["text051"])
                         def dialog_button(button_key):
                             global message_text
                             # global button_key
+                            # message_text = f"""
+                            # <div style='font-size:22px; font-weight:bold;'>
+                            #     現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
+                            #     移行票番号(製造オーダー)は、<br>
+                            #     <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
+                            #     でよろしいですか？
+                            # </div>
+                            # """
                             message_text = f"""
                             <div style='font-size:22px; font-weight:bold;'>
-                                現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
-                                移行票番号(製造オーダー)は、<br>
+                                {t["text047"]} : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
+                                {t["text052"]}<br>
                                 <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
-                                でよろしいですか？
+                                {t["text053"]}
                             </div>
                             """
                             result_flag = approve_button(message_text, button_key)
@@ -2067,7 +2136,8 @@ def zaiko_place():
                 else:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
-                        if st.button("移行票番号を再入力"):
+                        # if st.button("移行票番号を再入力"):
+                        if st.button(t["text054"]):
                             st.session_state.df = None
                             st.session_state.data = None
                             st.session_state.material = None
@@ -2188,19 +2258,32 @@ def zaiko_place():
                         
                         owner_value = st.session_state.owner
                         production_order_value = st.session_state.production_order
-                        styled_text(f"項　　目　 :　追加または削除の対象", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="16px", border_thickness="3px")
-                        styled_text(f"社員番号　 : {owner_value}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
-                        styled_text(f"棚　　番　 : {tanaban_select}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"項　　目　 :　追加または削除の対象", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="16px", border_thickness="3px")
+                        # styled_text(f"社員番号　 : {owner_value}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"棚　　番　 : {tanaban_select}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # if zkMochidashi_value_1 == "持出中":
+                        #     styled_text(f"持　　出　 : {zkMochidashi_value_1}", bg_color="#FFAAFF", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # else:
+                        #     styled_text(f"持　　出　 : {zkMochidashi_value_1}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"移行票番号 : {production_order_value}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"品　　番　 : {default_hinban}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"工　　順　 : {default_process_order}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"工 程 名　 : {default_process_order_name}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"数量(工程) : {default_quantity}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        # styled_text(f"完　了　日 : {default_end_daytime}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text055"]} :　{t["text056"]}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="16px", border_thickness="3px")
+                        styled_text(f"{t["text057"]} : {owner_value}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text058"]} : {tanaban_select}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         if zkMochidashi_value_1 == "持出中":
-                            styled_text(f"持　　出　 : {zkMochidashi_value_1}", bg_color="#FFAAFF", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                            styled_text(f"{t["text059"]} : {zkMochidashi_value_1}", bg_color="#FFAAFF", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         else:
-                            styled_text(f"持　　出　 : {zkMochidashi_value_1}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
-                        styled_text(f"移行票番号 : {production_order_value}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
-                        styled_text(f"品　　番　 : {default_hinban}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
-                        styled_text(f"工　　順　 : {default_process_order}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
-                        styled_text(f"工 程 名　 : {default_process_order_name}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
-                        styled_text(f"数量(工程) : {default_quantity}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
-                        styled_text(f"完　了　日 : {default_end_daytime}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                            styled_text(f"{t["text059"]} : {zkMochidashi_value_1}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text060"]} : {production_order_value}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text061"]} : {default_hinban}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text062"]} : {default_process_order}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text063"]} : {default_process_order_name}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text064"]} : {default_quantity}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
+                        styled_text(f"{t["text065"]} : {default_end_daytime}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         if st.session_state.data:
                             hinban = default_hinban
                             process_order = default_process_order
@@ -2217,17 +2300,22 @@ def zaiko_place():
                         left, center1, center2, right = st.columns(4)
                         with left:
                             if st.session_state.list_flag == 0 and tanaban_select != "": # 移行票番号が無い場合のみ
-                                submit_button_add = st.form_submit_button("追加(add)")
+                                # submit_button_add = st.form_submit_button("追加(add)")
+                                submit_button_add = st.form_submit_button(t["text066"])
                         with center1:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
-                                submit_button_del = st.form_submit_button("削除(del)")
+                                # submit_button_del = st.form_submit_button("削除(del)")
+                                submit_button_del = st.form_submit_button(t["text067"])
                         with center2:
                             if st.session_state.list_flag == 1: # 移行票番号が有る場合のみ
-                                submit_button_pic = st.form_submit_button("持出(picking)")
+                                # submit_button_pic = st.form_submit_button("持出(picking)")
+                                submit_button_pic = st.form_submit_button(t["text004"])
                             if st.session_state.list_flag == 3: # 持出中のみ
-                                submit_button_pic_cancel = st.form_submit_button("持出解除(release)")
+                                # submit_button_pic_cancel = st.form_submit_button("持出解除(release)")
+                                submit_button_pic_cancel = st.form_submit_button(t["text068"])
                         with right:
-                            submit_button_cancel = st.form_submit_button("取消(cancel)")
+                            # submit_button_cancel = st.form_submit_button("取消(cancel)")
+                            submit_button_cancel = st.form_submit_button(t["text069"])
                         submit_button_flag = 0
                         if st.session_state.list_flag == 0 and tanaban_select != "":
                             if submit_button_add:
@@ -2428,7 +2516,8 @@ def zaiko_place():
                                         update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
                                 button_key = "check_ok_2"
                                 if st.session_state.zkScroll_flag == 1 and button_key not in st.session_state:
-                                    @st.dialog("処理結果通知")
+                                    # @st.dialog("処理結果通知")
+                                    @st.dialog(t["text070"])
                                     def dialog_button_2(button_key):
                                         global dialog_ok_flag
                                         # st.session_state["dialog_closed"] = True
