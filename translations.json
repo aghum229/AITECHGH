@@ -69,10 +69,10 @@
     "text064": "数量(工程)",
     "text065": "完　了　日",
     "text066": "追加",
-    "text066": "削除",
-    "text066": "持出解除",
-    "text067": "取消",
-    "text068": "処理結果通知"
+    "text067": "削除",
+    "text068": "持出解除",
+    "text069": "取消",
+    "text070": "処理結果通知"
   },
   "en": {
     "title": "Welcome",
@@ -144,9 +144,9 @@
     "text064": "Quantity(process)",
     "text065": "Completion date",
     "text066": "addition",
-    "text066": "delete",
-    "text066": "Cancel of removal",
-    "text067": "Cancel",
-    "text068": "Processing result notification"
+    "text067": "delete",
+    "text068": "Cancel of removal",
+    "text069": "Cancel",
+    "text070": "Processing result notification"
   }
 }
