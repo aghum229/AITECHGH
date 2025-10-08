@@ -72,7 +72,9 @@
     "text067": "削除",
     "text068": "持出解除",
     "text069": "取消",
-    "text070": "処理結果通知"
+    "text070": "処理結果通知",
+    "text071": "棚番のみ手動",
+    "text072": "移行票番号はQRコード入力"
   },
   "en": {
     "title": "Welcome",
@@ -147,6 +149,8 @@
     "text067": "delete",
     "text068": "Cancel of removal",
     "text069": "Cancel",
-    "text070": "Processing result notification"
+    "text070": "Processing result notification",
+    "text071": "Only the location number is manual",
+    "text072": "Enter the migration Ikohyo number by scanning the QR code"
   }
 }
