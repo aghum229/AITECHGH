@@ -727,7 +727,7 @@ def display_footer():
     # _= '''
     with center:
         st.markdown(
-            "<p style='text-align:right;'> \
+            f"<p style='text-align:right;'> \
             <span style='font-size: 10px;'>{st.session_state.version_value}</span> \
             </p>"
             , unsafe_allow_html=True
