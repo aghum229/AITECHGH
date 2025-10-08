@@ -1178,6 +1178,8 @@ def zaiko_place():
         st.session_state.tanaban_select_value = ""
     if "tanaban_record_flag" not in st.session_state:
         st.session_state.tanaban_select_flag = False
+    if "checkbox_flag" not in st.session_state:
+        st.session_state.checkbox_flag = False
     if "qr_code" not in st.session_state:
         st.session_state.qr_code = None
     if "qr_code_tana" not in st.session_state:
@@ -1400,6 +1402,8 @@ def zaiko_place():
             # tool_tips("(棚番と移行票番号を手動で入力)")
             button_manual = st.button(t["text013"])
             tool_tips(t["text014"])
+            st.session_state.checkbox_flag = st.checkbox(t["text071"])
+            tool_tips(t["text072"])
         with right:
             # button_reference = st.button("参照")
             # tool_tips("(品番から棚番を検索)")
@@ -1420,6 +1424,7 @@ def zaiko_place():
         with center:
             # if st.button("入力方法を再選択"):
             if st.button(t["text017"]):
+                st.session_state.checkbox_flag = False
                 st.session_state.manual_input_check = False
                 st.session_state.manual_input_flag = 0
                 st.session_state.manual_input_check_select = False
@@ -2053,7 +2058,7 @@ def zaiko_place():
                     )
                     # st.write(f"### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}") 
                     # st.write(f"#### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}")  # ←この文字サイズ変更コードでは、特定の文字の場合に背景色が黒くなるバグが発生。原因不明の為、とりあえずコメント化20250926。
-                    if st.session_state.manual_input_flag == 0:
+                    if st.session_state.manual_input_flag == 0 or st.session_state.checkbox_flag == True:
                         qr_code_kari = ""
                         left, center, right = st.columns([0.25, 0.5, 0.25])
                         with center:
