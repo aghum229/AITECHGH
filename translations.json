@@ -65,7 +65,7 @@
     "text060": "移行票番号",
     "text061": "品　　番　",
     "text062": "工　　順　",
-    "text063": "工　程　名",
+    "text063": "工 程 名　",
     "text064": "数量(工程)",
     "text065": "完　了　日",
     "text066": "追加",
@@ -74,7 +74,8 @@
     "text069": "取消",
     "text070": "処理結果通知",
     "text071": "棚番のみ手動",
-    "text072": "(移行票番号はQRコード入力)"
+    "text072": "(移行票番号はQRコード入力)",
+    "text073": "在庫置場を表示"
   },
   "en": {
     "title": "Welcome",
@@ -151,6 +152,7 @@
     "text069": "Cancel",
     "text070": "Processing result notification",
     "text071": "Only the location number is manual",
-    "text072": "(Enter the migration Ikohyo number by scanning the QR code)"
+    "text072": "(Enter the migration Ikohyo number by scanning the QR code)",
+    "text073": "Show the inventory location"
   }
 }
