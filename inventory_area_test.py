@@ -228,6 +228,37 @@ def consultar_salesforce(production_order, sf):
         records = result['records']
         if not records:
             st.write("❌00 **データの取り出しに失敗しました。**")
+            return pd.DataFrame()
+        df = pd.DataFrame(records)
+        st.session_state.all_data = df.to_dict(orient="records")
+        
+        df_done = df[df['snps_um__Status__c'] == 'Done']
+        if not df_done.empty:
+            last_record = df_done.loc[df_done['snps_um__ProcessOrderNo__c'].idxmax()].to_dict()
+            return pd.DataFrame([last_record])
+        else:
+            st.write("❌01 **データの取り出しに失敗しました。**")
+        return pd.DataFrame()
+    except Exception as e:
+        st.error(f"Salesforceクエリエラー: {e}")
+        return pd.DataFrame()
+
+def consultar_salesforce_bak(production_order, sf):
+    query = f"""
+        SELECT Id, Name, snps_um__ProcessName__c, snps_um__ActualQt__c, snps_um__Item__r.Id, 
+               snps_um__Item__r.Name, snps_um__ProcessOrderNo__c, snps_um__ProdOrder__r.Id, 
+               snps_um__ProdOrder__r.Name, snps_um__Status__c, snps_um__WorkPlace__r.Id, 
+               snps_um__WorkPlace__r.Name, snps_um__StockPlace__r.Name, snps_um__Item__c, 
+               snps_um__Process__r.AITC_Acumulated_Price__c, AITC_OrderQt__c, snps_um__EndDateTime__c, 
+               snps_um__Item__r.AITC_PrintItemName__c, snps_um__Process__r.AITC_ID18__c
+        FROM snps_um__WorkOrder__c 
+        WHERE snps_um__ProdOrder__r.Name = '{production_order}'
+    """
+    try:
+        result = sf.query(query)
+        records = result['records']
+        if not records:
+            st.write("❌00 **データの取り出しに失敗しました。**")
             return pd.DataFrame(), None, None, 0
             # return pd.DataFrame(), None, None, 0.0
         df = pd.DataFrame(records)
@@ -2165,7 +2196,8 @@ def zaiko_place():
                         default_end_daytime = ""
                         # st.write(st.session_state)
                         if st.session_state.production_order is not None:
-                            df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
+                            # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
+                            df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             if "all_data" in st.session_state and st.session_state.all_data:
                                 print("Salesforceで発見されたすべての記録:")
                                 # st.write("Salesforceで発見されたすべての記録:")
@@ -2173,13 +2205,13 @@ def zaiko_place():
                                 # st.dataframe(simplified_df)
                             if not df.empty:
                                 st.session_state.data = df.to_dict(orient="records")
-                                st.session_state.material = material
-                                st.session_state.material_weight = material_weight
-                                st.session_state.cumulative_cost = cumulative_cost
+                                # st.session_state.material = material
+                                # st.session_state.material_weight = material_weight
+                                # st.session_state.cumulative_cost = cumulative_cost
                                 last_record = st.session_state.data[0]
                                 default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0)
                                 # default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0.0)
-                                default_quantity = round(default_quantity)
+                                # default_quantity = round(default_quantity)
                                 default_process_order = int(last_record.get("snps_um__ProcessOrderNo__c", 0))
                                 default_process_order_name = last_record.get("snps_um__ProcessName__c")
                                 default_id = last_record.get("snps_um__Process__r", {}).get("AITC_ID18__c", "")
