@@ -1250,6 +1250,8 @@ def zaiko_place():
         st.session_state.zkScroll_flag = 0
     if "result_text" not in st.session_state:
         st.session_state.result_text = ""
+    if "image_view_flag" not in st.session_state: # 初期値0
+        st.session_state.image_view_flag = 0
     
    
     item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
@@ -1468,6 +1470,7 @@ def zaiko_place():
                 st.session_state.records  = None
                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
                 st.session_state.record  = None
+                st.session_state.image_view_flag = 0
                 st.rerun()
         if st.session_state.manual_input_flag == 9:
             if not st.session_state.manual_input_check_select:
@@ -1520,6 +1523,7 @@ def zaiko_place():
                         st.session_state.records  = None
                         st.session_state.df_search_result = st.session_state.df_search_result_syoki
                         st.session_state.record  = None
+                        st.session_state.image_view_flag = 0
                         st.rerun()
                 if st.session_state.manual_input_check_flag == 0:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
@@ -1550,6 +1554,7 @@ def zaiko_place():
                                 st.session_state.records  = None
                                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                 st.session_state.record  = None
+                                st.session_state.image_view_flag = 0
                                 st.rerun()
                         if not st.session_state.hinban_select_flag:
                             records = data_catch_hinmoku(st.session_state.sf, st.session_state["manual_input_hinban"])
@@ -1585,6 +1590,7 @@ def zaiko_place():
                                         st.session_state.records  = None
                                         st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                         st.session_state.record  = None
+                                        st.session_state.image_view_flag = 0
                                         st.rerun()
                                 dialog_button_hinban_select(button_key)
                         else:
@@ -1598,6 +1604,7 @@ def zaiko_place():
                                     st.session_state.tanaban_select_flag  = False
                                     st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                     st.session_state.record  = None
+                                    st.session_state.image_view_flag = 0
                                     st.rerun()
                             st.session_state.df_search_result = st.session_state.df_search_result_syoki
                             listCount = 0
@@ -1661,6 +1668,7 @@ def zaiko_place():
                                                 st.session_state.tanaban_select_flag  = False
                                                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                                 st.session_state.record  = None
+                                                st.session_state.image_view_flag = 0
                                                 st.rerun()
                                         dialog_button_zkHin_Search(button_key)
                                     # st.write(st.session_state.df_search_result)
@@ -1703,6 +1711,7 @@ def zaiko_place():
                                     if st.button(t["text035"]):
                                         st.session_state.tanaban_select_flag  = False
                                         st.session_state.tanaban_select_value = ""
+                                        st.session_state.image_view_flag = 0
                                         st.rerun()
                                 # st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
                                 # st.markdown(
@@ -1713,8 +1722,12 @@ def zaiko_place():
                                     f"<div style='font-size:28px; font-weight:bold;'>{t["text036"]} :  {st.session_state.tanaban_select_value}</div>",
                                     unsafe_allow_html=True
                                 )
-                                image_viewer(st.session_state.tanaban_select_value)
-                                st.stop()
+                                if st.session_state.image_view_flag == 0:
+                                    # if st.button("在庫置場を表示"):
+                                    if st.button(t["text073"]):
+                                        st.session_state.image_view_flag = 1
+                                        image_viewer(st.session_state.tanaban_select_value)
+                                        st.stop()
                 elif st.session_state.manual_input_check_flag == 1:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
@@ -1752,6 +1765,7 @@ def zaiko_place():
                                 st.session_state.tanaban_select_temp_info_select = ""
                                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                 st.session_state.record_2  = None
+                                st.session_state.image_view_flag = 0
                                 st.rerun()
                         if not st.session_state.qr_code_tana_info:
                             tanaban_select_info = ""
@@ -1823,6 +1837,7 @@ def zaiko_place():
                                     st.session_state.tanaban_select_temp_info_select = ""
                                     st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                     st.session_state.record_2  = None
+                                    st.session_state.image_view_flag = 0
                                     st.rerun()
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
                             # st.markdown(
@@ -1913,8 +1928,12 @@ def zaiko_place():
                                 st.stop()
                             
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
-                            image_viewer(normalize(st.session_state.tanaban_select_temp_info))
-                            st.stop()
+                            if st.session_state.image_view_flag == 0:
+                                # if st.button("在庫置場を表示"):
+                                if st.button(t["text073"]):
+                                    st.session_state.image_view_flag = 1
+                                    image_viewer(normalize(st.session_state.tanaban_select_temp_info))
+                                    st.stop()
                 _= '''
                 else:
                     st.title("移行票番号で検索")
