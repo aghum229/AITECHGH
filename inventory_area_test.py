@@ -1723,6 +1723,7 @@ def zaiko_place():
                                     unsafe_allow_html=True
                                 )
                                 if st.session_state.image_view_flag == 0:
+                                    left, center, right = st.columns([0.25, 0.5, 0.25])
                                     with center:
                                         # if st.button("在庫置場を表示"):
                                         if st.button(t["text073"]):
@@ -1911,6 +1912,7 @@ def zaiko_place():
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
                                     # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
+                                    df_sorted = None
                                     df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
                                     st.table(df_sorted)
@@ -1936,12 +1938,14 @@ def zaiko_place():
                             
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
                             if st.session_state.image_view_flag == 0:
-                                # if st.button("在庫置場を表示"):
-                                if st.button(t["text073"]):
-                                    st.session_state.image_view_flag = 1
-                                    image_viewer(normalize(st.session_state.tanaban_select_temp_info))
-                                    st.rerun()
-                                    # st.stop()
+                                left, center, right = st.columns([0.25, 0.5, 0.25])
+                                with center:
+                                    # if st.button("在庫置場を表示"):
+                                    if st.button(t["text073"]):
+                                        st.session_state.image_view_flag = 1
+                                        image_viewer(normalize(st.session_state.tanaban_select_temp_info))
+                                        # st.rerun()
+                                        st.stop()
                             else:
                                 st.session_state.tanaban_select_flag  = False
                                 st.session_state.tanaban_select_value = ""
