@@ -1227,6 +1227,8 @@ def zaiko_place():
         st.session_state.record = ""
     if "records" not in st.session_state:
         st.session_state.records = ""
+    if "record_2" not in st.session_state:
+        st.session_state.record_2 = ""
     if "df_search_result_syoki" not in st.session_state:
         # st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
         st.session_state.df_search_result_syoki = pd.DataFrame(columns=[t["text003"], t["text004"], t["text005"], t["text006"], t["text007"], t["text008"], t["text009"]])
@@ -1616,16 +1618,16 @@ def zaiko_place():
                             zkEndDT = ""
                             zkMo = "0"
                             zkHistory = ""
-                            record = data_catch(st.session_state.sf, item_id)
-                            if record:
-                                # zkHistory = record["zkHistory__c"]  # zk履歴
-                                zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                                zkIko_list = record["zkIkohyoNo__c"].splitlines() 
-                                zkHin_list = record["zkHinban__c"].splitlines() 
-                                zkKan_list = record["zkKanryoKoutei__c"].splitlines() 
-                                zkSu_list = record["zkSuryo__c"].splitlines()
-                                zkEndDT_list = record["zkEndDayTime__c"].splitlines() 
-                                zkMo_list = record["zkMochidashi__c"].splitlines()
+                            st.session_state.record = data_catch(st.session_state.sf, item_id)
+                            if st.session_state.record:
+                                # zkHistory = st.session_state.record["zkHistory__c"]  # zk履歴
+                                zkTana_list = st.session_state.record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                                zkIko_list = st.session_state.record["zkIkohyoNo__c"].splitlines() 
+                                zkHin_list = st.session_state.record["zkHinban__c"].splitlines() 
+                                zkKan_list = st.session_state.record["zkKanryoKoutei__c"].splitlines() 
+                                zkSu_list = st.session_state.record["zkSuryo__c"].splitlines()
+                                zkEndDT_list = st.session_state.record["zkEndDayTime__c"].splitlines() 
+                                zkMo_list = st.session_state.record["zkMochidashi__c"].splitlines()
                                 listCount = len(zkTana_list)
                                 # listCount = len(zkHin_list)
                                 zkHin_Search = st.session_state.hinban_select_value
@@ -1867,16 +1869,16 @@ def zaiko_place():
                             zkEndDT = ""
                             zkMo = ""
                             zkHistory = ""
-                            record_2 = data_catch(st.session_state.sf, item_id)
-                            if record_2:
-                                # zkHistory = record_2["zkHistory__c"]  # zk履歴
-                                zkTana_list = record_2["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                                zkIko_list = record_2["zkIkohyoNo__c"].splitlines() 
-                                zkHin_list = record_2["zkHinban__c"].splitlines() 
-                                zkKan_list = record_2["zkKanryoKoutei__c"].splitlines() 
-                                zkSu_list = record_2["zkSuryo__c"].splitlines() 
-                                zkEndDT_list = record_2["zkEndDayTime__c"].splitlines() 
-                                zkMo_list = record_2["zkMochidashi__c"].splitlines() 
+                            st.session_state.record_2 = data_catch(st.session_state.sf, item_id)
+                            if st.session_state.record_2:
+                                # zkHistory = st.session_state.record_2["zkHistory__c"]  # zk履歴
+                                zkTana_list = st.session_state.record_2["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                                zkIko_list = st.session_state.record_2["zkIkohyoNo__c"].splitlines() 
+                                zkHin_list = st.session_state.record_2["zkHinban__c"].splitlines() 
+                                zkKan_list = st.session_state.record_2["zkKanryoKoutei__c"].splitlines() 
+                                zkSu_list = st.session_state.record_2["zkSuryo__c"].splitlines() 
+                                zkEndDT_list = st.session_state.record_2["zkEndDayTime__c"].splitlines() 
+                                zkMo_list = st.session_state.record_2["zkMochidashi__c"].splitlines() 
                                 listCount = len(zkTana_list)
                                 # listCount = len(zkHin_list)
                                 zkTana_Search = st.session_state.tanaban_select_temp_info
@@ -1912,7 +1914,6 @@ def zaiko_place():
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
                                     # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
-                                    df_sorted = None
                                     df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
                                     st.table(df_sorted)
