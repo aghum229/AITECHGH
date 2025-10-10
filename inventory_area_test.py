@@ -1738,8 +1738,8 @@ def zaiko_place():
                                         if st.button(t["text073"]):
                                             st.session_state.image_view_flag = 1
                                             image_viewer(st.session_state.tanaban_select_value)
-                                            st.rerun()
-                                            # st.stop()
+                                            # st.rerun()
+                                            st.stop()
                                 else:
                                     st.session_state.tanaban_select_flag  = False
                                     st.session_state.tanaban_select_value = ""
