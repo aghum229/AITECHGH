@@ -1736,15 +1736,11 @@ def zaiko_place():
                                     with center:
                                         # if st.button("在庫置場を表示"):
                                         if st.button(t["text073"]):
-                                            st.session_state.image_view_flag = 1
+                                            # st.session_state.image_view_flag = 1
                                             image_viewer(st.session_state.tanaban_select_value)
                                             # st.rerun()
                                             st.stop()
-                                else:
-                                    st.session_state.tanaban_select_flag  = False
-                                    st.session_state.tanaban_select_value = ""
-                                    st.session_state.image_view_flag = 0
-                                    st.rerun()
+
                 elif st.session_state.manual_input_check_flag == 1:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
