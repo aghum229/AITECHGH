@@ -1238,6 +1238,8 @@ def zaiko_place():
         st.session_state.df_search_result_bak = st.session_state.df_search_result_syoki
     if "df" not in st.session_state:
         st.session_state.df = None
+    if "df_sorted" not in st.session_state:df_sorted
+        st.session_state.df_sorted = None
     if "selected_row" not in st.session_state:
         st.session_state.selected_row = None
     if "button_key" not in st.session_state:
@@ -1847,6 +1849,7 @@ def zaiko_place():
                                     st.session_state.tanaban_select_temp_info_select = ""
                                     st.session_state.df_search_result = st.session_state.df_search_result_syoki
                                     st.session_state.record_2  = None
+                                    st.session_state.df_sorted = None
                                     st.session_state.image_view_flag = 0
                                     st.rerun()
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
@@ -1914,9 +1917,9 @@ def zaiko_place():
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
                                     # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
-                                    df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
+                                    st.session_state.df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
-                                    st.table(df_sorted)
+                                    st.table(st.session_state.df_sorted)
                                     # gb = GridOptionsBuilder.from_dataframe(df_sorted)
                                     # gb.configure_grid_options(headerHeight=35)
                                     # gridOptions = gb.build()
