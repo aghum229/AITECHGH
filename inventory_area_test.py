@@ -1961,15 +1961,15 @@ def zaiko_place():
                                 with center:
                                     # if st.button("在庫置場を表示"):
                                     if st.button(t["text073"]):
-                                        st.session_state.image_view_flag = 1
+                                        # st.session_state.image_view_flag = 1
                                         image_viewer(normalize(st.session_state.tanaban_select_temp_info))
                                         # st.rerun()
                                         st.stop()
-                            else:
-                                st.session_state.tanaban_select_flag  = False
-                                st.session_state.tanaban_select_value = ""
-                                st.session_state.image_view_flag = 0
-                                st.rerun()
+                            # else:
+                            #     st.session_state.tanaban_select_flag  = False
+                            #     st.session_state.tanaban_select_value = ""
+                            #     st.session_state.image_view_flag = 0
+                            #     st.rerun()
                 _= '''
                 else:
                     st.title("移行票番号で検索")
