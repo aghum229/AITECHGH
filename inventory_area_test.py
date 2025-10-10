@@ -1867,6 +1867,8 @@ def zaiko_place():
                                 unsafe_allow_html=True
                             )
                             st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                            st.session_state.record_2 = None
+                            st.session_state.df_sorted = None
                             listCount = 0
                             listCount2 = 0
                             zkTana = ""
