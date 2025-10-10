@@ -1871,6 +1871,13 @@ def zaiko_place():
                             st.session_state.df_sorted = None
                             listCount = 0
                             listCount2 = 0
+                            zkTana_list = None
+                            zkIko_list = None
+                            zkHin_list = None
+                            zkKan_list = None 
+                            zkSu_list = None
+                            zkEndDT_list = None 
+                            zkMo_list = None
                             zkTana = ""
                             zkIko = ""
                             zkHin = ""
