@@ -1238,7 +1238,7 @@ def zaiko_place():
         st.session_state.df_search_result_bak = st.session_state.df_search_result_syoki
     if "df" not in st.session_state:
         st.session_state.df = None
-    if "df_sorted" not in st.session_state:df_sorted
+    if "df_sorted" not in st.session_state:
         st.session_state.df_sorted = None
     if "selected_row" not in st.session_state:
         st.session_state.selected_row = None
