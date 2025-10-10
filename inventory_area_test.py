@@ -1472,7 +1472,7 @@ def zaiko_place():
                 st.session_state.tanaban_select_temp_info = ""
                 st.session_state.tanaban_select_temp_info_select = ""
                 st.session_state.records = None
-                st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                 st.session_state.record = None
                 st.session_state.df_sorted = None
                 st.session_state.image_view_flag = 0
@@ -1526,7 +1526,7 @@ def zaiko_place():
                         st.session_state.tanaban_select_temp_info = ""
                         st.session_state.tanaban_select_temp_info_select = ""
                         st.session_state.records = None
-                        st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                        st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                         st.session_state.record = None
                         st.session_state.df_sorted = None
                         st.session_state.image_view_flag = 0
@@ -1558,7 +1558,7 @@ def zaiko_place():
                                 st.session_state.hinban_select_flag = False
                                 st.session_state.tanaban_select_flag = False
                                 st.session_state.records = None
-                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                                 st.session_state.record = None
                                 st.session_state.df_sorted = None
                                 st.session_state.image_view_flag = 0
@@ -1595,7 +1595,7 @@ def zaiko_place():
                                         st.session_state.hinban_select_flag = False
                                         st.session_state.tanaban_select_flag  = False
                                         st.session_state.records  = None
-                                        st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                                        st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                                         st.session_state.record  = None
                                         st.session_state.image_view_flag = 0
                                         st.rerun()
@@ -1609,12 +1609,12 @@ def zaiko_place():
                                 if st.button(t["text030"]):
                                     st.session_state.hinban_select_flag = False
                                     st.session_state.tanaban_select_flag  = False
-                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                                     st.session_state.record = None
                                     st.session_state.df_sorted = None
                                     st.session_state.image_view_flag = 0
                                     st.rerun()
-                            st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                            st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                             listCount = 0
                             zkTana = ""
                             zkIko = ""
@@ -1674,8 +1674,9 @@ def zaiko_place():
                                             if dialog_ok_flag:
                                                 st.session_state.hinban_select_flag = False
                                                 st.session_state.tanaban_select_flag  = False
-                                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                                                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                                                 st.session_state.record = None
+                                                st.session_state.df_sorted = None
                                                 st.session_state.image_view_flag = 0
                                                 st.rerun()
                                         dialog_button_zkHin_Search(button_key)
@@ -1779,7 +1780,7 @@ def zaiko_place():
                                 st.session_state.qr_code_tana_info = False
                                 st.session_state.tanaban_select_temp_info = ""
                                 st.session_state.tanaban_select_temp_info_select = ""
-                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                                 st.session_state.record_2 = None
                                 st.session_state.df_sorted = None
                                 st.session_state.image_view_flag = 0
@@ -1866,9 +1867,9 @@ def zaiko_place():
                                 f"<div style='font-size:28px; font-weight:bold;'>{t["text036"]} :  {st.session_state.tanaban_select_temp_info}　{t["text046"]}</div>",
                                 unsafe_allow_html=True
                             )
-                            st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
-                            st.session_state.record_2 = None
-                            st.session_state.df_sorted = None
+                            # st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                            # st.session_state.record_2 = None
+                            # st.session_state.df_sorted = None
                             listCount = 0
                             listCount2 = 0
                             zkTana_list = None
