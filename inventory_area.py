@@ -228,6 +228,37 @@ def consultar_salesforce(production_order, sf):
         records = result['records']
         if not records:
             st.write("❌00 **データの取り出しに失敗しました。**")
+            return pd.DataFrame()
+        df = pd.DataFrame(records)
+        st.session_state.all_data = df.to_dict(orient="records")
+        
+        df_done = df[df['snps_um__Status__c'] == 'Done']
+        if not df_done.empty:
+            last_record = df_done.loc[df_done['snps_um__ProcessOrderNo__c'].idxmax()].to_dict()
+            return pd.DataFrame([last_record])
+        else:
+            st.write("❌01 **データの取り出しに失敗しました。**")
+        return pd.DataFrame()
+    except Exception as e:
+        st.error(f"Salesforceクエリエラー: {e}")
+        return pd.DataFrame()
+
+def consultar_salesforce_bak(production_order, sf):
+    query = f"""
+        SELECT Id, Name, snps_um__ProcessName__c, snps_um__ActualQt__c, snps_um__Item__r.Id, 
+               snps_um__Item__r.Name, snps_um__ProcessOrderNo__c, snps_um__ProdOrder__r.Id, 
+               snps_um__ProdOrder__r.Name, snps_um__Status__c, snps_um__WorkPlace__r.Id, 
+               snps_um__WorkPlace__r.Name, snps_um__StockPlace__r.Name, snps_um__Item__c, 
+               snps_um__Process__r.AITC_Acumulated_Price__c, AITC_OrderQt__c, snps_um__EndDateTime__c, 
+               snps_um__Item__r.AITC_PrintItemName__c, snps_um__Process__r.AITC_ID18__c
+        FROM snps_um__WorkOrder__c 
+        WHERE snps_um__ProdOrder__r.Name = '{production_order}'
+    """
+    try:
+        result = sf.query(query)
+        records = result['records']
+        if not records:
+            st.write("❌00 **データの取り出しに失敗しました。**")
             return pd.DataFrame(), None, None, 0
             # return pd.DataFrame(), None, None, 0.0
         df = pd.DataFrame(records)
@@ -1196,6 +1227,8 @@ def zaiko_place():
         st.session_state.record = ""
     if "records" not in st.session_state:
         st.session_state.records = ""
+    if "record_2" not in st.session_state:
+        st.session_state.record_2 = ""
     if "df_search_result_syoki" not in st.session_state:
         # st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日"])
         st.session_state.df_search_result_syoki = pd.DataFrame(columns=[t["text003"], t["text004"], t["text005"], t["text006"], t["text007"], t["text008"], t["text009"]])
@@ -1205,6 +1238,8 @@ def zaiko_place():
         st.session_state.df_search_result_bak = st.session_state.df_search_result_syoki
     if "df" not in st.session_state:
         st.session_state.df = None
+    if "df_sorted" not in st.session_state:
+        st.session_state.df_sorted = None
     if "selected_row" not in st.session_state:
         st.session_state.selected_row = None
     if "button_key" not in st.session_state:
@@ -1219,6 +1254,8 @@ def zaiko_place():
         st.session_state.zkScroll_flag = 0
     if "result_text" not in st.session_state:
         st.session_state.result_text = ""
+    if "image_view_flag" not in st.session_state: # 初期値0
+        st.session_state.image_view_flag = 0
     
    
     item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
@@ -1434,9 +1471,11 @@ def zaiko_place():
                 st.session_state.qr_code_tana_info = False
                 st.session_state.tanaban_select_temp_info = ""
                 st.session_state.tanaban_select_temp_info_select = ""
-                st.session_state.records  = None
-                st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                st.session_state.record  = None
+                st.session_state.records = None
+                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                st.session_state.record = None
+                st.session_state.df_sorted = None
+                st.session_state.image_view_flag = 0
                 st.rerun()
         if st.session_state.manual_input_flag == 9:
             if not st.session_state.manual_input_check_select:
@@ -1486,9 +1525,11 @@ def zaiko_place():
                         st.session_state.qr_code_tana_info = False
                         st.session_state.tanaban_select_temp_info = ""
                         st.session_state.tanaban_select_temp_info_select = ""
-                        st.session_state.records  = None
-                        st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                        st.session_state.record  = None
+                        st.session_state.records = None
+                        st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                        st.session_state.record = None
+                        st.session_state.df_sorted = None
+                        st.session_state.image_view_flag = 0
                         st.rerun()
                 if st.session_state.manual_input_check_flag == 0:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
@@ -1515,10 +1556,12 @@ def zaiko_place():
                             if st.button(t["text025"]):
                                 st.session_state.manual_input_hinban_entered = False
                                 st.session_state.hinban_select_flag = False
-                                st.session_state.tanaban_select_flag  = False
-                                st.session_state.records  = None
-                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                st.session_state.record  = None
+                                st.session_state.tanaban_select_flag = False
+                                st.session_state.records = None
+                                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                                st.session_state.record = None
+                                st.session_state.df_sorted = None
+                                st.session_state.image_view_flag = 0
                                 st.rerun()
                         if not st.session_state.hinban_select_flag:
                             records = data_catch_hinmoku(st.session_state.sf, st.session_state["manual_input_hinban"])
@@ -1552,8 +1595,9 @@ def zaiko_place():
                                         st.session_state.hinban_select_flag = False
                                         st.session_state.tanaban_select_flag  = False
                                         st.session_state.records  = None
-                                        st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                                        st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                                         st.session_state.record  = None
+                                        st.session_state.image_view_flag = 0
                                         st.rerun()
                                 dialog_button_hinban_select(button_key)
                         else:
@@ -1565,10 +1609,12 @@ def zaiko_place():
                                 if st.button(t["text030"]):
                                     st.session_state.hinban_select_flag = False
                                     st.session_state.tanaban_select_flag  = False
-                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                    st.session_state.record  = None
+                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                                    st.session_state.record = None
+                                    st.session_state.df_sorted = None
+                                    st.session_state.image_view_flag = 0
                                     st.rerun()
-                            st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                            st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                             listCount = 0
                             zkTana = ""
                             zkIko = ""
@@ -1578,16 +1624,16 @@ def zaiko_place():
                             zkEndDT = ""
                             zkMo = "0"
                             zkHistory = ""
-                            record = data_catch(st.session_state.sf, item_id)
-                            if record:
-                                # zkHistory = record["zkHistory__c"]  # zk履歴
-                                zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                                zkIko_list = record["zkIkohyoNo__c"].splitlines() 
-                                zkHin_list = record["zkHinban__c"].splitlines() 
-                                zkKan_list = record["zkKanryoKoutei__c"].splitlines() 
-                                zkSu_list = record["zkSuryo__c"].splitlines()
-                                zkEndDT_list = record["zkEndDayTime__c"].splitlines() 
-                                zkMo_list = record["zkMochidashi__c"].splitlines()
+                            st.session_state.record = data_catch(st.session_state.sf, item_id)
+                            if st.session_state.record:
+                                # zkHistory = st.session_state.record["zkHistory__c"]  # zk履歴
+                                zkTana_list = st.session_state.record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                                zkIko_list = st.session_state.record["zkIkohyoNo__c"].splitlines() 
+                                zkHin_list = st.session_state.record["zkHinban__c"].splitlines() 
+                                zkKan_list = st.session_state.record["zkKanryoKoutei__c"].splitlines() 
+                                zkSu_list = st.session_state.record["zkSuryo__c"].splitlines()
+                                zkEndDT_list = st.session_state.record["zkEndDayTime__c"].splitlines() 
+                                zkMo_list = st.session_state.record["zkMochidashi__c"].splitlines()
                                 listCount = len(zkTana_list)
                                 # listCount = len(zkHin_list)
                                 zkHin_Search = st.session_state.hinban_select_value
@@ -1628,17 +1674,19 @@ def zaiko_place():
                                             if dialog_ok_flag:
                                                 st.session_state.hinban_select_flag = False
                                                 st.session_state.tanaban_select_flag  = False
-                                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                                st.session_state.record  = None
+                                                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                                                st.session_state.record = None
+                                                st.session_state.df_sorted = None
+                                                st.session_state.image_view_flag = 0
                                                 st.rerun()
                                         dialog_button_zkHin_Search(button_key)
                                     # st.write(st.session_state.df_search_result)
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
                                     # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
-                                    df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
+                                    st.session_state.df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
-                                    st.table(df_sorted)
+                                    st.table(st.session_state.df_sorted)
                                     # gb = GridOptionsBuilder.from_dataframe(df_sorted)
                                     # gb.configure_grid_options(headerHeight=35)
                                     # gridOptions = gb.build()
@@ -1672,6 +1720,7 @@ def zaiko_place():
                                     if st.button(t["text035"]):
                                         st.session_state.tanaban_select_flag  = False
                                         st.session_state.tanaban_select_value = ""
+                                        st.session_state.image_view_flag = 0
                                         st.rerun()
                                 # st.write(f"選択された棚番： {st.session_state.tanaban_select_value}")
                                 # st.markdown(
@@ -1682,8 +1731,16 @@ def zaiko_place():
                                     f"<div style='font-size:28px; font-weight:bold;'>{t["text036"]} :  {st.session_state.tanaban_select_value}</div>",
                                     unsafe_allow_html=True
                                 )
-                                image_viewer(st.session_state.tanaban_select_value)
-                                st.stop()
+                                if st.session_state.image_view_flag == 0:
+                                    left, center, right = st.columns([0.25, 0.5, 0.25])
+                                    with center:
+                                        # if st.button("在庫置場を表示"):
+                                        if st.button(t["text073"]):
+                                            # st.session_state.image_view_flag = 1
+                                            image_viewer(st.session_state.tanaban_select_value)
+                                            # st.rerun()
+                                            st.stop()
+
                 elif st.session_state.manual_input_check_flag == 1:
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
@@ -1719,8 +1776,10 @@ def zaiko_place():
                                 st.session_state.qr_code_tana_info = False
                                 st.session_state.tanaban_select_temp_info = ""
                                 st.session_state.tanaban_select_temp_info_select = ""
-                                st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                st.session_state.record_2  = None
+                                st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                                st.session_state.record_2 = None
+                                st.session_state.df_sorted = None
+                                st.session_state.image_view_flag = 0
                                 st.rerun()
                         if not st.session_state.qr_code_tana_info:
                             tanaban_select_info = ""
@@ -1790,8 +1849,10 @@ def zaiko_place():
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
                                     st.session_state.tanaban_select_temp_info_select = ""
-                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                    st.session_state.record_2  = None
+                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                                    st.session_state.record_2 = None
+                                    st.session_state.df_sorted = None
+                                    st.session_state.image_view_flag = 0
                                     st.rerun()
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}　にある品番一覧")
                             # st.markdown(
@@ -1802,9 +1863,18 @@ def zaiko_place():
                                 f"<div style='font-size:28px; font-weight:bold;'>{t["text036"]} :  {st.session_state.tanaban_select_temp_info}　{t["text046"]}</div>",
                                 unsafe_allow_html=True
                             )
-                            st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                            st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
+                            # st.session_state.record_2 = None
+                            # st.session_state.df_sorted = None
                             listCount = 0
                             listCount2 = 0
+                            zkTana_list = None
+                            zkIko_list = None
+                            zkHin_list = None
+                            zkKan_list = None 
+                            zkSu_list = None
+                            zkEndDT_list = None 
+                            zkMo_list = None
                             zkTana = ""
                             zkIko = ""
                             zkHin = ""
@@ -1813,16 +1883,16 @@ def zaiko_place():
                             zkEndDT = ""
                             zkMo = ""
                             zkHistory = ""
-                            record_2 = data_catch(st.session_state.sf, item_id)
-                            if record_2:
-                                # zkHistory = record_2["zkHistory__c"]  # zk履歴
-                                zkTana_list = record_2["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                                zkIko_list = record_2["zkIkohyoNo__c"].splitlines() 
-                                zkHin_list = record_2["zkHinban__c"].splitlines() 
-                                zkKan_list = record_2["zkKanryoKoutei__c"].splitlines() 
-                                zkSu_list = record_2["zkSuryo__c"].splitlines() 
-                                zkEndDT_list = record_2["zkEndDayTime__c"].splitlines() 
-                                zkMo_list = record_2["zkMochidashi__c"].splitlines() 
+                            st.session_state.record_2 = data_catch(st.session_state.sf, item_id)
+                            if st.session_state.record_2:
+                                # zkHistory = st.session_state.record_2["zkHistory__c"]  # zk履歴
+                                zkTana_list = st.session_state.record_2["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                                zkIko_list = st.session_state.record_2["zkIkohyoNo__c"].splitlines() 
+                                zkHin_list = st.session_state.record_2["zkHinban__c"].splitlines() 
+                                zkKan_list = st.session_state.record_2["zkKanryoKoutei__c"].splitlines() 
+                                zkSu_list = st.session_state.record_2["zkSuryo__c"].splitlines() 
+                                zkEndDT_list = st.session_state.record_2["zkEndDayTime__c"].splitlines() 
+                                zkMo_list = st.session_state.record_2["zkMochidashi__c"].splitlines() 
                                 listCount = len(zkTana_list)
                                 # listCount = len(zkHin_list)
                                 zkTana_Search = st.session_state.tanaban_select_temp_info
@@ -1858,9 +1928,9 @@ def zaiko_place():
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
                                     # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
-                                    df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
+                                    st.session_state.df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
-                                    st.table(df_sorted)
+                                    st.table(st.session_state.df_sorted)
                                     # gb = GridOptionsBuilder.from_dataframe(df_sorted)
                                     # gb.configure_grid_options(headerHeight=35)
                                     # gridOptions = gb.build()
@@ -1882,8 +1952,20 @@ def zaiko_place():
                                 st.stop()
                             
                             # st.write(f"選択された棚番： {st.session_state.tanaban_select_temp_info}")
-                            image_viewer(normalize(st.session_state.tanaban_select_temp_info))
-                            st.stop()
+                            if st.session_state.image_view_flag == 0:
+                                left, center, right = st.columns([0.25, 0.5, 0.25])
+                                with center:
+                                    # if st.button("在庫置場を表示"):
+                                    if st.button(t["text073"]):
+                                        # st.session_state.image_view_flag = 1
+                                        image_viewer(normalize(st.session_state.tanaban_select_temp_info))
+                                        # st.rerun()
+                                        st.stop()
+                            # else:
+                            #     st.session_state.tanaban_select_flag  = False
+                            #     st.session_state.tanaban_select_value = ""
+                            #     st.session_state.image_view_flag = 0
+                            #     st.rerun()
                 _= '''
                 else:
                     st.title("移行票番号で検索")
@@ -2165,7 +2247,8 @@ def zaiko_place():
                         default_end_daytime = ""
                         # st.write(st.session_state)
                         if st.session_state.production_order is not None:
-                            df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
+                            # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
+                            df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             if "all_data" in st.session_state and st.session_state.all_data:
                                 print("Salesforceで発見されたすべての記録:")
                                 # st.write("Salesforceで発見されたすべての記録:")
@@ -2173,13 +2256,13 @@ def zaiko_place():
                                 # st.dataframe(simplified_df)
                             if not df.empty:
                                 st.session_state.data = df.to_dict(orient="records")
-                                st.session_state.material = material
-                                st.session_state.material_weight = material_weight
-                                st.session_state.cumulative_cost = cumulative_cost
+                                # st.session_state.material = material
+                                # st.session_state.material_weight = material_weight
+                                # st.session_state.cumulative_cost = cumulative_cost
                                 last_record = st.session_state.data[0]
                                 default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0)
                                 # default_quantity = clean_quantity(last_record.get("snps_um__ActualQt__c") or last_record.get("AITC_OrderQt__c") or 0.0)
-                                default_quantity = round(default_quantity)
+                                # default_quantity = round(default_quantity)
                                 default_process_order = int(last_record.get("snps_um__ProcessOrderNo__c", 0))
                                 default_process_order_name = last_record.get("snps_um__ProcessName__c")
                                 default_id = last_record.get("snps_um__Process__r", {}).get("AITC_ID18__c", "")
@@ -2873,7 +2956,7 @@ if "sf" not in st.session_state:
         st.error(f"認証エラー: {e}")
         st.stop()
 
-st.session_state.version_value = "ver.1.0.3"
+st.session_state.version_value = "ver.1.0.4"
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
