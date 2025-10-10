@@ -1471,9 +1471,10 @@ def zaiko_place():
                 st.session_state.qr_code_tana_info = False
                 st.session_state.tanaban_select_temp_info = ""
                 st.session_state.tanaban_select_temp_info_select = ""
-                st.session_state.records  = None
+                st.session_state.records = None
                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                st.session_state.record  = None
+                st.session_state.record = None
+                st.session_state.df_sorted = None
                 st.session_state.image_view_flag = 0
                 st.rerun()
         if st.session_state.manual_input_flag == 9:
@@ -1524,9 +1525,10 @@ def zaiko_place():
                         st.session_state.qr_code_tana_info = False
                         st.session_state.tanaban_select_temp_info = ""
                         st.session_state.tanaban_select_temp_info_select = ""
-                        st.session_state.records  = None
+                        st.session_state.records = None
                         st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                        st.session_state.record  = None
+                        st.session_state.record = None
+                        st.session_state.df_sorted = None
                         st.session_state.image_view_flag = 0
                         st.rerun()
                 if st.session_state.manual_input_check_flag == 0:
@@ -1554,10 +1556,11 @@ def zaiko_place():
                             if st.button(t["text025"]):
                                 st.session_state.manual_input_hinban_entered = False
                                 st.session_state.hinban_select_flag = False
-                                st.session_state.tanaban_select_flag  = False
-                                st.session_state.records  = None
+                                st.session_state.tanaban_select_flag = False
+                                st.session_state.records = None
                                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                st.session_state.record  = None
+                                st.session_state.record = None
+                                st.session_state.df_sorted = None
                                 st.session_state.image_view_flag = 0
                                 st.rerun()
                         if not st.session_state.hinban_select_flag:
@@ -1607,7 +1610,8 @@ def zaiko_place():
                                     st.session_state.hinban_select_flag = False
                                     st.session_state.tanaban_select_flag  = False
                                     st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                    st.session_state.record  = None
+                                    st.session_state.record = None
+                                    st.session_state.df_sorted = None
                                     st.session_state.image_view_flag = 0
                                     st.rerun()
                             st.session_state.df_search_result = st.session_state.df_search_result_syoki
@@ -1671,7 +1675,7 @@ def zaiko_place():
                                                 st.session_state.hinban_select_flag = False
                                                 st.session_state.tanaban_select_flag  = False
                                                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                                st.session_state.record  = None
+                                                st.session_state.record = None
                                                 st.session_state.image_view_flag = 0
                                                 st.rerun()
                                         dialog_button_zkHin_Search(button_key)
@@ -1679,9 +1683,9 @@ def zaiko_place():
                                     # st.session_state.df_search_result.sort_values(by=["完了日", "移行票番号", "品番", "棚番"])
                                     # st.write(st.session_state.df_search_result.columns)
                                     # df_sorted = st.session_state.df_search_result.sort_values(by=["品番", "完了日", "移行票番号"]).reset_index(drop=True)
-                                    df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
+                                    st.session_state.df_sorted = st.session_state.df_search_result.sort_values(by=[t["text006"], t["text009"], t["text005"]]).reset_index(drop=True)
                                     # st.dataframe(df_sorted)
-                                    st.table(df_sorted)
+                                    st.table(st.session_state.df_sorted)
                                     # gb = GridOptionsBuilder.from_dataframe(df_sorted)
                                     # gb.configure_grid_options(headerHeight=35)
                                     # gridOptions = gb.build()
@@ -1776,7 +1780,8 @@ def zaiko_place():
                                 st.session_state.tanaban_select_temp_info = ""
                                 st.session_state.tanaban_select_temp_info_select = ""
                                 st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                st.session_state.record_2  = None
+                                st.session_state.record_2 = None
+                                st.session_state.df_sorted = None
                                 st.session_state.image_view_flag = 0
                                 st.rerun()
                         if not st.session_state.qr_code_tana_info:
@@ -1848,7 +1853,7 @@ def zaiko_place():
                                     st.session_state.tanaban_select_temp_info = ""
                                     st.session_state.tanaban_select_temp_info_select = ""
                                     st.session_state.df_search_result = st.session_state.df_search_result_syoki
-                                    st.session_state.record_2  = None
+                                    st.session_state.record_2 = None
                                     st.session_state.df_sorted = None
                                     st.session_state.image_view_flag = 0
                                     st.rerun()
