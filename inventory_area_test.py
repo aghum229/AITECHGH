@@ -1852,7 +1852,7 @@ def zaiko_place():
                                     st.session_state.qr_code_tana_info = False
                                     st.session_state.tanaban_select_temp_info = ""
                                     st.session_state.tanaban_select_temp_info_select = ""
-                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                                    st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                                     st.session_state.record_2 = None
                                     st.session_state.df_sorted = None
                                     st.session_state.image_view_flag = 0
@@ -1866,7 +1866,7 @@ def zaiko_place():
                                 f"<div style='font-size:28px; font-weight:bold;'>{t["text036"]} :  {st.session_state.tanaban_select_temp_info}　{t["text046"]}</div>",
                                 unsafe_allow_html=True
                             )
-                            st.session_state.df_search_result = st.session_state.df_search_result_syoki
+                            st.session_state.df_search_result = st.session_state.df_search_result_syoki.copy()
                             st.session_state.record_2 = None
                             st.session_state.df_sorted = None
                             listCount = 0
