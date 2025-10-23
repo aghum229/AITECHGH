@@ -2213,7 +2213,7 @@ def zaiko_place():
                             st.session_state.show_camera = True
                         st.session_state.production_order_flag = False
                         st.session_state.qr_code = None
-                        st.session_state.production_order = None
+                        st.session_state.production_order = ""
                         if button_key in st.session_state:
                             del st.session_state[button_key]
                         # st.rerun()
@@ -2246,7 +2246,8 @@ def zaiko_place():
                         default_hinban = ""
                         default_end_daytime = ""
                         # st.write(st.session_state)
-                        if st.session_state.production_order is not None:
+                        # if st.session_state.production_order is not None:
+                        if st.session_state.production_order != "":
                             # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             if "all_data" in st.session_state and st.session_state.all_data:
@@ -2283,7 +2284,7 @@ def zaiko_place():
                                 default_end_daytime = dt_jst.strftime("%Y/%m/%d %H:%M:%S")
                                 # '''
                             else:
-                                st.session_state.production_order = None
+                                st.session_state.production_order = ""
                                 st.session_state.production_order_flag = False
                                 st.warning("生産オーダーに該当する 'Done' ステータスの記録が見つかりませんでした。")
                                 # st.stop()
