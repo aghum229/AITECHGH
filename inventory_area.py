@@ -2438,6 +2438,7 @@ def zaiko_place():
                                 st.session_state.production_order_flag = False
                                 st.session_state.add_del_flag = 0
                                 st.session_state.df = None
+                                st.session_state.data = None
                                 st.rerun()
                                 
                             # item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
@@ -2956,7 +2957,7 @@ if "sf" not in st.session_state:
         st.error(f"認証エラー: {e}")
         st.stop()
 
-st.session_state.version_value = "ver.1.0.4"
+st.session_state.version_value = "ver.1.0.5"
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
