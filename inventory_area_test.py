@@ -2213,7 +2213,7 @@ def zaiko_place():
                             st.session_state.show_camera = True
                         st.session_state.production_order_flag = False
                         st.session_state.qr_code = None
-                        st.session_state.production_order = None
+                        st.session_state.production_order = ""
                         if button_key in st.session_state:
                             del st.session_state[button_key]
                         # st.rerun()
@@ -2246,7 +2246,8 @@ def zaiko_place():
                         default_hinban = ""
                         default_end_daytime = ""
                         # st.write(st.session_state)
-                        if st.session_state.production_order is not None:
+                        # if st.session_state.production_order is not None:
+                        if st.session_state.production_order != "":
                             # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             if "all_data" in st.session_state and st.session_state.all_data:
@@ -2283,7 +2284,7 @@ def zaiko_place():
                                 default_end_daytime = dt_jst.strftime("%Y/%m/%d %H:%M:%S")
                                 # '''
                             else:
-                                st.session_state.production_order = None
+                                st.session_state.production_order = ""
                                 st.session_state.production_order_flag = False
                                 st.warning("生産オーダーに該当する 'Done' ステータスの記録が見つかりませんでした。")
                                 # st.stop()
@@ -2438,6 +2439,7 @@ def zaiko_place():
                                 st.session_state.production_order_flag = False
                                 st.session_state.add_del_flag = 0
                                 st.session_state.df = None
+                                st.session_state.data = None
                                 st.rerun()
                                 
                             # item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
@@ -2956,7 +2958,7 @@ if "sf" not in st.session_state:
         st.error(f"認証エラー: {e}")
         st.stop()
 
-st.session_state.version_value = "ver.1.0.4"
+st.session_state.version_value = "ver.1.0.5"
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
