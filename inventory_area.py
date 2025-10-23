@@ -1264,8 +1264,8 @@ def zaiko_place():
         records = data_catch_for_csv(st.session_state.sf, item_id)
         if records:
             df = pd.DataFrame(records)
-            st.session_state.df_search_result = st.session_state.df_search_result_syoki
-            st.session_state.df_search_result_bak = st.session_state.df_search_result_syoki
+            st.session_state.df_search_result = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日", "履歴"])
+            st.session_state.df_search_result_bak = pd.DataFrame(columns=["棚番", "持出", "移行票番号", "品番", "完了工程", "数量", "完了日", "履歴"])
             listCount = 0
             listCount2 = 0
             zkTana = ""
