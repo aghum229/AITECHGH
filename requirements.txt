@@ -12,3 +12,4 @@ flask
 easyocr
 torch
 streamlit-aggrid
+streamlit-js-eval
