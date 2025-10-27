@@ -17,6 +17,7 @@ import toml
 import streamlit.components.v1 as components
 # from st_aggrid import AgGrid, GridOptionsBuilder
 import unicodedata
+from streamlit_js_eval import streamlit_js_eval
 
 import easyocr
 import numpy as np
@@ -2963,6 +2964,45 @@ if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
     
+st.title("QRコード読み取り（JavaScript）")
+
+components.html(
+    """
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <div id="reader" style="width:300px;"></div>
+    <div id="result"></div>
+    <script>
+      function onScanSuccess(decodedText, decodedResult) {
+          document.getElementById('result').innerText = `読み取ったQRコード: ${decodedText}`;
+      }
+
+      function onScanFailure(error) {
+          // エラー処理（オプション）
+      }
+
+      let html5QrcodeScanner = new Html5QrcodeScanner(
+          "reader", { fps: 10, qrbox: 250 });
+      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+    """,
+    height=400,
+)
+
+st.title("QRコード読み取り結果の表示")
+
+# JavaScriptでQRコードを読み取り、結果を返す
+qr_result = streamlit_js_eval(
+    js_expressions="window.qrCodeResult",
+    key="qr-reader",
+    debounce=0.5,
+)
+
+# 結果があれば表示
+if qr_result:
+    st.write("読み取ったQRコードの内容:", qr_result)
+
+st.stop()
+
 if not st.session_state.user_code_entered:
     styled_input_text()
     st.title(t["text001"])
