@@ -2964,6 +2964,15 @@ if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
     
+st.title("QRコード読み取り結果の表示")
+
+# JavaScriptでQRコードを読み取り、結果を返す
+qr_result = streamlit_js_eval(
+    js_expressions="window.qrCodeResult",
+    key="qr-reader",
+    debounce=0.5,
+)
+
 st.title("QRコード読み取り（JavaScript）")
 
 components.html(
@@ -2986,15 +2995,6 @@ components.html(
     </script>
     """,
     height=400,
-)
-
-st.title("QRコード読み取り結果の表示")
-
-# JavaScriptでQRコードを読み取り、結果を返す
-qr_result = streamlit_js_eval(
-    js_expressions="window.qrCodeResult",
-    key="qr-reader",
-    debounce=0.5,
 )
 
 # 結果があれば表示
