@@ -2966,40 +2966,37 @@ if "user_code_entered" not in st.session_state:
     
 st.title("QRコード読み取り結果の表示")
 
-# JavaScriptでQRコードを読み取り、結果を返す
+# JavaScript埋め込み
+components.html(
+    """
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <div id="reader" style="width:300px;"></div>
+    <script>
+      window.qrCodeResult = "";
+
+      function onScanSuccess(decodedText, decodedResult) {
+          window.qrCodeResult = decodedText;
+      }
+
+      let html5QrcodeScanner = new Html5QrcodeScanner(
+          "reader", { fps: 10, qrbox: 250 });
+      html5QrcodeScanner.render(onScanSuccess);
+    </script>
+    """,
+    height=400,
+)
+
+# JavaScriptから結果を取得
 qr_result = streamlit_js_eval(
     js_expressions="window.qrCodeResult",
     key="qr-reader",
     debounce=0.5,
 )
 
-st.title("QRコード読み取り（JavaScript）")
-
-components.html(
-    """
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <div id="reader" style="width:300px;"></div>
-    <div id="result"></div>
-    <script>
-      function onScanSuccess(decodedText, decodedResult) {
-          document.getElementById('result').innerText = `読み取ったQRコード: ${decodedText}`;
-      }
-
-      function onScanFailure(error) {
-          // エラー処理（オプション）
-      }
-
-      let html5QrcodeScanner = new Html5QrcodeScanner(
-          "reader", { fps: 10, qrbox: 250 });
-      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-    </script>
-    """,
-    height=400,
-)
-
-# 結果があれば表示
+# 結果表示
 if qr_result:
-    st.write("読み取ったQRコードの内容:", qr_result)
+    st.success("読み取ったQRコードの内容:")
+    st.write(qr_result)
 
 st.stop()
 
