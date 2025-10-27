@@ -2966,7 +2966,7 @@ if "user_code_entered" not in st.session_state:
     
 st.title("QRコード読み取り結果の表示")
 
-# JavaScript埋め込み
+# JavaScript埋め込み（QRコード読み取り）
 components.html(
     """
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -2986,14 +2986,14 @@ components.html(
     height=400,
 )
 
-# JavaScriptから結果を取得
+# JavaScriptから結果を取得（components.htmlより後に実行）
 qr_result = streamlit_js_eval(
     js_expressions="window.qrCodeResult",
     key="qr-reader",
     debounce=0.5,
 )
 
-# 結果表示
+# 結果があれば表示
 if qr_result:
     st.success("読み取ったQRコードの内容:")
     st.write(qr_result)
