@@ -375,6 +375,18 @@ def atualizar_tanaban_addkari(sf, item_id):  # 棚番書き込み専用
         # reset_form()
     st.stop()
                
+def update_tanaban_zkHisDel(sf, item_id, zkHistory):
+    try:
+        sf.snps_um__Process__c.update(item_id, {
+            "zkHistory__c": zkHistory
+        })
+        st.session_state.result_text = f"履歴を全て削除しました。"
+        st.session_state.zkScroll_flag = 1
+    except Exception as e:
+        st.error(f"更新エラー: {e}")
+        reset_form()
+        st.stop()
+
 def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder):
     # global add_del_flag  # 0:追加　1:削除
     # global zkScroll_flag  # 初期値0
@@ -1260,6 +1272,11 @@ def zaiko_place():
     
    
     item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
+
+    if st.session_state['owner'] == "9990":
+        zkHistory = ""
+        update_tanaban_zkHisDel(st.session_state.sf, item_id, zkHistory)
+        st.stop()
 
     if st.session_state['owner'] == "9997" or st.session_state['owner'] == "9994":
         records = data_catch_for_csv(st.session_state.sf, item_id)
