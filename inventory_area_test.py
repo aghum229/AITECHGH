@@ -2980,7 +2980,8 @@ st.session_state.version_value = "ver.1.0.5"
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
-    
+
+_= '''
 st.title("QRコード読み取り結果の表示")
 
 # JavaScript埋め込み（QRコード読み取り）
@@ -3016,6 +3017,7 @@ if qr_result:
     st.write(qr_result)
 
 st.stop()
+'''
 
 if not st.session_state.user_code_entered:
     styled_input_text()
