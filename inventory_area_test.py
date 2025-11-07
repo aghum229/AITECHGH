@@ -495,7 +495,7 @@ def data_catch_zkHistory(sf, item_id):
         result = sf.query(query)
         records = result.get("records", [])
         if records:
-            return records
+            return records[0]
         else:
             return None
             st.stop()
@@ -1295,12 +1295,12 @@ def zaiko_place():
     mojisu = data_catch_zkHistory(st.session_state.sf, item_id)
     if len(mojisu) >= 100000:
         zkHistory = ""
-        st.write(f"履歴の文字数が10万字を超えました。  {len(mojisu)}")
+        st.write(f"履歴の文字数が10万字を超えました。  {len(mojisu["zkHistory__c"])}")
         # update_tanaban_zkHisDel(st.session_state.sf, item_id, zkHistory)
         st.stop()
     else:
-        st.write(f"履歴の文字数は、  {len(mojisu)}　です。")
-        st.write(f"履歴の文字は、「　{mojisu}　」です。")
+        st.write(f"履歴の文字数は、  {len(mojisu["zkHistory__c"])}　です。")
+        st.write(f"履歴の文字は、「　{mojisu["zkHistory__c"]}　」です。")
         st.stop()
     
     if st.session_state['owner'] == "9997" or st.session_state['owner'] == "9994":
