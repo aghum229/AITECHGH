@@ -1292,7 +1292,8 @@ def zaiko_place():
     item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
 
     # if st.session_state['owner'] == "9990":
-    if len(data_catch_zkHistory(sf, item_id)) >= 100000:
+    mojisu = data_catch_zkHistory(sf, item_id)
+    if len(mojisu) >= 100000:
         zkHistory = ""
         st.write(f"履歴の文字数が10万字を超えました。  {len(data_catch_zkHistory(sf, item_id))}")
         # update_tanaban_zkHisDel(st.session_state.sf, item_id, zkHistory)
