@@ -1295,11 +1295,11 @@ def zaiko_place():
     mojisu = data_catch_zkHistory(st.session_state.sf, item_id)
     if len(mojisu) >= 100000:
         zkHistory = ""
-        st.write(f"履歴の文字数が10万字を超えました。  {len(data_catch_zkHistory(sf, item_id))}")
+        st.write(f"履歴の文字数が10万字を超えました。  {len(mojisu)}")
         # update_tanaban_zkHisDel(st.session_state.sf, item_id, zkHistory)
         st.stop()
     else:
-        st.write(f"履歴の文字数は、  {len(data_catch_zkHistory(sf, item_id))}　です。")
+        st.write(f"履歴の文字数は、  {len(mojisu)}　です。")
         st.stop()
     
     if st.session_state['owner'] == "9997" or st.session_state['owner'] == "9994":
