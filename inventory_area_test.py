@@ -485,6 +485,24 @@ def data_catch_hinmoku(sf, item_name):
         # reset_form()
         st.stop()
 
+def data_catch_zkHistory(sf, item_name):
+    query = f"""
+        SELECT zkHistory__c
+        FROM snps_um__Process__c
+        WHERE AITC_ID18__c = '{item_id}'
+    """
+    try:
+        result = sf.query(query)
+        records = result.get("records", [])
+        if records:
+            return records
+        else:
+            return None
+            st.stop()
+    except Exception as e:
+        st.error(f"履歴取得エラー: {e}")
+        st.stop()
+
 def data_catch_for_csv(sf, item_id):
     query = f"""
         SELECT AITC_ID18__c, Name,
@@ -1273,11 +1291,16 @@ def zaiko_place():
    
     item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
 
-    if st.session_state['owner'] == "9990":
+    # if st.session_state['owner'] == "9990":
+    if len(data_catch_zkHistory(sf, item_id)) >= 100000:
         zkHistory = ""
-        update_tanaban_zkHisDel(st.session_state.sf, item_id, zkHistory)
+        st.write(f"履歴の文字数が10万字を超えました。  {len(data_catch_zkHistory(sf, item_id))}")
+        # update_tanaban_zkHisDel(st.session_state.sf, item_id, zkHistory)
         st.stop()
-
+    else:
+        st.write(f"履歴の文字数は、  {len(data_catch_zkHistory(sf, item_id))}　です。")
+        st.stop()
+    
     if st.session_state['owner'] == "9997" or st.session_state['owner'] == "9994":
         records = data_catch_for_csv(st.session_state.sf, item_id)
         if records:
