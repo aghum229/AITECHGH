@@ -1300,6 +1300,7 @@ def zaiko_place():
         st.stop()
     else:
         st.write(f"履歴の文字数は、  {len(mojisu)}　です。")
+        st.write(f"履歴の文字は、「　{mojisu}　」です。")
         st.stop()
     
     if st.session_state['owner'] == "9997" or st.session_state['owner'] == "9994":
