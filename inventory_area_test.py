@@ -485,7 +485,7 @@ def data_catch_hinmoku(sf, item_name):
         # reset_form()
         st.stop()
 
-def data_catch_zkHistory(sf, item_name):
+def data_catch_zkHistory(sf, item_id):
     query = f"""
         SELECT zkHistory__c
         FROM snps_um__Process__c
