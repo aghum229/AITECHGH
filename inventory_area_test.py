@@ -1291,6 +1291,7 @@ def zaiko_place():
    
     item_id = "a1ZQ8000000FB4jMAG"  # 工程手配明細マスタの 1-PC9-SW_IZ の ID(18桁) ※変更禁止
 
+    _= '''
     # if st.session_state['owner'] == "9990":
     mojisu = data_catch_zkHistory(st.session_state.sf, item_id)
     if len(mojisu) >= 100000:
@@ -1302,6 +1303,7 @@ def zaiko_place():
         st.write(f"履歴の文字数は、  {len(mojisu["zkHistory__c"])}　です。")
         st.write(f"履歴の文字は、「　{mojisu["zkHistory__c"]}　」です。")
         st.stop()
+    '''
     
     if st.session_state['owner'] == "9997" or st.session_state['owner'] == "9994":
         records = data_catch_for_csv(st.session_state.sf, item_id)
