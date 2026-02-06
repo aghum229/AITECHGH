@@ -2454,7 +2454,7 @@ def zaiko_place():
                                 st.stop()  # 以降の処理を止める
                             # st.session_state.zkScroll_flag = 0
                             if item_id:
-                                st.write("update_tanaban前")
+                                st.write(item_id)
                                 if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
                                     update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
                                 else:
