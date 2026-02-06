@@ -85,7 +85,7 @@ def consultar_salesforce(production_order, sf):
         result = sf.query(query)
         records = result['records']
         if not records:
-            st.write("❌00 **データの取り出しに失敗しました。**")
+            st.write("❌50 **データの取り出しに失敗しました。**")
             return pd.DataFrame()
         df = pd.DataFrame(records)
         st.session_state.all_data = df.to_dict(orient="records")
@@ -116,7 +116,7 @@ def consultar_salesforce_bak(production_order, sf):
         result = sf.query(query)
         records = result['records']
         if not records:
-            st.write("❌00 **データの取り出しに失敗しました。**")
+            st.write("❌60 **データの取り出しに失敗しました。**")
             return pd.DataFrame(), None, None, 0
             # return pd.DataFrame(), None, None, 0.0
         df = pd.DataFrame(records)
