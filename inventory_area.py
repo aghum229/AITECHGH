@@ -261,6 +261,7 @@ def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo
             st.session_state.result_text = f"棚番 '{zkTana}' から、移行票No '{zkOrder}' を削除しました。"
     except Exception as e:
         st.error(f"更新エラー: {e}")
+        st.write(f"更新エラー: {e}")
         reset_form()
         st.stop()
                
