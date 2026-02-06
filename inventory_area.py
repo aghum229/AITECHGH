@@ -81,10 +81,10 @@ def consultar_salesforce(production_order, sf):
         FROM snps_um__WorkOrder__c 
         WHERE snps_um__ProdOrder__r.Name = '{production_order}'
     """
-    st.write(query)
+    #st.write(query)
     try:
         result = sf.query(query)
-        st.write(result)
+        #st.write(result)
         records = result['records']
         if not records:
             st.write("❌50 **データの取り出しに失敗しました。**")
@@ -2324,7 +2324,9 @@ def zaiko_place():
                             zkOrder = ""
                             zkHistory = ""
                             st.session_state.zkScroll_flag = 0
+                            st.write("data_catch前")
                             record = data_catch(st.session_state.sf, item_id)
+                            st.write("data_catch後")
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
