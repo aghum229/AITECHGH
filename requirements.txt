@@ -1,3 +1,5 @@
+streamlit>=1.32
+altair>=5
 simple-salesforce
 pandas
 openpyxl
