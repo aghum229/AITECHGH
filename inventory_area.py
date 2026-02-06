@@ -2636,14 +2636,14 @@ return_1161 = "⏎ 1161.在庫置き場メニュー　へ戻る"
 def show_main_screen():
     left, center, right = st.columns([0.2, 0.6, 0.2])
     with center:
-    #    pass
-        st.image("aitech_logo.png", use_container_width=True)
+        pass
+    #    st.image("aitech_logo.png", use_container_width=True)
     #     st.image("aitech_logo_D.png", use_container_width=True)
     # with right:
     #     st.write('(仮)')
     
     # display_container('yellow', '☆メイン画面☆')
-    # display_container('yellow', '☆在庫置場管理システム☆')
+    display_container('yellow', '☆在庫置場管理システム☆')
     display_line()
     st.markdown(button_style, unsafe_allow_html=True)
     st.markdown(formsubmitbutton_style, unsafe_allow_html=True)
