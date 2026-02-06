@@ -2453,8 +2453,8 @@ def zaiko_place():
                                 st.write(f"❌09 **作業者コード '{owner}' が未入力です。**")
                                 st.stop()  # 以降の処理を止める
                             # st.session_state.zkScroll_flag = 0
-                            st.write("update_tanaban前")
                             if item_id:
+                                st.write("update_tanaban前")
                                 if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
                                     update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
                                 else:
