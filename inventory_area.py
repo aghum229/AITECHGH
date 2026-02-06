@@ -81,8 +81,10 @@ def consultar_salesforce(production_order, sf):
         FROM snps_um__WorkOrder__c 
         WHERE snps_um__ProdOrder__r.Name = '{production_order}'
     """
+    st.write(query)
     try:
         result = sf.query(query)
+        st.write(result)
         records = result['records']
         if not records:
             st.write("❌50 **データの取り出しに失敗しました。**")
