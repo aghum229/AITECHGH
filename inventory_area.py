@@ -261,8 +261,8 @@ def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo
             st.session_state.result_text = f"棚番 '{zkTana}' から、移行票No '{zkOrder}' を削除しました。"
     except Exception as e:
         st.error(f"更新エラー: {e}")
-        st.write(f"更新エラー: {e}")
-        #reset_form()
+        #st.write(f"更新エラー: {e}")
+        reset_form()
         st.stop()
                
 def update_Mochidashi(sf, item_id, zkTana, zkMo, zkHistory, zkOrder, zkMo_flag):
@@ -2455,8 +2455,8 @@ def zaiko_place():
                                 st.stop()  # 以降の処理を止める
                             # st.session_state.zkScroll_flag = 0
                             if item_id:
-                                st.write("update_tanaban前")
-                                st.write(item_id)
+                                #st.write("update_tanaban前")
+                                #st.write(item_id)
                                 if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
                                     update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
                                 else:
@@ -2464,7 +2464,7 @@ def zaiko_place():
                                         update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
                                     else:
                                         update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
-                                st.write("update_tanaban後")
+                                #st.write("update_tanaban後")
                                 button_key = "check_ok_2"
                                 if st.session_state.zkScroll_flag == 1 and button_key not in st.session_state:
                                     # @st.dialog("処理結果通知")
