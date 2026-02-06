@@ -333,6 +333,24 @@ def data_catch_hinmoku(sf, item_name):
         # reset_form()
         st.stop()
 
+def data_catch_zkHistory(sf, item_id):
+    query = f"""
+        SELECT zkHistory__c
+        FROM snps_um__Process__c
+        WHERE AITC_ID18__c = '{item_id}'
+    """
+    try:
+        result = sf.query(query)
+        records = result.get("records", [])
+        if records:
+            return records[0]
+        else:
+            return None
+            st.stop()
+    except Exception as e:
+        st.error(f"履歴取得エラー: {e}")
+        st.stop()
+
 def data_catch_for_csv(sf, item_id):
     query = f"""
         SELECT AITC_ID18__c, Name,
