@@ -2324,9 +2324,7 @@ def zaiko_place():
                             zkOrder = ""
                             zkHistory = ""
                             st.session_state.zkScroll_flag = 0
-                            st.write("data_catch前")
                             record = data_catch(st.session_state.sf, item_id)
-                            st.write("data_catch後")
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
@@ -2455,6 +2453,7 @@ def zaiko_place():
                                 st.write(f"❌09 **作業者コード '{owner}' が未入力です。**")
                                 st.stop()  # 以降の処理を止める
                             # st.session_state.zkScroll_flag = 0
+                            st.write("update_tanaban前")
                             if item_id:
                                 if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
                                     update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
@@ -2463,6 +2462,7 @@ def zaiko_place():
                                         update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
                                     else:
                                         update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
+                                st.write("update_tanaban後")
                                 button_key = "check_ok_2"
                                 if st.session_state.zkScroll_flag == 1 and button_key not in st.session_state:
                                     # @st.dialog("処理結果通知")
