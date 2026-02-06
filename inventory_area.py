@@ -2636,8 +2636,8 @@ return_1161 = "⏎ 1161.在庫置き場メニュー　へ戻る"
 def show_main_screen():
     left, center, right = st.columns([0.2, 0.6, 0.2])
     with center:
-        pass
-    #    st.image("aitech_logo.png", use_container_width=True)
+    #    pass
+        st.image("aitech_logo.png", use_container_width=True)
     #     st.image("aitech_logo_D.png", use_container_width=True)
     # with right:
     #     st.write('(仮)')
