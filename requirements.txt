@@ -13,3 +13,4 @@ easyocr
 torch
 streamlit-aggrid
 streamlit-js-eval
+altair==4.2.2
