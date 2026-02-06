@@ -262,7 +262,7 @@ def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo
     except Exception as e:
         st.error(f"更新エラー: {e}")
         st.write(f"更新エラー: {e}")
-        reset_form()
+        #reset_form()
         st.stop()
                
 def update_Mochidashi(sf, item_id, zkTana, zkMo, zkHistory, zkOrder, zkMo_flag):
