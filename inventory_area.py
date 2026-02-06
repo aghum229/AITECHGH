@@ -75,7 +75,7 @@ def consultar_salesforce(production_order, sf):
         SELECT Id, Name, snps_um__ProcessName__c, snps_um__ActualQt__c, snps_um__Item__r.Id, 
                snps_um__Item__r.Name, snps_um__ProcessOrderNo__c, snps_um__ProdOrder__r.Id, 
                snps_um__ProdOrder__r.Name, snps_um__Status__c, snps_um__WorkPlace__r.Id, 
-               snps_um__WorkPlace__r.Name, snps_um__StockPlace__r.Name, snps_um__Item__c, 
+               snps_um__Item__c, 
                AITC_OrderQt__c, snps_um__EndDateTime__c, 
                snps_um__Process__r.AITC_ID18__c
         FROM snps_um__WorkOrder__c 
