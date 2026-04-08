@@ -2199,6 +2199,7 @@ def zaiko_place():
                         
                         owner_value = st.session_state.owner
                         production_order_value = st.session_state.production_order
+                        st.write(f"移行票番号確認用: {st.session_state.production_order}")
                         # styled_text(f"項　　目　 :　追加または削除の対象", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="16px", border_thickness="3px")
                         # styled_text(f"社員番号　 : {owner_value}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         # styled_text(f"棚　　番　 : {tanaban_select}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
