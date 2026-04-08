@@ -95,7 +95,6 @@ def consultar_salesforce(production_order, sf):
         df_done = df[df['snps_um__Status__c'] == 'Done']
         if not df_done.empty:
             last_record = df_done.loc[df_done['snps_um__ProcessOrderNo__c'].idxmax()].to_dict()
-            st.write(f"❌50 :{last_record}")
             return pd.DataFrame([last_record])
         else:
             st.write("❌01 **データの取り出しに失敗しました。**")
@@ -264,7 +263,7 @@ def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo
     except Exception as e:
         st.error(f"更新エラー: {e}")
         st.write(f"棚番更新エラー: {e}")
-        #reset_form()
+        reset_form()
         st.stop()
                
 def update_Mochidashi(sf, item_id, zkTana, zkMo, zkHistory, zkOrder, zkMo_flag):
@@ -451,7 +450,7 @@ def list_update_zkKari(record, zkKari, dbItem, listNo, update_value, flag):
 
 def reset_form():
     st.session_state.production_order = None
-    st.write("110初期化番号")
+    $st.write("110初期化番号")
     #st.session_state.production_order_sub = None
     # st.session_state.data = None
     # st.session_state.material = None
@@ -1027,7 +1026,7 @@ def zaiko_place():
     # Inicializar estados necessários
     if "production_order" not in st.session_state:
         st.session_state.production_order = None
-        st.write("111初期化番号")
+        #st.write("111初期化番号")
     if "production_order_sub" not in st.session_state:
         st.session_state.production_order_sub = None
     if "production_order_flag" not in st.session_state:
@@ -1927,7 +1926,7 @@ def zaiko_place():
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
-                            st.write("112初期化番号")
+                            #st.write("112初期化番号")
                             if st.session_state.manual_input_flag == 0:
                                 st.session_state.show_camera = True  # 必要に応じてカメラ表示を再開
                             st.rerun() 
@@ -1999,7 +1998,7 @@ def zaiko_place():
                     # st.write(st.session_state.qr_code_tana)
                     st.session_state.qr_code = ""
                     st.session_state.production_order = None
-                    st.write("103初期化番号")
+                    #st.write("103初期化番号")
                     #st.session_state.production_order_sub = None
                     st.session_state.production_order_flag = False
                     st.rerun()  # 再描画して次のステップへ
@@ -2014,13 +2013,13 @@ def zaiko_place():
                             st.session_state.show_camera = True  # 必要に応じてカメラ表示を再開
                         st.session_state.qr_code = ""
                         st.session_state.production_order = None
-                        st.write("104初期化番号")
+                        #st.write("104初期化番号")
                         #st.session_state.production_order_sub = None
                         st.session_state.production_order_flag = False
                         st.rerun()
                 
                 if not st.session_state.production_order_flag:
-                    st.write(f"移行票番号確認用04: {st.session_state.production_order}")
+                    #st.write(f"移行票番号確認用04: {st.session_state.production_order}")
                     # str_text = f"現在選択されている棚番 :   {st.session_state.tanaban_select_temp}"
                     # st.markdown(
                     #     f"<div style='font-size:28px; font-weight:bold;'>現在選択されている棚番 :   {st.session_state.tanaban_select_temp}</div>",
@@ -2041,7 +2040,7 @@ def zaiko_place():
                                 st.session_state.show_camera = True
                                 st.session_state.qr_code = ""
                                 st.session_state.production_order = None
-                                st.write("105初期化番号")
+                                #st.write("105初期化番号")
                                 #st.session_state.production_order_sub = None
                                 st.session_state.production_order_flag = False
                                 st.rerun()
@@ -2055,8 +2054,8 @@ def zaiko_place():
                             
                             if "qr_code" in st.session_state and st.session_state.qr_code != "":
                                 st.session_state.production_order = f"{st.session_state.qr_code}"
-                                st.session_state.production_order_sub = f"{st.session_state.qr_code}"
-                                st.session_state.production_order_sub_flag = 1
+                                #st.session_state.production_order_sub = f"{st.session_state.qr_code}"
+                                #st.session_state.production_order_sub_flag = 1
                                 st.session_state.show_camera = False
                                 
                     else:                   
@@ -2068,44 +2067,44 @@ def zaiko_place():
                                                     key="manual_input")
                         if manual_input and manual_input.isdigit():
                             st.session_state.production_order = f"PO-{manual_input.zfill(6)}"
-                            st.session_state.production_order_sub = f"PO-{manual_input.zfill(6)}"
-                            st.session_state.production_order_sub_flag = 1
+                            #st.session_state.production_order_sub = f"PO-{manual_input.zfill(6)}"
+                            #st.session_state.production_order_sub_flag = 1
                             # st.session_state.manual_input_value = manual_input
                             st.session_state.show_camera = False
                         
                     # st.write(f"#### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}")                   
                     button_key = "check_ok"
                     # st.session_state[button_key] = False
-                    st.write(f"移行票番号確認用08: {st.session_state.production_order}")
-                    if st.session_state.production_order_sub_flag == 1:
-                        st.session_state.production_order_sub_flag = 2
-                        if (st.session_state.production_order is not None or st.session_state.production_order_sub is not None) and button_key not in st.session_state:
-                        # if st.session_state.production_order != "" and st.session_state[button_key] == False:
-                            # if st.button("棚番と移行票番号確認"):
-                            # @st.dialog("棚番と移行票番号確認")
-                            st.session_state.production_order = st.session_state.production_order_sub
-                            @st.dialog(t["text051"])
-                            def dialog_button(button_key):
-                                global message_text
-                                # global button_key
-                                # message_text = f"""
-                                # <div style='font-size:22px; font-weight:bold;'>
-                                #     現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
-                                #     移行票番号(製造オーダー)は、<br>
-                                #     <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
-                                #     でよろしいですか？
-                                # </div>
-                                # """
-                                message_text = f"""
-                                <div style='font-size:22px; font-weight:bold;'>
-                                    {t["text047"]} : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
-                                    {t["text052"]}<br>
-                                    <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
-                                    {t["text053"]}
-                                </div>
-                                """
-                                result_flag = approve_button(message_text, button_key)
-                            dialog_button(button_key)
+                    #st.write(f"移行票番号確認用08: {st.session_state.production_order}")
+                    #if st.session_state.production_order_sub_flag == 1:
+                    #    st.session_state.production_order_sub_flag = 2
+                    if (st.session_state.production_order is not None or st.session_state.production_order_sub is not None) and button_key not in st.session_state:
+                    # if st.session_state.production_order != "" and st.session_state[button_key] == False:
+                        # if st.button("棚番と移行票番号確認"):
+                        # @st.dialog("棚番と移行票番号確認")
+                        st.session_state.production_order = st.session_state.production_order_sub
+                        @st.dialog(t["text051"])
+                        def dialog_button(button_key):
+                            global message_text
+                            # global button_key
+                            # message_text = f"""
+                            # <div style='font-size:22px; font-weight:bold;'>
+                            #     現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
+                            #     移行票番号(製造オーダー)は、<br>
+                            #     <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
+                            #     でよろしいですか？
+                            # </div>
+                            # """
+                            message_text = f"""
+                            <div style='font-size:22px; font-weight:bold;'>
+                                {t["text047"]} : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
+                                {t["text052"]}<br>
+                                <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
+                                {t["text053"]}
+                            </div>
+                            """
+                            result_flag = approve_button(message_text, button_key)
+                        dialog_button(button_key)
 
                     if st.session_state.get(button_key, False):
                         st.session_state.show_camera = False
@@ -2119,13 +2118,13 @@ def zaiko_place():
                         st.session_state.production_order_flag = False
                         st.session_state.qr_code = None
                         st.session_state.production_order = None
-                        st.write("106初期化番号")
-                        st.session_state.production_order_sub = None
+                        #st.write("106初期化番号")
+                        #st.session_state.production_order_sub = None
                         if button_key in st.session_state:
                             del st.session_state[button_key]
                         # st.rerun()
                 else:
-                    st.write(f"移行票番号確認用07: {st.session_state.production_order}")
+                    #st.write(f"移行票番号確認用07: {st.session_state.production_order}")
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
                         # if st.button("移行票番号を再入力"):
@@ -2139,7 +2138,7 @@ def zaiko_place():
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = None
-                            st.write("107初期化番号")
+                            #st.write("107初期化番号")
                             if st.session_state.manual_input_flag == 0:
                                 st.session_state.show_camera = True  # 必要に応じてカメラ表示を再開
                             st.rerun()
@@ -2147,7 +2146,7 @@ def zaiko_place():
                     st.session_state.zkSplitNo = 99
                     st.session_state.zkSplitFlag = 0
                     with st.form(key="registro_form", clear_on_submit=True):
-                        st.write(f"移行票番号確認用05: {st.session_state.production_order}")
+                        #st.write(f"移行票番号確認用05: {st.session_state.production_order}")
                         default_quantity = 0
                         # default_quantity = 0.0
                         default_process_order = 0
@@ -2157,9 +2156,10 @@ def zaiko_place():
                         default_end_daytime = ""
                         # st.write(st.session_state)
                         # if st.session_state.production_order is not None:
-                        st.write(f"移行票番号確認用06: {st.session_state.production_order}")
-                        if st.session_state.production_order is not None or st.session_state.production_order_sub is not None:
-                            st.session_state.production_order = st.session_state.production_order_sub
+                        #st.write(f"移行票番号確認用06: {st.session_state.production_order}")
+                        #if st.session_state.production_order is not None or st.session_state.production_order_sub is not None:
+                        if st.session_state.production_order is not None:
+                            #st.session_state.production_order = st.session_state.production_order_sub
                             # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             if "all_data" in st.session_state and st.session_state.all_data:
@@ -2197,7 +2197,7 @@ def zaiko_place():
                                 # '''
                             else:
                                 st.session_state.production_order = None
-                                st.write("108初期化番号")
+                                s#t.write("108初期化番号")
                                 st.session_state.production_order_flag = False
                                 st.warning("生産オーダーに該当する 'Done' ステータスの記録が見つかりませんでした。")
                                 # st.stop()
@@ -2210,8 +2210,8 @@ def zaiko_place():
                                 st.session_state.show_camera = True  # 必要に応じて棚番再選択
                             st.session_state.qr_code = ""
                             st.session_state.production_order = None
-                            st.write("109初期化番号")
-                            st.session_state.production_order_sub = None
+                            #st.write("109初期化番号")
+                            #st.session_state.production_order_sub = None
                             st.session_state.production_order_flag = False
                             st.session_state.add_del_flag = 0
                             st.session_state.df = None
@@ -2259,7 +2259,7 @@ def zaiko_place():
                         
                         owner_value = st.session_state.owner
                         production_order_value = st.session_state.production_order
-                        st.write(f"移行票番号確認用: {st.session_state.production_order}")
+                        #st.write(f"移行票番号確認用: {st.session_state.production_order}")
                         # styled_text(f"項　　目　 :　追加または削除の対象", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="16px", border_thickness="3px")
                         # styled_text(f"社員番号　 : {owner_value}", bg_color="#c0c0c0", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
                         # styled_text(f"棚　　番　 : {tanaban_select}", bg_color="#FFFF00", padding="7px", width="100%", text_color="#333333", font_size="20px", border_thickness="0px")
@@ -2352,7 +2352,7 @@ def zaiko_place():
                                     st.session_state.show_camera = True  # 必要に応じて棚番再選択
                                 st.session_state.qr_code = ""
                                 st.session_state.production_order = None
-                                st.write("100初期化番号")
+                                #st.write("100初期化番号")
                                 st.session_state.production_order_flag = False
                                 st.session_state.add_del_flag = 0
                                 st.session_state.df = None
@@ -2382,28 +2382,11 @@ def zaiko_place():
                             #zkHistory = ""
                             st.session_state.zkScroll_flag = 0
                             record = data_catch(st.session_state.sf, item_id)
-                            st.write(f"移行票番号確認用01: {st.session_state.production_order}")
+                            #st.write(f"移行票番号確認用01: {st.session_state.production_order}")
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                                #zkIko    = record["zkIkohyoNo__c"].splitlines()
-                                #zkHin    = record["zkHinban__c"].splitlines()
-                                #zkKan    = record["zkKanryoKoutei__c"].splitlines()
-                                #zkSu     = record["zkSuryo__c"].splitlines()
-                                #zkEndDT  = record["zkEndDayTime__c"].splitlines()
-                                #zkMo     = record["zkMochidashi__c"].splitlines()
                                 listCount = len(zkTana_list)
-                                #for name, lst in [
-                                #    ("zkIko", zkIko),
-                                #    ("zkHin", zkHin),
-                                #    ("zkKan", zkKan),
-                                #    ("zkSu", zkSu),
-                                #    ("zkEndDT", zkEndDT),
-                                #    ("zkMo", zkMo),
-                                #]:
-                                #    if len(lst) != listCount:
-                                #        st.error(f"{name} の行数が棚番と一致しません。{len(lst)} != {expected}")
-                                #        st.stop()
                                 if listCount > 2:
                                     for index, item in enumerate(zkTana_list):
                                         if normalize(item) == normalize(st.session_state.tanaban_select_temp):
@@ -2482,18 +2465,14 @@ def zaiko_place():
                                             # st.write(f"持出の値：　{zkMochidashi_value}")
                                             zkMochidashi_value = "1"
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
-                                            #zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
-                                            #zkMo  = list_update_zkKari(zkMo,  listNumber, "1", 4)        # 持出フラグ 更新
                                             zkHistory_value = f"{zkHistory_value},picadd"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
                                         elif st.session_state.add_del_flag == 3: # 持出OFFの場合
                                             zkMochidashi_value = "0"
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
-                                            #zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
-                                            #zkMo  = list_update_zkKari(zkMo,  listNumber, "0", 4)        # 持出フラグ 更新
                                             zkHistory_value = f"{zkHistory_value},picdel"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
@@ -2505,12 +2484,6 @@ def zaiko_place():
                                             zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
                                             zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 0)   # zk完了日
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 0)   # zk持出
-                                            #zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 1)               # 移行票No 追加
-                                            #zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 0)                # 品番
-                                            #zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 0)    # 完了工程
-                                            #zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 0)         # 数量
-                                            #zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 0)  # 完了日
-                                            #zkMo    = list_update_zkKari(zkMo,    listNumber, "0", 0)                   # 持出フラグ
                                             zkHistory_value = f"{zkHistory_value},add"
                                         elif st.session_state.add_del_flag == 1: # 削除の場合
                                             zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
@@ -2519,12 +2492,6 @@ def zaiko_place():
                                             zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 2)   # zk数量
                                             zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 2)   # zk完了日
                                             zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 2)   # zk持出
-                                            #zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 3)               # 移行票No 削除
-                                            #zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 2)                # 品番 削除
-                                            #zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 2)    # 完了工程 削除
-                                            #zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 2)         # 数量 削除
-                                            #zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 2)  # 完了日 削除
-                                            #zkMo    = list_update_zkKari(zkMo,    listNumber, zkMochidashi_value, 2)    # 持出フラグ 削除
                                             zkHistory_value = f"{zkHistory_value},del"
                                         zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                         
@@ -2540,7 +2507,7 @@ def zaiko_place():
                                     # zkShoBu = record["zkShortcutButton__c"].splitlines()   # zkショートカットボタン
                                     # zkShoU = record["zkShortcutUser__c"].splitlines()   # zkショートカットユーザー
                             
-                            st.write(f"移行票番号確認用02: {st.session_state.production_order}")
+                            #st.write(f"移行票番号確認用02: {st.session_state.production_order}")
                             if st.session_state.owner is None:
                                 st.write(f"❌09 **作業者コード '{owner}' が未入力です。**")
                                 st.stop()  # 以降の処理を止める
@@ -2579,7 +2546,7 @@ def zaiko_place():
                                                 st.session_state.show_camera = True  # 必要に応じて棚番再選択
                                             st.session_state.qr_code = ""
                                             st.session_state.production_order = None
-                                            st.write("101初期化番号")
+                                            #st.write("101初期化番号")
                                             st.session_state.production_order_flag = False
                                             st.session_state[button_key] = False
                                             del st.session_state[button_key]
@@ -2588,7 +2555,7 @@ def zaiko_place():
                                             st.session_state.df = None
                                             st.rerun()
                                     dialog_button_2(button_key)
-                            st.write(f"移行票番号確認用03: {st.session_state.production_order}")
+                            #st.write(f"移行票番号確認用03: {st.session_state.production_order}")
 
 
 return_main = "⏎ ☆メイン画面☆　へ戻る"
