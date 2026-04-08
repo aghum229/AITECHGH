@@ -81,7 +81,7 @@ def consultar_salesforce(production_order, sf):
         FROM snps_um__WorkOrder__c 
         WHERE snps_um__ProdOrder__r.Name = '{production_order}'
     """
-    st.write(query)
+    #st.write(query)
     try:
         result = sf.query(query)
         #st.write(result)
@@ -2290,7 +2290,7 @@ def zaiko_place():
                                 if st.session_state.manual_input_flag == 0:
                                     st.session_state.show_camera = True  # 必要に応じて棚番再選択
                                 st.session_state.qr_code = ""
-                                st.session_state.production_order = ""
+                                #st.session_state.production_order = ""
                                 st.session_state.production_order_flag = False
                                 st.session_state.add_del_flag = 0
                                 st.session_state.df = None
