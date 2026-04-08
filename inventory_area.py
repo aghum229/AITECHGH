@@ -2035,6 +2035,7 @@ def zaiko_place():
                     # st.write(f"#### 現在選択されている棚番 :   {st.session_state.tanaban_select_temp}")                   
                     button_key = "check_ok"
                     # st.session_state[button_key] = False
+                    st.write(f"移行票番号確認用08: {st.session_state.production_order}")
                     if st.session_state.production_order != "" and button_key not in st.session_state:
                     # if st.session_state.production_order != "" and st.session_state[button_key] == False:
                         # if st.button("棚番と移行票番号確認"):
@@ -2079,6 +2080,7 @@ def zaiko_place():
                             del st.session_state[button_key]
                         # st.rerun()
                 else:
+                    st.write(f"移行票番号確認用07: {st.session_state.production_order}")
                     left, center, right = st.columns([0.25, 0.5, 0.25])
                     with center:
                         # if st.button("移行票番号を再入力"):
@@ -2100,6 +2102,7 @@ def zaiko_place():
                     st.session_state.zkSplitNo = 99
                     st.session_state.zkSplitFlag = 0
                     with st.form(key="registro_form", clear_on_submit=True):
+                        st.write(f"移行票番号確認用05: {st.session_state.production_order}")
                         default_quantity = 0
                         # default_quantity = 0.0
                         default_process_order = 0
@@ -2109,6 +2112,7 @@ def zaiko_place():
                         default_end_daytime = ""
                         # st.write(st.session_state)
                         # if st.session_state.production_order is not None:
+                        st.write(f"移行票番号確認用06: {st.session_state.production_order}")
                         if st.session_state.production_order != "" and st.session_state.production_order is not None:
                             # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
