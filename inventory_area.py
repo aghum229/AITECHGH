@@ -1881,7 +1881,7 @@ def zaiko_place():
                                 st.session_state.show_camera = True
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = None
-                            st.session_state.production_order = None
+                            #st.session_state.production_order = None
                             # st.rerun()
                     else:
                         if st.button("移行票番号を再入力"):
@@ -2290,7 +2290,7 @@ def zaiko_place():
                                 if st.session_state.manual_input_flag == 0:
                                     st.session_state.show_camera = True  # 必要に応じて棚番再選択
                                 st.session_state.qr_code = ""
-                                #st.session_state.production_order = ""
+                                st.session_state.production_order = ""
                                 st.session_state.production_order_flag = False
                                 st.session_state.add_del_flag = 0
                                 st.session_state.df = None
@@ -2857,7 +2857,7 @@ if "sf" not in st.session_state:
         st.error(f"認証エラー: {e}")
         st.stop()
 
-st.session_state.version_value = "ver.1.0.5"
+st.session_state.version_value = "ver.1.0.6"
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
