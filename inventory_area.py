@@ -1997,7 +1997,7 @@ def zaiko_place():
                     st.session_state.qr_code = ""
                     st.session_state.production_order = None
                     st.write("103初期化番号")
-                    st.session_state.production_order_sub = None
+                    #st.session_state.production_order_sub = None
                     st.session_state.production_order_flag = False
                     st.rerun()  # 再描画して次のステップへ
             else:
@@ -2012,7 +2012,7 @@ def zaiko_place():
                         st.session_state.qr_code = ""
                         st.session_state.production_order = None
                         st.write("104初期化番号")
-                        st.session_state.production_order_sub = None
+                        #st.session_state.production_order_sub = None
                         st.session_state.production_order_flag = False
                         st.rerun()
                 
@@ -2039,7 +2039,7 @@ def zaiko_place():
                                 st.session_state.qr_code = ""
                                 st.session_state.production_order = None
                                 st.write("105初期化番号")
-                                st.session_state.production_order_sub = None
+                                #st.session_state.production_order_sub = None
                                 st.session_state.production_order_flag = False
                                 st.rerun()
                         if qr_code_kari == "":
