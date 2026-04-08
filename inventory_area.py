@@ -2236,7 +2236,7 @@ def zaiko_place():
                             quantity = 0
                             # quantity = 0.0
 
-                        st.session_state.add_del_flag = 99  # 0:追加 1:削除 2:持出 3:持出解除 9:取消     
+                        st.session_state.add_del_flag = 0  # 0:追加 1:削除 2:持出 3:持出解除 9:取消     
                         left, center1, center2, right = st.columns(4)
                         with left:
                             if st.session_state.list_flag == 0 and tanaban_select != "": # 移行票番号が無い場合のみ
