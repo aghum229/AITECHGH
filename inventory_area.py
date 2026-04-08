@@ -995,7 +995,7 @@ def image_viewer(target_text):
 def zaiko_place():
     # Inicializar estados necessários
     if "production_order" not in st.session_state:
-        st.session_state.production_order = None
+        #st.session_state.production_order = None
     if "production_order_flag" not in st.session_state:
         st.session_state.production_order_flag = False
     # if "sf" not in st.session_state:
@@ -1013,8 +1013,6 @@ def zaiko_place():
     if "quantity" not in st.session_state:
         st.session_state.quantity = 0
         # st.session_state.quantity = 0.0
-    if "process_order" not in st.session_state:
-        st.session_state.process_order = 0
     if "material" not in st.session_state:
         st.session_state.material = None
     if "material_weight" not in st.session_state:
