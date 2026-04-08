@@ -95,6 +95,7 @@ def consultar_salesforce(production_order, sf):
         df_done = df[df['snps_um__Status__c'] == 'Done']
         if not df_done.empty:
             last_record = df_done.loc[df_done['snps_um__ProcessOrderNo__c'].idxmax()].to_dict()
+            st.write("❌50 :{last_record}")
             return pd.DataFrame([last_record])
         else:
             st.write("❌01 **データの取り出しに失敗しました。**")
