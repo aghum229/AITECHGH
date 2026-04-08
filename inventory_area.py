@@ -81,7 +81,7 @@ def consultar_salesforce(production_order, sf):
         FROM snps_um__WorkOrder__c 
         WHERE snps_um__ProdOrder__r.Name = '{production_order}'
     """
-    #st.write(query)
+    st.write(query)
     try:
         result = sf.query(query)
         #st.write(result)
