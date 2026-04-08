@@ -2036,7 +2036,7 @@ def zaiko_place():
                     button_key = "check_ok"
                     # st.session_state[button_key] = False
                     st.write(f"移行票番号確認用08: {st.session_state.production_order}")
-                    if st.session_state.production_order != "" and button_key not in st.session_state:
+                    if st.session_state.production_order != "" and st.session_state.production_order is not None and button_key not in st.session_state:
                     # if st.session_state.production_order != "" and st.session_state[button_key] == False:
                         # if st.button("棚番と移行票番号確認"):
                         # @st.dialog("棚番と移行票番号確認")
