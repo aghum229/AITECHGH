@@ -1964,7 +1964,7 @@ def zaiko_place():
                     st.session_state.qr_code_tana = True
                     # st.write(st.session_state.qr_code_tana)
                     st.session_state.qr_code = ""
-                    st.session_state.production_order = ""
+                    #st.session_state.production_order = ""
                     st.write("103初期化番号")
                     st.session_state.production_order_flag = False
                     st.rerun()  # 再描画して次のステップへ
@@ -1978,7 +1978,7 @@ def zaiko_place():
                         if st.session_state.manual_input_flag == 0:
                             st.session_state.show_camera = True  # 必要に応じてカメラ表示を再開
                         st.session_state.qr_code = ""
-                        st.session_state.production_order = ""
+                        #st.session_state.production_order = ""
                         st.write("104初期化番号")
                         st.session_state.production_order_flag = False
                         st.rerun()
