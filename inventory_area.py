@@ -2387,7 +2387,7 @@ def zaiko_place():
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 if len(zkHistory) > 8000:
-                                    zkHistory = zkHistory[:8000]  # zk履歴
+                                    zkHistory = zkHistory[:3000]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
                                 listCount = len(zkTana_list)
                                 if listCount > 2:
