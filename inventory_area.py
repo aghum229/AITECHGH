@@ -422,6 +422,7 @@ def list_update_zkKari(zkKari_raw, listNo, update_value, flag):
 
 def reset_form():
     st.session_state.production_order = None
+    st.write("110初期化番号")
     # st.session_state.data = None
     # st.session_state.material = None
     # st.session_state.material_weight = None
