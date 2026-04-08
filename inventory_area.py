@@ -1984,6 +1984,7 @@ def zaiko_place():
                         st.rerun()
                 
                 if not st.session_state.production_order_flag:
+                    st.write(f"移行票番号確認用04: {st.session_state.production_order}")
                     # str_text = f"現在選択されている棚番 :   {st.session_state.tanaban_select_temp}"
                     # st.markdown(
                     #     f"<div style='font-size:28px; font-weight:bold;'>現在選択されている棚番 :   {st.session_state.tanaban_select_temp}</div>",
@@ -2536,6 +2537,7 @@ def zaiko_place():
                                             st.session_state.df = None
                                             st.rerun()
                                     dialog_button_2(button_key)
+                            st.write(f"移行票番号確認用03: {st.session_state.production_order}")
 
 
 return_main = "⏎ ☆メイン画面☆　へ戻る"
