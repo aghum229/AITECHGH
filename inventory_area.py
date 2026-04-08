@@ -2430,7 +2430,8 @@ def zaiko_place():
                                             zkMochidashi_value = "1"
                                             #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
                                             zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
-                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
+                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
+                                            zkMo  = list_update_zkKari(zkMo,  listNumber, "1", 4)        # 持出フラグ 更新
                                             zkHistory_value = f"{zkHistory_value},picadd"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
@@ -2438,27 +2439,39 @@ def zaiko_place():
                                             zkMochidashi_value = "0"
                                             #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
                                             zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
-                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
+                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
+                                            zkMo  = list_update_zkKari(zkMo,  listNumber, "0", 4)        # 持出フラグ 更新
                                             zkHistory_value = f"{zkHistory_value},picdel"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
                                         elif st.session_state.add_del_flag == 0: # 追加の場合
                                             zkMochidashi_value = "0"
-                                            zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
-                                            zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
-                                            zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 0)   # zk完了工程
-                                            zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
-                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 0)   # zk完了日
-                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 0)   # zk持出
+                                            #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
+                                            #zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
+                                            #zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 0)   # zk完了工程
+                                            #zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
+                                            #zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 0)   # zk完了日
+                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 0)   # zk持出
+                                            zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 1)               # 移行票No 追加
+                                            zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 0)                # 品番
+                                            zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 0)    # 完了工程
+                                            zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 0)         # 数量
+                                            zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 0)  # 完了日
+                                            zkMo    = list_update_zkKari(zkMo,    listNumber, "0", 0)                   # 持出フラグ
                                             zkHistory_value = f"{zkHistory_value},add"
                                         elif st.session_state.add_del_flag == 1: # 削除の場合
                                             #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
-                                            zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
-                                            zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 2)   # zk品番
-                                            zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 2)   # zk完了工程
-                                            zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 2)   # zk数量
-                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 2)   # zk完了日
-                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 2)   # zk持出
+                                            #zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 2)   # zk品番
+                                            #zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 2)   # zk完了工程
+                                            #zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 2)   # zk数量
+                                            #zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 2)   # zk完了日
+                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 2)   # zk持出
+                                            zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 3)               # 移行票No 削除
+                                            zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 2)                # 品番 削除
+                                            zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 2)    # 完了工程 削除
+                                            zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 2)         # 数量 削除
+                                            zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 2)  # 完了日 削除
+                                            zkMo    = list_update_zkKari(zkMo,    listNumber, zkMochidashi_value, 2)    # 持出フラグ 削除
                                             zkHistory_value = f"{zkHistory_value},del"
                                         zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                         
@@ -2481,13 +2494,20 @@ def zaiko_place():
                             if item_id:
                                 #st.write("update_tanaban前")
                                 #st.write(item_id)
-                                if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
-                                    update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
+                                #if st.session_state.add_del_flag != 2 and st.session_state.add_del_flag != 3:
+                                #    update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
+                                #else:
+                                #    if st.session_state.add_del_flag == 3: # 持出OFFの場合
+                                #        update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
+                                #    else:
+                                #        update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
+                                if st.session_state.add_del_flag not in (2, 3):
+                                    update_tanaban(st.session_state.sf, item_id, st.session_state.tanaban_select_temp,
+                                                   zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo, zkHistory, zkOrder)
                                 else:
-                                    if st.session_state.add_del_flag == 3: # 持出OFFの場合
-                                        update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
-                                    else:
-                                        update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
+                                    update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp,
+                                                      zkMo, zkHistory, zkOrder,
+                                                      0 if st.session_state.add_del_flag == 3 else 1)
                                 #st.write("update_tanaban後")
                                 button_key = "check_ok_2"
                                 if st.session_state.zkScroll_flag == 1 and button_key not in st.session_state:
