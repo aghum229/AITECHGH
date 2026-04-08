@@ -376,75 +376,48 @@ def data_catch_for_csv(sf, item_id):
         st.stop()
         
 def list_update_zkKari(zkKari_raw, listNo, update_value, flag):
-    """
-    安全版 list_update_zkKari
-    - zkKari_raw: 改行区切りの文字列（例: "A,B\nC,D"）
-    - listNo: 更新対象の行番号
-    - update_value: 追加・削除・更新する値
-    - flag:
-        0 = 追加（移行票No以外）
-        1 = 追加（移行票No）
-        2 = 削除（移行票No以外）
-        3 = 削除（移行票No）
-        4 = 更新（持出ON/OFF）
-    """
-
-    # --- 1. 改行区切りをリスト化 ---
     if isinstance(zkKari_raw, str):
         zkKari = zkKari_raw.splitlines()
     else:
         zkKari = list(zkKari_raw)
 
-    # 行番号チェック
     if listNo < 0 or listNo >= len(zkKari):
         raise ValueError(f"listNo が範囲外です: {listNo}")
 
-    # --- 2. カンマ区切りをリスト化 ---
     items = zkKari[listNo].split(",") if zkKari[listNo] != "-" else []
 
-    # --- 3. 操作別処理 ---
-
-    # 追加（移行票No以外）
     if flag == 0:
         items.append(update_value)
 
-    # 追加（移行票No）
     elif flag == 1:
         if update_value in items:
             raise ValueError(f"すでに登録されています: {update_value}")
         items.append(update_value)
 
-    # 削除（移行票No以外）
     elif flag == 2:
         if update_value in items:
             items.remove(update_value)
         else:
             raise ValueError(f"削除対象がありません: {update_value}")
 
-    # 削除（移行票No）
     elif flag == 3:
         if update_value in items:
             items.remove(update_value)
         else:
             raise ValueError(f"削除対象の移行票Noがありません: {update_value}")
 
-    # 更新（持出ON/OFF）
     elif flag == 4:
-        # items が空なら追加
         if not items:
             items.append(update_value)
         else:
-            # 最後の値を更新（持出フラグは1つだけ）
             items[-1] = update_value
 
     else:
         raise ValueError(f"不正な flag: {flag}")
 
-    # --- 4. 空になった場合は "-" に戻す ---
     zkKari[listNo] = ",".join(items) if items else "-"
-
-    # --- 5. 改行区切りに戻す ---
     return "\n".join(zkKari)
+
 
 
 def reset_form():
@@ -2337,25 +2310,38 @@ def zaiko_place():
                             listNumber = 0
                             zkTana_list = ""
                             zkTana = ""
-                            zkIko = ""
+                            #zkIko = ""
                             #zkHin = ""
                             #zkKan = ""
                             #zkSu = ""
                             #zkEndDT = ""
                             #zkMo = ""
-                            zkHin   = record["zkHinban__c"].splitlines()
-                            zkKan   = record["zkKanryoKoutei__c"].splitlines()
-                            zkSu    = record["zkSuryo__c"].splitlines()
-                            zkEndDT = record["zkEndDayTime__c"].splitlines()
-                            zkMo    = record["zkMochidashi__c"].splitlines()
+                            zkIko    = record["zkIkohyoNo__c"].splitlines()
+                            zkHin    = record["zkHinban__c"].splitlines()
+                            zkKan    = record["zkKanryoKoutei__c"].splitlines()
+                            zkSu     = record["zkSuryo__c"].splitlines()
+                            zkEndDT  = record["zkEndDayTime__c"].splitlines()
+                            zkMo     = record["zkMochidashi__c"].splitlines()
+                            zkHistory = record["zkHistory__c"]
                             zkOrder = ""
-                            zkHistory = ""
+                            #zkHistory = ""
                             st.session_state.zkScroll_flag = 0
                             record = data_catch(st.session_state.sf, item_id)
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
                                 listCount = len(zkTana_list)
+                                for name, lst in [
+                                    ("zkIko", zkIko),
+                                    ("zkHin", zkHin),
+                                    ("zkKan", zkKan),
+                                    ("zkSu", zkSu),
+                                    ("zkEndDT", zkEndDT),
+                                    ("zkMo", zkMo),
+                                ]:
+                                    if len(lst) != listCount:
+                                        st.error(f"{name} の行数が棚番と一致しません。{len(lst)} != {expected}")
+                                        st.stop()
                                 if listCount > 2:
                                     for index, item in enumerate(zkTana_list):
                                         if normalize(item) == normalize(st.session_state.tanaban_select_temp):
