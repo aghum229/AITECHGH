@@ -2068,7 +2068,7 @@ def zaiko_place():
                             st.session_state.show_camera = True
                         st.session_state.production_order_flag = False
                         st.session_state.qr_code = None
-                        st.session_state.production_order = ""
+                        #st.session_state.production_order = ""
                         if button_key in st.session_state:
                             del st.session_state[button_key]
                         # st.rerun()
