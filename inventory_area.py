@@ -2384,8 +2384,9 @@ def zaiko_place():
                             record = data_catch(st.session_state.sf, item_id)
                             #st.write(f"移行票番号確認用01: {st.session_state.production_order}")
                             if record:
-                                zkHistory = record["zkHistory__c"][0-8000]  # zk履歴
-                                #zkHistory = record["zkHistory__c"]  # zk履歴
+                                zkHistory = record["zkHistory__c"]  # zk履歴
+                                if len(zkHistory) > 8000:
+                                    zkHistory = zkHistory[:8000]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
                                 listCount = len(zkTana_list)
                                 if listCount > 2:
