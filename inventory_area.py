@@ -2078,11 +2078,12 @@ def zaiko_place():
                     #st.write(f"移行票番号確認用08: {st.session_state.production_order}")
                     #if st.session_state.production_order_sub_flag == 1:
                     #    st.session_state.production_order_sub_flag = 2
-                    if (st.session_state.production_order is not None or st.session_state.production_order_sub is not None) and button_key not in st.session_state:
+                    #if (st.session_state.production_order is not None or st.session_state.production_order_sub is not None) and button_key not in st.session_state:
                     # if st.session_state.production_order != "" and st.session_state[button_key] == False:
+                    if st.session_state.production_order is not None and button_key not in st.session_state:
                         # if st.button("棚番と移行票番号確認"):
                         # @st.dialog("棚番と移行票番号確認")
-                        st.session_state.production_order = st.session_state.production_order_sub
+                        #st.session_state.production_order = st.session_state.production_order_sub
                         @st.dialog(t["text051"])
                         def dialog_button(button_key):
                             global message_text
