@@ -997,6 +997,7 @@ def zaiko_place():
     # Inicializar estados necessários
     if "production_order" not in st.session_state:
         st.session_state.production_order = None
+        st.write("111初期化番号")
     if "production_order_flag" not in st.session_state:
         st.session_state.production_order_flag = False
     # if "sf" not in st.session_state:
@@ -1892,6 +1893,7 @@ def zaiko_place():
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
+                            st.write("112初期化番号")
                             if st.session_state.manual_input_flag == 0:
                                 st.session_state.show_camera = True  # 必要に応じてカメラ表示を再開
                             st.rerun() 
