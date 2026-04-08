@@ -1962,6 +1962,7 @@ def zaiko_place():
                     # st.write(st.session_state.qr_code_tana)
                     st.session_state.qr_code = ""
                     st.session_state.production_order = ""
+                    st.write("103初期化番号")
                     st.session_state.production_order_flag = False
                     st.rerun()  # 再描画して次のステップへ
             else:
@@ -1975,6 +1976,7 @@ def zaiko_place():
                             st.session_state.show_camera = True  # 必要に応じてカメラ表示を再開
                         st.session_state.qr_code = ""
                         st.session_state.production_order = ""
+                        st.write("104初期化番号")
                         st.session_state.production_order_flag = False
                         st.rerun()
                 
@@ -1999,6 +2001,7 @@ def zaiko_place():
                                 st.session_state.show_camera = True
                                 st.session_state.qr_code = ""
                                 st.session_state.production_order = None
+                                st.write("105初期化番号")
                                 st.session_state.production_order_flag = False
                                 st.rerun()
                         if qr_code_kari == "":
@@ -2067,6 +2070,7 @@ def zaiko_place():
                         st.session_state.production_order_flag = False
                         st.session_state.qr_code = None
                         st.session_state.production_order = ""
+                        st.write("106初期化番号")
                         if button_key in st.session_state:
                             del st.session_state[button_key]
                         # st.rerun()
@@ -2084,6 +2088,7 @@ def zaiko_place():
                             st.session_state.production_order_flag = False
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
+                            st.write("107初期化番号")
                             if st.session_state.manual_input_flag == 0:
                                 st.session_state.show_camera = True  # 必要に応じてカメラ表示を再開
                             st.rerun()
@@ -2138,6 +2143,7 @@ def zaiko_place():
                                 # '''
                             else:
                                 st.session_state.production_order = ""
+                                st.write("108初期化番号")
                                 st.session_state.production_order_flag = False
                                 st.warning("生産オーダーに該当する 'Done' ステータスの記録が見つかりませんでした。")
                                 # st.stop()
@@ -2150,6 +2156,7 @@ def zaiko_place():
                                 st.session_state.show_camera = True  # 必要に応じて棚番再選択
                             st.session_state.qr_code = ""
                             st.session_state.production_order = ""
+                            st.write("109初期化番号")
                             st.session_state.production_order_flag = False
                             st.session_state.add_del_flag = 0
                             st.session_state.df = None
@@ -2290,6 +2297,7 @@ def zaiko_place():
                                     st.session_state.show_camera = True  # 必要に応じて棚番再選択
                                 st.session_state.qr_code = ""
                                 st.session_state.production_order = ""
+                                st.write("100初期化番号")
                                 st.session_state.production_order_flag = False
                                 st.session_state.add_del_flag = 0
                                 st.session_state.df = None
@@ -2514,6 +2522,7 @@ def zaiko_place():
                                                 st.session_state.show_camera = True  # 必要に応じて棚番再選択
                                             st.session_state.qr_code = ""
                                             st.session_state.production_order = ""
+                                            st.write("101初期化番号")
                                             st.session_state.production_order_flag = False
                                             st.session_state[button_key] = False
                                             del st.session_state[button_key]
