@@ -79,7 +79,7 @@ def consultar_salesforce(production_order, sf):
                AITC_OrderQt__c, snps_um__EndDateTime__c, 
                snps_um__Process__r.AITC_ID18__c
         FROM snps_um__WorkOrder__c 
-        WHERE snps_um__ProdOrder__r.Name = '{production_order}'
+        WHERE snps_um__ProdOrder__r.Name LIKE '%{production_order}%'
     """
     #st.write(query)
     try:
