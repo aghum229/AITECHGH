@@ -101,6 +101,7 @@ def consultar_salesforce(production_order, sf):
         return pd.DataFrame()
     except Exception as e:
         st.error(f"Salesforceクエリエラー: {e}")
+        st.write(f"❌50 Salesforceクエリエラー: {e}")
         return pd.DataFrame()
 
 def consultar_salesforce_bak(production_order, sf):
