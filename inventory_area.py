@@ -376,48 +376,74 @@ def data_catch_for_csv(sf, item_id):
         # reset_form()
         st.stop()
         
-def list_update_zkKari(zkKari_raw, listNo, update_value, flag):
-    if isinstance(zkKari_raw, str):
-        zkKari = zkKari_raw.splitlines()
+def list_update_zkKari(record, zkKari, dbItem, listNo, update_value, flag):
+    """
+    指定されたlistNoの値を更新する関数。
+    "-"の場合はupdate_valueで上書き、それ以外はカンマ区切りで追加。
+
+    Parameters:
+    - zkKari: dict or list形式のデータ(注記.zkIko, zkHin, zkKan, zkSu, zkMo, zkEndDTの順で処理の事)
+    - dbItem: データベースの項目名(注記.表示ラベルではない)
+    - listNo: 対象のインデックスまたはキー
+    - update_value: 追加・削除・変更　する値
+    - flag: -1(追加 完了日または持出の場合), 0(追加 移行票No以外), 1(追加 移行票Noの場合), 2(削除 移行票No以外), 3(削除 移行票Noの場合), 4(更新 持出の場合)
+
+    Returns:
+    - 更新後のzkKari
+    """
+    # global zkSplitNo  # 初期値99
+    # global zkSplitFlag  # 0:完了日以外  1;完了日
+    zkKari = record[dbItem].splitlines()  # 大項目リスト(改行区切り)
+    zkSplit = zkKari[listNo].split(",")  # 小項目リスト(カンマ区切り)
+    # st.write(f"zkSplitのリスト数：'{len(zkSplit)}'")
+    # st.write(f"追加削除フラグ：'{flag}'")
+    if flag >= 2:
+        if len(zkSplit) > 1:
+            if flag == 3:
+                for index, item in enumerate(zkSplit):
+                    if item == update_value:
+                        st.session_state.zkSplitNo = index
+                        break  # 条件を満たしたらループを終了
+                if st.session_state.zkSplitNo == 99:
+                    st.write(f"❌02 **対象の移行票Noはありませんでした。'{update_value}'**")
+                    # reset_form()
+                    st.stop()  # 以降の処理を止める
+            if 0 <= st.session_state.zkSplitNo < len(zkSplit):
+                if flag == 4:
+                    zkSplit[st.session_state.zkSplitNo] = update_value
+                else:
+                    del zkSplit[st.session_state.zkSplitNo]  # 小項目の対象値削除
+            else:
+                # ログ出力やエラーハンドリング
+                # st.write(f"zkSplitNo {zkSplitNo} is out of range for zkSplit of length {len(zkSplit)}")
+                st.write(f"❌03 **登録数の有効な範囲ではありませんでした。'{st.session_state.zkSplitNo}'**")
+                # reset_form()
+                st.stop()  # 以降の処理を止める
+        else:
+            if flag == 3:
+                st.session_state.zkSplitNo = 0
+            if flag == 4:
+                zkSplit[st.session_state.zkSplitNo] = update_value  # 小項目の対象に特定値反映
+            else:
+                zkSplit[st.session_state.zkSplitNo] = "-"  # 小項目の対象にデフォルト値反映
+        zkKari[listNo] = ",".join(zkSplit)  # 大項目に反映
     else:
-        zkKari = list(zkKari_raw)
-
-    if listNo < 0 or listNo >= len(zkKari):
-        raise ValueError(f"listNo が範囲外です: {listNo}")
-
-    items = zkKari[listNo].split(",") if zkKari[listNo] != "-" else []
-
-    if flag == 0:
-        items.append(update_value)
-
-    elif flag == 1:
-        if update_value in items:
-            raise ValueError(f"すでに登録されています: {update_value}")
-        items.append(update_value)
-
-    elif flag == 2:
-        if update_value in items:
-            items.remove(update_value)
+        if zkKari[listNo] == "-":  # 大項目がデフォルト値の場合
+            if flag == -1 and st.session_state.zkSplitFlag == 1:  # 完了日で2つ目以降の追加の場合
+                zkKari[listNo] += "," + update_value
+            else:
+                zkKari[listNo] = update_value
         else:
-            raise ValueError(f"削除対象がありません: {update_value}")
-
-    elif flag == 3:
-        if update_value in items:
-            items.remove(update_value)
-        else:
-            raise ValueError(f"削除対象の移行票Noがありません: {update_value}")
-
-    elif flag == 4:
-        if not items:
-            items.append(update_value)
-        else:
-            items[-1] = update_value
-
-    else:
-        raise ValueError(f"不正な flag: {flag}")
-
-    zkKari[listNo] = ",".join(items) if items else "-"
-    return "\n".join(zkKari)
+            if flag == 1:
+                for index, item in enumerate(zkSplit):
+                    if item == update_value:
+                        st.write(f"❌04 **すでに登録されている移行票Noです。'{update_value}'**")
+                        # reset_form()
+                        st.stop()  # 以降の処理を止める
+                st.session_state.zkSplitFlag = 1
+            zkKari[listNo] += "," + update_value
+    zkKari = "\n".join(zkKari) if isinstance(zkKari, list) else zkKari
+    return zkKari
 
 
 
@@ -2338,12 +2364,12 @@ def zaiko_place():
                             listNumber = 0
                             #zkTana_list = ""
                             zkTana = ""
-                            #zkIko = ""
-                            #zkHin = ""
-                            #zkKan = ""
-                            #zkSu = ""
-                            #zkEndDT = ""
-                            #zkMo = ""
+                            zkIko = ""
+                            zkHin = ""
+                            zkKan = ""
+                            zkSu = ""
+                            zkEndDT = ""
+                            zkMo = ""
                             zkOrder = ""
                             #zkHistory = ""
                             st.session_state.zkScroll_flag = 0
@@ -2352,24 +2378,24 @@ def zaiko_place():
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
-                                zkIko    = record["zkIkohyoNo__c"].splitlines()
-                                zkHin    = record["zkHinban__c"].splitlines()
-                                zkKan    = record["zkKanryoKoutei__c"].splitlines()
-                                zkSu     = record["zkSuryo__c"].splitlines()
-                                zkEndDT  = record["zkEndDayTime__c"].splitlines()
-                                zkMo     = record["zkMochidashi__c"].splitlines()
+                                #zkIko    = record["zkIkohyoNo__c"].splitlines()
+                                #zkHin    = record["zkHinban__c"].splitlines()
+                                #zkKan    = record["zkKanryoKoutei__c"].splitlines()
+                                #zkSu     = record["zkSuryo__c"].splitlines()
+                                #zkEndDT  = record["zkEndDayTime__c"].splitlines()
+                                #zkMo     = record["zkMochidashi__c"].splitlines()
                                 listCount = len(zkTana_list)
-                                for name, lst in [
-                                    ("zkIko", zkIko),
-                                    ("zkHin", zkHin),
-                                    ("zkKan", zkKan),
-                                    ("zkSu", zkSu),
-                                    ("zkEndDT", zkEndDT),
-                                    ("zkMo", zkMo),
-                                ]:
-                                    if len(lst) != listCount:
-                                        st.error(f"{name} の行数が棚番と一致しません。{len(lst)} != {expected}")
-                                        st.stop()
+                                #for name, lst in [
+                                #    ("zkIko", zkIko),
+                                #    ("zkHin", zkHin),
+                                #    ("zkKan", zkKan),
+                                #    ("zkSu", zkSu),
+                                #    ("zkEndDT", zkEndDT),
+                                #    ("zkMo", zkMo),
+                                #]:
+                                #    if len(lst) != listCount:
+                                #        st.error(f"{name} の行数が棚番と一致しません。{len(lst)} != {expected}")
+                                #        st.stop()
                                 if listCount > 2:
                                     for index, item in enumerate(zkTana_list):
                                         if normalize(item) == normalize(st.session_state.tanaban_select_temp):
@@ -2447,50 +2473,50 @@ def zaiko_place():
                                         if st.session_state.add_del_flag == 2: # 持出ONの場合
                                             # st.write(f"持出の値：　{zkMochidashi_value}")
                                             zkMochidashi_value = "1"
-                                            #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
-                                            zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
-                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
-                                            zkMo  = list_update_zkKari(zkMo,  listNumber, "1", 4)        # 持出フラグ 更新
+                                            zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
+                                            #zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
+                                            #zkMo  = list_update_zkKari(zkMo,  listNumber, "1", 4)        # 持出フラグ 更新
                                             zkHistory_value = f"{zkHistory_value},picadd"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 1)
                                         elif st.session_state.add_del_flag == 3: # 持出OFFの場合
                                             zkMochidashi_value = "0"
-                                            #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
-                                            zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
-                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
-                                            zkMo  = list_update_zkKari(zkMo,  listNumber, "0", 4)        # 持出フラグ 更新
+                                            zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
+                                            #zkIko = list_update_zkKari(zkIko, listNumber, zkOrder, 3)
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 4)   # zk持出
+                                            #zkMo  = list_update_zkKari(zkMo,  listNumber, "0", 4)        # 持出フラグ 更新
                                             zkHistory_value = f"{zkHistory_value},picdel"
                                             zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                             update_Mochidashi(st.session_state.sf, item_id, st.session_state.tanaban_select_temp, zkMo, zkHistory, zkOrder, 0)
                                         elif st.session_state.add_del_flag == 0: # 追加の場合
                                             zkMochidashi_value = "0"
-                                            #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
-                                            #zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
-                                            #zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 0)   # zk完了工程
-                                            #zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
-                                            #zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 0)   # zk完了日
-                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 0)   # zk持出
-                                            zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 1)               # 移行票No 追加
-                                            zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 0)                # 品番
-                                            zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 0)    # 完了工程
-                                            zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 0)         # 数量
-                                            zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 0)  # 完了日
-                                            zkMo    = list_update_zkKari(zkMo,    listNumber, "0", 0)                   # 持出フラグ
+                                            zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 1)   # zk移行票No
+                                            zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 0)   # zk品番
+                                            zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 0)   # zk完了工程
+                                            zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 0)   # zk数量
+                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 0)   # zk完了日
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 0)   # zk持出
+                                            #zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 1)               # 移行票No 追加
+                                            #zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 0)                # 品番
+                                            #zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 0)    # 完了工程
+                                            #zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 0)         # 数量
+                                            #zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 0)  # 完了日
+                                            #zkMo    = list_update_zkKari(zkMo,    listNumber, "0", 0)                   # 持出フラグ
                                             zkHistory_value = f"{zkHistory_value},add"
                                         elif st.session_state.add_del_flag == 1: # 削除の場合
-                                            #zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
-                                            #zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 2)   # zk品番
-                                            #zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 2)   # zk完了工程
-                                            #zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 2)   # zk数量
-                                            #zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 2)   # zk完了日
-                                            #zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 2)   # zk持出
-                                            zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 3)               # 移行票No 削除
-                                            zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 2)                # 品番 削除
-                                            zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 2)    # 完了工程 削除
-                                            zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 2)         # 数量 削除
-                                            zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 2)  # 完了日 削除
-                                            zkMo    = list_update_zkKari(zkMo,    listNumber, zkMochidashi_value, 2)    # 持出フラグ 削除
+                                            zkIko = list_update_zkKari(record, zkIko, "zkIkohyoNo__c", listNumber, zkOrder, 3)   # zk移行票No
+                                            zkHin = list_update_zkKari(record, zkHin, "zkHinban__c", listNumber, hinban, 2)   # zk品番
+                                            zkKan = list_update_zkKari(record, zkKan, "zkKanryoKoutei__c", listNumber, process_order_name, 2)   # zk完了工程
+                                            zkSu = list_update_zkKari(record, zkSu, "zkSuryo__c", listNumber, f"{quantity}", 2)   # zk数量
+                                            zkEndDT = list_update_zkKari(record, zkEndDT, "zkEndDayTime__c", listNumber, f"{default_end_daytime}", 2)   # zk完了日
+                                            zkMo = list_update_zkKari(record, zkMo, "zkMochidashi__c", listNumber, f"{zkMochidashi_value}", 2)   # zk持出
+                                            #zkIko   = list_update_zkKari(zkIko,   listNumber, zkOrder, 3)               # 移行票No 削除
+                                            #zkHin   = list_update_zkKari(zkHin,   listNumber, hinban, 2)                # 品番 削除
+                                            #zkKan   = list_update_zkKari(zkKan,   listNumber, process_order_name, 2)    # 完了工程 削除
+                                            #zkSu    = list_update_zkKari(zkSu,    listNumber, f"{quantity}", 2)         # 数量 削除
+                                            #zkEndDT = list_update_zkKari(zkEndDT, listNumber, f"{default_end_daytime}", 2)  # 完了日 削除
+                                            #zkMo    = list_update_zkKari(zkMo,    listNumber, zkMochidashi_value, 2)    # 持出フラグ 削除
                                             zkHistory_value = f"{zkHistory_value},del"
                                         zkHistory  = zkHistory_value + "\n" + str(zkHistory)   # zk履歴
                                         
