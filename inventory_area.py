@@ -998,6 +998,8 @@ def zaiko_place():
     if "production_order" not in st.session_state:
         st.session_state.production_order = None
         st.write("111初期化番号")
+    if "production_order_sub" not in st.session_state:
+        st.session_state.production_order_sub = None
     if "production_order_flag" not in st.session_state:
         st.session_state.production_order_flag = False
     # if "sf" not in st.session_state:
@@ -1966,6 +1968,7 @@ def zaiko_place():
                     st.session_state.qr_code = ""
                     st.session_state.production_order = None
                     st.write("103初期化番号")
+                    st.session_state.production_order_sub = None
                     st.session_state.production_order_flag = False
                     st.rerun()  # 再描画して次のステップへ
             else:
@@ -1980,6 +1983,7 @@ def zaiko_place():
                         st.session_state.qr_code = ""
                         st.session_state.production_order = None
                         st.write("104初期化番号")
+                        st.session_state.production_order_sub = None
                         st.session_state.production_order_flag = False
                         st.rerun()
                 
@@ -2006,6 +2010,7 @@ def zaiko_place():
                                 st.session_state.qr_code = ""
                                 st.session_state.production_order = None
                                 st.write("105初期化番号")
+                                st.session_state.production_order_sub = None
                                 st.session_state.production_order_flag = False
                                 st.rerun()
                         if qr_code_kari == "":
@@ -2018,6 +2023,7 @@ def zaiko_place():
                             
                             if "qr_code" in st.session_state and st.session_state.qr_code != "":
                                 st.session_state.production_order = f"{st.session_state.qr_code}"
+                                st.session_state.production_order_sub = f"{st.session_state.qr_code}"
                                 st.session_state.show_camera = False
                                 
                     else:                   
@@ -2029,6 +2035,7 @@ def zaiko_place():
                                                     key="manual_input")
                         if manual_input and manual_input.isdigit():
                             st.session_state.production_order = f"PO-{manual_input.zfill(6)}"
+                            st.session_state.production_order_sub = f"PO-{manual_input.zfill(6)}"
                             # st.session_state.manual_input_value = manual_input
                             st.session_state.show_camera = False
                         
@@ -2036,10 +2043,11 @@ def zaiko_place():
                     button_key = "check_ok"
                     # st.session_state[button_key] = False
                     st.write(f"移行票番号確認用08: {st.session_state.production_order}")
-                    if st.session_state.production_order is not None and button_key not in st.session_state:
+                    if (st.session_state.production_order is not None or st.session_state.production_order_sub is not None) and button_key not in st.session_state:
                     # if st.session_state.production_order != "" and st.session_state[button_key] == False:
                         # if st.button("棚番と移行票番号確認"):
                         # @st.dialog("棚番と移行票番号確認")
+                        st.session_state.production_order = st.session_state.production_order_sub
                         @st.dialog(t["text051"])
                         def dialog_button(button_key):
                             global message_text
@@ -2076,6 +2084,7 @@ def zaiko_place():
                         st.session_state.qr_code = None
                         st.session_state.production_order = None
                         st.write("106初期化番号")
+                        st.session_state.production_order_sub = None
                         if button_key in st.session_state:
                             del st.session_state[button_key]
                         # st.rerun()
@@ -2113,7 +2122,8 @@ def zaiko_place():
                         # st.write(st.session_state)
                         # if st.session_state.production_order is not None:
                         st.write(f"移行票番号確認用06: {st.session_state.production_order}")
-                        if st.session_state.production_order is not None:
+                        if st.session_state.production_order is not None or st.session_state.production_order_sub is not None:
+                            st.session_state.production_order = st.session_state.production_order_sub
                             # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             if "all_data" in st.session_state and st.session_state.all_data:
@@ -2165,6 +2175,7 @@ def zaiko_place():
                             st.session_state.qr_code = ""
                             st.session_state.production_order = None
                             st.write("109初期化番号")
+                            st.session_state.production_order_sub = None
                             st.session_state.production_order_flag = False
                             st.session_state.add_del_flag = 0
                             st.session_state.df = None
