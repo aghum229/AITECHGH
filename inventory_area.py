@@ -2308,7 +2308,7 @@ def zaiko_place():
                             listCountEtc = 0
                             listAdd = 0  # リストに追加する場合は 1 
                             listNumber = 0
-                            zkTana_list = ""
+                            #zkTana_list = ""
                             zkTana = ""
                             #zkIko = ""
                             #zkHin = ""
@@ -2316,13 +2316,6 @@ def zaiko_place():
                             #zkSu = ""
                             #zkEndDT = ""
                             #zkMo = ""
-                            zkIko    = record["zkIkohyoNo__c"].splitlines()
-                            zkHin    = record["zkHinban__c"].splitlines()
-                            zkKan    = record["zkKanryoKoutei__c"].splitlines()
-                            zkSu     = record["zkSuryo__c"].splitlines()
-                            zkEndDT  = record["zkEndDayTime__c"].splitlines()
-                            zkMo     = record["zkMochidashi__c"].splitlines()
-                            zkHistory = record["zkHistory__c"]
                             zkOrder = ""
                             #zkHistory = ""
                             st.session_state.zkScroll_flag = 0
@@ -2330,6 +2323,12 @@ def zaiko_place():
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
+                                zkIko    = record["zkIkohyoNo__c"].splitlines()
+                                zkHin    = record["zkHinban__c"].splitlines()
+                                zkKan    = record["zkKanryoKoutei__c"].splitlines()
+                                zkSu     = record["zkSuryo__c"].splitlines()
+                                zkEndDT  = record["zkEndDayTime__c"].splitlines()
+                                zkMo     = record["zkMochidashi__c"].splitlines()
                                 listCount = len(zkTana_list)
                                 for name, lst in [
                                     ("zkIko", zkIko),
