@@ -1031,6 +1031,8 @@ def zaiko_place():
         st.session_state.production_order_sub = None
     if "production_order_flag" not in st.session_state:
         st.session_state.production_order_flag = False
+    if "production_order_sub_flag" not in st.session_state:
+        st.session_state.production_order_sub_flag = 0
     # if "sf" not in st.session_state:
     #     st.session_state.sf = None  # Salesforceオブジェクトを適切に設定
     if "show_camera" not in st.session_state:
@@ -2053,6 +2055,7 @@ def zaiko_place():
                             if "qr_code" in st.session_state and st.session_state.qr_code != "":
                                 st.session_state.production_order = f"{st.session_state.qr_code}"
                                 st.session_state.production_order_sub = f"{st.session_state.qr_code}"
+                                st.session_state.production_order_sub_flag = 1
                                 st.session_state.show_camera = False
                                 
                     else:                   
@@ -2065,6 +2068,7 @@ def zaiko_place():
                         if manual_input and manual_input.isdigit():
                             st.session_state.production_order = f"PO-{manual_input.zfill(6)}"
                             st.session_state.production_order_sub = f"PO-{manual_input.zfill(6)}"
+                            st.session_state.production_order_sub_flag = 1
                             # st.session_state.manual_input_value = manual_input
                             st.session_state.show_camera = False
                         
@@ -2072,33 +2076,35 @@ def zaiko_place():
                     button_key = "check_ok"
                     # st.session_state[button_key] = False
                     st.write(f"移行票番号確認用08: {st.session_state.production_order}")
-                    if (st.session_state.production_order is not None or st.session_state.production_order_sub is not None) and button_key not in st.session_state:
-                    # if st.session_state.production_order != "" and st.session_state[button_key] == False:
-                        # if st.button("棚番と移行票番号確認"):
-                        # @st.dialog("棚番と移行票番号確認")
-                        st.session_state.production_order = st.session_state.production_order_sub
-                        @st.dialog(t["text051"])
-                        def dialog_button(button_key):
-                            global message_text
-                            # global button_key
-                            # message_text = f"""
-                            # <div style='font-size:22px; font-weight:bold;'>
-                            #     現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
-                            #     移行票番号(製造オーダー)は、<br>
-                            #     <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
-                            #     でよろしいですか？
-                            # </div>
-                            # """
-                            message_text = f"""
-                            <div style='font-size:22px; font-weight:bold;'>
-                                {t["text047"]} : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
-                                {t["text052"]}<br>
-                                <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
-                                {t["text053"]}
-                            </div>
-                            """
-                            result_flag = approve_button(message_text, button_key)
-                        dialog_button(button_key)
+                    if st.session_state.production_order_sub_flag == 1:
+                        st.session_state.production_order_sub_flag = 2
+                        if (st.session_state.production_order is not None or st.session_state.production_order_sub is not None) and button_key not in st.session_state:
+                        # if st.session_state.production_order != "" and st.session_state[button_key] == False:
+                            # if st.button("棚番と移行票番号確認"):
+                            # @st.dialog("棚番と移行票番号確認")
+                            st.session_state.production_order = st.session_state.production_order_sub
+                            @st.dialog(t["text051"])
+                            def dialog_button(button_key):
+                                global message_text
+                                # global button_key
+                                # message_text = f"""
+                                # <div style='font-size:22px; font-weight:bold;'>
+                                #     現在選択されている棚番 : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
+                                #     移行票番号(製造オーダー)は、<br>
+                                #     <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
+                                #     でよろしいですか？
+                                # </div>
+                                # """
+                                message_text = f"""
+                                <div style='font-size:22px; font-weight:bold;'>
+                                    {t["text047"]} : <span style='font-size:30px; color:#FF0000;'>{st.session_state.tanaban_select_temp}</span><br>
+                                    {t["text052"]}<br>
+                                    <span style='font-size:30px; color:#FF0000;'>「 {st.session_state.production_order} 」</span><br>
+                                    {t["text053"]}
+                                </div>
+                                """
+                                result_flag = approve_button(message_text, button_key)
+                            dialog_button(button_key)
 
                     if st.session_state.get(button_key, False):
                         st.session_state.show_camera = False
