@@ -2330,6 +2330,7 @@ def zaiko_place():
                             #zkHistory = ""
                             st.session_state.zkScroll_flag = 0
                             record = data_catch(st.session_state.sf, item_id)
+                            st.write(f"移行票番号確認用01: {st.session_state.production_order}")
                             if record:
                                 zkHistory = record["zkHistory__c"]  # zk履歴
                                 zkTana_list = record["zkTanaban__c"].splitlines()  # 改行区切り　UM「新規 工程手配明細マスタ レポート」で見易くする為
@@ -2486,7 +2487,8 @@ def zaiko_place():
                                     # zkDelSya = record["zkDeleteSya__c"].split(",")   # zk直近削除者
                                     # zkShoBu = record["zkShortcutButton__c"].splitlines()   # zkショートカットボタン
                                     # zkShoU = record["zkShortcutUser__c"].splitlines()   # zkショートカットユーザー
-                                                
+                            
+                            st.write(f"移行票番号確認用02: {st.session_state.production_order}")
                             if st.session_state.owner is None:
                                 st.write(f"❌09 **作業者コード '{owner}' が未入力です。**")
                                 st.stop()  # 以降の処理を止める
