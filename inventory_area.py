@@ -263,7 +263,7 @@ def update_tanaban(sf, item_id, zkTana, zkIko, zkHin, zkKan, zkSu, zkEndDT, zkMo
             st.session_state.result_text = f"棚番 '{zkTana}' から、移行票No '{zkOrder}' を削除しました。"
     except Exception as e:
         st.error(f"更新エラー: {e}")
-        st.session_state.result_text = f"棚番更新エラー: {e}"
+        st.write(f"棚番更新エラー: {e}")
         reset_form()
         st.stop()
                
@@ -284,7 +284,7 @@ def update_Mochidashi(sf, item_id, zkTana, zkMo, zkHistory, zkOrder, zkMo_flag):
             st.session_state.result_text = f"棚番 '{zkTana}' の、移行票No '{zkOrder}' の持出を設定しました。"
     except Exception as e:
         st.error(f"更新エラー: {e}")
-        st.session_state.result_text = f"持出更新エラー: {e}"
+        st.write(f"棚番更新エラー: {e}")
         reset_form()
         st.stop()
         
