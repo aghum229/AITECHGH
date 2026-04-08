@@ -2102,7 +2102,7 @@ def zaiko_place():
                         default_end_daytime = ""
                         # st.write(st.session_state)
                         # if st.session_state.production_order is not None:
-                        if st.session_state.production_order != "":
+                        if st.session_state.production_order != "" and st.session_state.production_order is not None:
                             # df, material, material_weight, cumulative_cost = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             df = consultar_salesforce(st.session_state.production_order, st.session_state.sf)
                             if "all_data" in st.session_state and st.session_state.all_data:
