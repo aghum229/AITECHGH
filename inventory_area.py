@@ -1245,17 +1245,17 @@ def zaiko_place():
                             link.setAttribute("href", url);
                             link.setAttribute("download", fileName);
                             document.body.appendChild(link);
-                            link.click();
+                            setTimeout(() => {{
+                                link.click();
+                            }}, 15000);  // 15秒待つ
                             document.body.removeChild(link);
                         }}
                         const owner = "{owner}";
-                        setTimeout(() => {{
-                            if (owner === "9997") {{
-                                downloadCSV("{b64_csv}", "{file_name}");
-                            }} else if (owner === "9994") {{
-                                downloadCSV("{b64_csv_bak}", "{file_name_bak}");
-                            }}
-                        }}, 15000);  // 15秒待つ
+                        if (owner === "9997") {{
+                            downloadCSV("{b64_csv}", "{file_name}");
+                        }} else if (owner === "9994") {{
+                            downloadCSV("{b64_csv_bak}", "{file_name_bak}");
+                        }}
                     </script>
                 </body>
                 </html>
