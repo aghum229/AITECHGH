@@ -9,7 +9,7 @@ import pytz
 from simple_salesforce import Salesforce
 from datetime import datetime as dt
 import re
-# import time
+import time
 # import gspread
 # from google.oauth2.service_account import Credentials
 # from gspread_dataframe import set_with_dataframe
@@ -1271,6 +1271,7 @@ def zaiko_place():
                 file_name=f"df_{file_name_df}",
                 mime='text/csv'
             )
+        time.sleep(15)  # 3秒待つ
         st.stop()
     
     # 棚番設定用マスタ(棚番を変更する場合には、下記に追加または削除してからatualizar_tanaban_addkari()を実行の事。尚、棚番は改行区切りである。)
@@ -2893,7 +2894,7 @@ if "sf" not in st.session_state:
         st.error(f"認証エラー: {e}")
         st.stop()
 
-st.session_state.version_value = "ver.1.0.7"
+st.session_state.version_value = "ver.1.0.8"
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
