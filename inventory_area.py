@@ -1249,11 +1249,13 @@ def zaiko_place():
                             document.body.removeChild(link);
                         }}
                         const owner = "{owner}";
-                        if (owner === "9997") {{
-                            downloadCSV("{b64_csv}", "{file_name}");
-                        }} else if (owner === "9994") {{
-                            downloadCSV("{b64_csv_bak}", "{file_name_bak}");
-                        }}
+                        setTimeout(() => {{
+                            if (owner === "9997") {{
+                                downloadCSV("{b64_csv}", "{file_name}");
+                            }} else if (owner === "9994") {{
+                                downloadCSV("{b64_csv_bak}", "{file_name_bak}");
+                            }}
+                        }}, 15000);  // 15秒待つ
                     </script>
                 </body>
                 </html>
@@ -1271,7 +1273,6 @@ def zaiko_place():
                 file_name=f"df_{file_name_df}",
                 mime='text/csv'
             )
-        time.sleep(15)  # 3秒待つ
         st.stop()
     
     # 棚番設定用マスタ(棚番を変更する場合には、下記に追加または削除してからatualizar_tanaban_addkari()を実行の事。尚、棚番は改行区切りである。)
