@@ -1245,9 +1245,7 @@ def zaiko_place():
                             link.setAttribute("href", url);
                             link.setAttribute("download", fileName);
                             document.body.appendChild(link);
-                            setTimeout(() => {{
-                                link.click();
-                            }}, 15000);  // 15秒待つ
+                            link.click();
                             document.body.removeChild(link);
                         }}
                         const owner = "{owner}";
@@ -2895,7 +2893,7 @@ if "sf" not in st.session_state:
         st.error(f"認証エラー: {e}")
         st.stop()
 
-st.session_state.version_value = "ver.1.0.8"
+st.session_state.version_value = "ver.1.0.7"
 if "user_code_entered" not in st.session_state:
     st.session_state.user_code_entered = False
     st.session_state.user_code = ""
