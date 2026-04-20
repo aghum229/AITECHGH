@@ -2188,8 +2188,12 @@ def zaiko_place():
                                 else:
                                     iso_str = "2000-01-01T01:00:00.000+0000"
                                 # UTCとしてパース
-                                st.write("iso_str =", iso_str, type(iso_str))
-                                dt_utc = datetime.strptime(iso_str, "%Y-%m-%dT%H:%M:%S.%f%z")
+                                # st.write("iso_str =", iso_str, type(iso_str))
+                                # dt_utc = datetime.strptime(iso_str, "%Y-%m-%dT%H:%M:%S.%f%z")
+                                if iso_str is None or (isinstance(iso_str, float) and math.isnan(iso_str)):
+                                    dt_utc = datetime.strptime("2000-01-01T01:00:00.000+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
+                                else:
+                                    dt_utc = datetime.strptime(iso_str, "%Y-%m-%dT%H:%M:%S.%f%z")
                                 dt_utc = dt_utc.replace(tzinfo=pytz.utc)
                                 # 日本時間に変換
                                 jst = pytz.timezone("Asia/Tokyo")
