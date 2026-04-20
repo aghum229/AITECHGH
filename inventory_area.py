@@ -2189,6 +2189,7 @@ def zaiko_place():
                                     iso_str = "2000-01-01T01:00:00.000+0000"
                                 # UTCとしてパース
                                 dt_utc = datetime.strptime(iso_str, "%Y-%m-%dT%H:%M:%S.%f%z")
+                                st.write("iso_str =", iso_str, type(iso_str))
                                 dt_utc = dt_utc.replace(tzinfo=pytz.utc)
                                 # 日本時間に変換
                                 jst = pytz.timezone("Asia/Tokyo")
