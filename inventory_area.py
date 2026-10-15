@@ -33,6 +33,7 @@ def carregar_credenciais():
     if os.path.exists('.streamlit/secrets.toml'):
         #import toml
         #secrets = toml.load('.streamlit/secrets.toml')
+        st.stop()
     else:
         secrets = st.secrets
     return secrets
